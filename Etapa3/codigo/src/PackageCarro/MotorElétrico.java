@@ -1,8 +1,16 @@
 package PackageCarro;
 
 public class MotorElétrico extends Motor {
-	public GTHibrido_ _unnamed_GTHibrido__;
-	public C1Hibrido _unnamed_C1Hibrido_;
-	public C2Hibrido _unnamed_C2Hibrido_;
-	public C1 _unnamed_C1_;
+
+	public MotorElétrico(int _potencia, int _capacidadeCombustivel, ModoMotor _modo) {
+		super(_potencia, _capacidadeCombustivel, _modo);
+	}
+
+	public MotorElétrico(int _potencia, int _capacidadeCombustivel) {
+		super(_potencia, _capacidadeCombustivel);
+	}
+	public MotorElétrico(Motor motor)
+	{
+		super(motor);
+	}
 }

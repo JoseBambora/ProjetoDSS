@@ -2,4 +2,13 @@ package PackageCarro;
 
 public class C1Hibrido extends C1 {
 	private MotorElétrico _motorEletrico;
+	public C1Hibrido(MotorElétrico _motorEletrico)
+	{
+		super();
+		this._motorEletrico = _motorEletrico;
+	}
+	public MotorElétrico get_motorEletrico()
+	{
+		return this._motorEletrico;
+	}
 }
