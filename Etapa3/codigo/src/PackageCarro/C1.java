@@ -1,5 +1,8 @@
 package PackageCarro;
 
 public class C1 extends Categoria {
-	public MotorElétrico _unnamed_MotorElétrico_;
+	public C1(int _fiabilidade)
+	{
+		super(_fiabilidade);
+	}
 }
