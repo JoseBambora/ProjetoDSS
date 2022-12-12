@@ -106,22 +106,16 @@ public class PilotoDAO implements Map<String,Piloto> {
 		return r;
 	}
 
- /* 
-	private Nome getNome(String nome) throws SQLException
-	{
-		String filter = "nome";
-		ResultSet rs = makeQuery("Nome",filter,nome);
-		return new Nome(rs.getString(1));
-	}
-*/
 
-	private void insertPiloto(Piloto piloto)
+		private void insertPiloto(Piloto piloto)
 	{
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 Statement stm = conn.createStatement())
 		{
-			String nome = this.set_Nome(piloto.get_nome());
-			String sql = "INSERT INTO Piloto ()VALUES (" + piloto.insertCommandPiloto() + ")";
+			String nome = piloto.get_nome();
+			Float sva = piloto.get_SVA();
+			Float cts = piloto.get_CTS();
+			String sql = "INSERT INTO Piloto ()VALUES (" + nome + ", " + sva + ", " + cts + ")";
 			stm.executeUpdate(sql);
 			System.out.println("Piloto: " + piloto + " adicionado");
 		} catch (SQLException e) {
