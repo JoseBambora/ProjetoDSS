@@ -1,7 +1,6 @@
 package PackagePiloto;
 
 import PackageCircuito.Caracteristica;
-
 import java.util.List;
 
 public class Piloto implements IPiloto {
