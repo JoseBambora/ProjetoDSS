@@ -29,11 +29,11 @@ public class Piloto implements IPiloto {
 		return _nome;
 	}
 	
-	public String get_SVA() {
+	public Float get_SVA() {
 		return _sva;
 	}
 	
-	public String get_CTS() {
+	public Float get_CTS() {
 		return _cts;
 	}
 	
