@@ -24,6 +24,10 @@ public class Piloto implements IPiloto {
 	{
 		return key.split(",");
 	}
+	
+	public void set_Nome(int nome) {
+		this._nome = nome;
+	}
 
     @Override
 	public Integer simulaDecisao(Caracteristica aSituacao, List<String> aClassificacao) {
