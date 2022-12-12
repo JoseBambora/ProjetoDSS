@@ -21,8 +21,8 @@ public class PilotoDAO implements Map<String,Piloto> {
 			sql = """
 				  CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Piloto` (
        				  `nome` VARCHAR(50) NOT NULL,
-       				  `sva` FLOAT NOT NULL,
-       				  `cts` FLOAT NOT NULL,
+       				  `sva` INT NOT NULL,
+       				  `cts` INT NOT NULL,
        				  )
 				  """;
 			stm.executeUpdate(sql);
@@ -70,7 +70,8 @@ public class PilotoDAO implements Map<String,Piloto> {
 		String []str = Piloto.getCondutor((String) key); // completar get
 		String nome = str[0];
 		Piloto r = null;
-		int sva = 0, cts =0;
+		float sva = 0;
+		float cts =0;
 		boolean aux = false;
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 Statement stm = conn.createStatement()) {
@@ -82,8 +83,8 @@ public class PilotoDAO implements Map<String,Piloto> {
 			if(rs.next())
 			{
 				nome = rs.getString(1);
-				sva = rs.getInt(2);
-				cts = rs.getInt(3);
+				sva = rs.getFloat(2);
+				cts = rs.getFloat(3);
 				aux = true;
 			}
 
@@ -119,7 +120,7 @@ public class PilotoDAO implements Map<String,Piloto> {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 Statement stm = conn.createStatement())
 		{
-			int nome = this.setNome(piloto.get_nome());
+			String nome = this.set_Nome(piloto.get_nome());
 			String sql = "INSERT INTO Piloto ()VALUES (" + piloto.insertCommandPiloto() + ")";
 			stm.executeUpdate(sql);
 			System.out.println("Piloto: " + piloto + " adicionado");
