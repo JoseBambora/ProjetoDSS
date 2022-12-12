@@ -25,8 +25,28 @@ public class Piloto implements IPiloto {
 		return key.split(",");
 	}
 	
+	public String get_nome() {
+		return _nome;
+	}
+	
+	public String get_SVA() {
+		return _sva;
+	}
+	
+	public String get_CTS() {
+		return _cts;
+	}
+	
 	public void set_Nome(String nome) {
 		this._nome = nome;
+	}
+	
+	public void set_SVA(float sva) {
+		this._sva = sva;
+	}
+	
+	public void set_CTS(float cts) {
+		this._cts = cts;
 	}
 
     @Override
@@ -34,7 +54,4 @@ public class Piloto implements IPiloto {
 		return null;
 	}
 
-	public String get_nome() {
-		return _nome;
-	}
 }
