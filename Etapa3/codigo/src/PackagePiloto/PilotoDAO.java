@@ -21,8 +21,8 @@ public class PilotoDAO implements Map<String,Piloto> {
 			sql = """
 				  CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Piloto` (
        				  `nome` VARCHAR(50) NOT NULL,
-       				  `sva` INT NOT NULL,
-       				  `cts` INT NOT NULL,
+       				  `sva` FLOAT NOT NULL,
+       				  `cts` FLOAT NOT NULL,
        				  )
 				  """;
 			stm.executeUpdate(sql);
