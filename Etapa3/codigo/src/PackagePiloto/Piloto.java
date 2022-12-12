@@ -15,11 +15,6 @@ public class Piloto implements IPiloto {
 		this._cts = (float) e;
     }
 
-	public String insertCommandPiloto()
-	{
-		return '\'' + this._nome + '\'' + "," +'\'' + this._sva +'\'' + "," + this._cts;
-	}
-
 	public static String[] getCondutor(String key)
 	{
 		return key.split(",");
