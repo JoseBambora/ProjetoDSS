@@ -25,7 +25,7 @@ public class Piloto implements IPiloto {
 		return key.split(",");
 	}
 	
-	public void set_Nome(int nome) {
+	public void set_Nome(String nome) {
 		this._nome = nome;
 	}
 
