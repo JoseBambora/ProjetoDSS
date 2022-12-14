@@ -8,7 +8,7 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         CarroDAO carroDAO = CarroDAO.getInstace();
-        // carroDAO.generateData();
+        carroDAO.generateData();
         Set<String> key = carroDAO.keySet();
         Collection<Carro> carros = carroDAO.values();
         Set<Map.Entry<String,Carro>> entrySet = carroDAO.entrySet();

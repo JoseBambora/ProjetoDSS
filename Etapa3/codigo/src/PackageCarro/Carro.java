@@ -100,6 +100,10 @@ public class Carro implements ICarro {
 		return _motor;
 	}
 
+	public int get_cilindrada() {
+		return _motor.get_cilindrada();
+	}
+
 	public Categoria get_unnamed_Categoria_() {
 		return _unnamed_Categoria_;
 	}
@@ -116,5 +120,41 @@ public class Carro implements ICarro {
 	@Override
 	public String toString() {
 		return this._marca + " " + this._modelo;
+	}
+
+	public String get_marca() {
+		return _marca;
+	}
+
+	public void set_marca(String _marca) {
+		this._marca = _marca;
+	}
+
+	public String get_modelo() {
+		return _modelo;
+	}
+
+	public void set_modelo(String _modelo) {
+		this._modelo = _modelo;
+	}
+
+	public float get_pac() {
+		return _pac;
+	}
+
+	public void set_pac(float _pac) {
+		this._pac = _pac;
+	}
+
+	public void set_unnamed_IConjuntoPneus_(Pneu _unnamed_IConjuntoPneus_) {
+		this._unnamed_IConjuntoPneus_ = _unnamed_IConjuntoPneus_;
+	}
+
+	public void set_motor(MotorCombustao _motor) {
+		this._motor = _motor;
+	}
+
+	public void set_unnamed_Categoria_(Categoria _unnamed_Categoria_) {
+		this._unnamed_Categoria_ = _unnamed_Categoria_;
 	}
 }

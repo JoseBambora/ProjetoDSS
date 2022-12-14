@@ -95,7 +95,6 @@ public class PilotoDAO implements Map<String,Piloto> {
 		}
 		if (aux)
 		{
-			
 			r = new Piloto(nome,sva,cts);
 		}
 		return r;

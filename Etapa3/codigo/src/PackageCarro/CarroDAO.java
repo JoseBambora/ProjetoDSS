@@ -232,8 +232,6 @@ public class CarroDAO implements Map<String,Carro> {
 	private Categoria getCategoria(int id) throws SQLException
 	{
 		Categoria r = null;
-		String filter = "categoria";
-		ResultSet rs;
 		List<String> list = new ArrayList<>();
 		list.add("C1");
 		list.add("C2");
@@ -242,12 +240,14 @@ public class CarroDAO implements Map<String,Carro> {
 		list.add("C1H");
 		list.add("C2H");
 		list.add("GTH");
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			int i = 0;
 			for (String cat : list)
 			{
-				rs = stm.executeQuery(makeQuery(cat, filter, id));
+				String sql = "SELECT * FROM " + cat  + " WHERE categoria = ?";
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ps.setInt(1,id);
+				ResultSet rs = ps.executeQuery();
 				if(rs.next())
 				{
 					switch (i)
@@ -271,17 +271,18 @@ public class CarroDAO implements Map<String,Carro> {
 	private Pneu getPneus(int id) throws SQLException
 	{
 		Pneu r = null;
-		String filter = "pneu";
 		List<String> list = new ArrayList<>();
 		list.add("Macio");
 		list.add("Duro");
 		list.add("Chuva");
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			int i = 0;
 			for (String cat : list)
 			{
-				ResultSet rs = stm.executeQuery(makeQuery(cat, filter, id));
+				String sql = "SELECT * FROM " + cat + " WHERE pneu = ?";
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ps.setString(1,cat);
+				ResultSet rs = ps.executeQuery();
 				if(rs.next())
 				{
 					switch (i)
@@ -300,17 +301,18 @@ public class CarroDAO implements Map<String,Carro> {
 	private ModoMotor getModo(int id) throws SQLException
 	{
 		ModoMotor r = null;
-		String filter = "modo";
 		List<String> list = new ArrayList<>();
 		list.add("Agressivo");
 		list.add("Conservador");
-		list.add("Normal");
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
+		list.add("Normal");;
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			int i = 0;
 			for (String cat : list)
 			{
-				ResultSet rs = stm.executeQuery(makeQuery(cat, filter, id));
+				String sql = "SELECT * FROM " + cat + " WHERE modo = ?";
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ps.setInt(1,id);
+				ResultSet rs = ps.executeQuery();
 				if(rs.next())
 				{
 					switch (i)
@@ -329,12 +331,12 @@ public class CarroDAO implements Map<String,Carro> {
 	}
 	private Motor getMotor(int id) throws SQLException
 	{
-		String filter = "id";
-		ResultSet rs;
 		Motor r = null;
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
-			 rs = stm.executeQuery(makeQuery("Motor", filter, id));
+		String sql = "SELECT * FROM Motor WHERE id = ?";
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			 PreparedStatement ps = conn.prepareStatement(sql);
+			 ps.setInt(1,id);
+			 ResultSet rs = ps.executeQuery();
 			 int potencia = rs.getInt("potencia");
 			 int capacidade = rs.getInt("capacidadeCombustivel");
 			 int modo = rs.getInt("modo");
@@ -352,10 +354,13 @@ public class CarroDAO implements Map<String,Carro> {
 		int cat = 0, cil =0 , pneu = 0, eng = 0;
 		float pac = 0;
 		boolean aux = false;
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
-			String sql = "SELECT * FROM Carro WHERE marca = '" + marca + "' AND modelo = '" + modelo + "'";
-			ResultSet rs = stm.executeQuery(sql);
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+
+			String sql = "SELECT * FROM Carro WHERE marca = ? AND modelo = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1,marca);
+			ps.setString(2,modelo);
+			ResultSet rs = ps.executeQuery();
 			if(rs.next())
 			{
 				marca = rs.getString("marca");
@@ -514,14 +519,21 @@ public class CarroDAO implements Map<String,Carro> {
 
 	private void insertCarro(Carro carro)
 	{
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement())
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
 		{
 			int motor = this.insertMotor(carro.get_motor());
 			int pneu = this.insertPneu(carro.get_unnamed_IConjuntoPneus_());
 			int categoria = this.insertCategoria(carro.get_unnamed_Categoria_());
-			String sql = "INSERT INTO Carro ()VALUES (" + carro.insertCommand() + "," + motor + "," + pneu + "," + categoria+ ")";
-			stm.executeUpdate(sql);
+			String sql = "INSERT INTO Carro ()VALUES (?,?,?,?,?,?,?)";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1,carro.get_marca());
+			ps.setString(2,carro.get_modelo());
+			ps.setFloat(3,carro.get_pac());
+			ps.setInt(4,carro.get_cilindrada());
+			ps.setInt(5,motor);
+			ps.setInt(6,pneu);
+			ps.setInt(7,categoria);
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new NullPointerException(e.getMessage());
@@ -554,14 +566,15 @@ public class CarroDAO implements Map<String,Carro> {
 		categorias.add(new C1Hibrido(80,(MotorElétrico) motores.get(4)));
 		categorias.add(new C2Hibrido(85,(MotorElétrico) motores.get(5)));
 		categorias.add(new GTHibrido_(90,(MotorElétrico) motores.get(4)));
-		List<Carro> carros = new ArrayList<>();
-		carros.add(new Carro("Porshe", "GT3RS",2,pneus.get(1),(MotorCombustao) motores.get(0),categorias.get(0)));
-		carros.add(new Carro("Ferrari", "Enzo",2,pneus.get(0),(MotorCombustao) motores.get(1),categorias.get(1)));
-		carros.add(new Carro("Audi", "R8",3,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(2)));
-		carros.add(new Carro("Honda", "Type-R",4,pneus.get(2),(MotorCombustao) motores.get(3),categorias.get(3)));
-		carros.add(new Carro("Toyota", "Supra",5,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(4)));
-		carros.add(new Carro("Mercedes", "AMG",6,pneus.get(2),(MotorCombustao) motores.get(1),categorias.get(5)));
-		carros.forEach(this::insertCarro);
+		//List<Carro> carros = new ArrayList<>();
+		//carros.add(new Carro("Porshe", "GT3RS",2,pneus.get(1),(MotorCombustao) motores.get(0),categorias.get(0)));
+		//carros.add(new Carro("Ferrari", "Enzo",2,pneus.get(0),(MotorCombustao) motores.get(1),categorias.get(1)));
+		//carros.add(new Carro("Audi", "R8",3,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(2)));
+		//carros.add(new Carro("Honda", "Type-R",4,pneus.get(2),(MotorCombustao) motores.get(3),categorias.get(3)));
+		//carros.add(new Carro("Toyota", "Supra",5,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(4)));
+		//carros.add(new Carro("Mercedes", "AMG",6,pneus.get(2),(MotorCombustao) motores.get(1),categorias.get(5)));
+		this.insertCarro(new Carro("BMW","M4",0.5f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
+		//carros.forEach(this::insertCarro);
 	}
 
 	@Override
@@ -589,9 +602,10 @@ public class CarroDAO implements Map<String,Carro> {
 	public Set<String> keySet()
 	{
 		Set<String> result = new HashSet<>();
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
-			ResultSet rs = stm.executeQuery("SELECT * FROM Carro");
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			String sql = "SELECT * FROM Carro";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{
 				String marca = rs.getString("marca");

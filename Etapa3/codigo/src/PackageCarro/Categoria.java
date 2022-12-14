@@ -10,7 +10,6 @@ public abstract class Categoria implements ICategoria {
 
 	public abstract int calculaFiabilidade(int aCilindrada);
 
-
 	public String getValues()
 	{
 		return Integer.toString(this._fiabilidade);
