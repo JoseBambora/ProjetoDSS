@@ -95,13 +95,8 @@ public class PilotoDAO implements Map<String,Piloto> {
 		}
 		if (aux)
 		{
-			try {
-				r = new Piloto(nome,sva,cts);
-			} catch (SQLException e) {
-				// Erro a criar tabela...
-				e.printStackTrace();
-				throw new NullPointerException(e.getMessage());
-			}
+			
+			r = new Piloto(nome,sva,cts);
 		}
 		return r;
 	}
