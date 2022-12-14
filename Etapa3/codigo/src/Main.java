@@ -1,21 +1,22 @@
 import PackageCarro.Carro;
 import PackageCarro.CarroDAO;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
 public class Main {
     public static void main(String[] args) {
         CarroDAO carroDAO = CarroDAO.getInstace();
-        //carroDAO.generateData();
-        Carro carro1 = carroDAO.get("Porshe,GT3RS");
-        Carro carro2 = carroDAO.get("Ferrari,Enzo");
-        Carro carro3 = carroDAO.get("Audi,R8");
-        Carro carro4 = carroDAO.get("Honda,Type-R");
-        Carro carro5 = carroDAO.get("Toyota,Supra");
-        Carro carro6 = carroDAO.get("Mercedes,AMG");
-        System.out.println(carro1);
-        System.out.println(carro2);
-        System.out.println(carro3);
-        System.out.println(carro4);
-        System.out.println(carro5);
-        System.out.println(carro6);
+        // carroDAO.generateData();
+        Set<String> key = carroDAO.keySet();
+        Collection<Carro> carros = carroDAO.values();
+        Set<Map.Entry<String,Carro>> entrySet = carroDAO.entrySet();
+        System.out.println("Values: ");
+        carros.forEach(System.out::println);
+        System.out.println("\nEntrey Set");
+        entrySet.forEach(c -> System.out.println(c.getValue()));
+        System.out.println("\nKeySet: ");
+        key.forEach(System.out::println);
     }
 }

@@ -2,5 +2,5 @@ package PackageCarro;
 
 public interface IConjuntoPneus {
 
-	public void calculaDesgaste();
+	public void reduzCapacidadePneu(String aDecisao, int aGdu) ;
 }

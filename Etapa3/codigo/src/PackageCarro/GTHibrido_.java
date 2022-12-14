@@ -12,4 +12,17 @@ public class GTHibrido_ extends GT {
 	{
 		return this._motorEletrico;
 	}
+	public void reduzCapacidadeCombustivel(String aDecisao)
+	{
+		this._motorEletrico.reduzCapacidadeCombustivel(aDecisao);
+	}
+	public void capacidadeComb100()
+	{
+		this._motorEletrico.capacidadeComb100();
+	}
+
+	public void calculaFiabilidade()
+	{
+
+	}
 }

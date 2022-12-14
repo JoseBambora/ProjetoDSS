@@ -11,4 +11,13 @@ public class C2Hibrido extends C2 {
 	{
 		return this._motorEletrico;
 	}
+	public void reduzCapacidadeCombustivel(String aDecisao)
+	{
+		this._motorEletrico.reduzCapacidadeCombustivel(aDecisao);
+	}
+	public void capacidadeComb100()
+	{
+		this._motorEletrico.capacidadeComb100();
+	}
+
 }

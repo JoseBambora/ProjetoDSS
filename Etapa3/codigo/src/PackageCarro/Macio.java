@@ -1,8 +1,5 @@
 package PackageCarro;
 
-public class Macio implements IConjuntoPneus {
+public class Macio extends Pneu {
 
-	public void calculaDesgaste() {
-		throw new UnsupportedOperationException();
-	}
 }

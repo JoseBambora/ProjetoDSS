@@ -2,9 +2,7 @@ package PackageCarro;
 
 public interface ICategoria {
 
-	public void calculaFiabilidade(int aCilindrada);
+	public int calculaFiabilidade(int aCilindrada);
 
-	public void validaCat(Integer aCilindrada, Integer aPotenciac, Integer aPotenciae);
-
-	public void recalculaFiabilidade(Integer aDecisão, int aGdu);
+	public void recalculaFiabilidade(String aDecisão, int aGdu);
 }

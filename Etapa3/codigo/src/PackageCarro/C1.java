@@ -5,4 +5,9 @@ public class C1 extends Categoria {
 	{
 		super(_fiabilidade);
 	}
+
+	@Override
+	public int calculaFiabilidade(int aCilindrada) {
+		return 0;
+	}
 }

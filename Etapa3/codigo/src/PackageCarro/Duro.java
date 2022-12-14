@@ -1,8 +1,5 @@
 package PackageCarro;
 
-public class Duro implements IConjuntoPneus {
+public class Duro extends Pneu{
 
-	public void calculaDesgaste() {
-		throw new UnsupportedOperationException();
-	}
 }

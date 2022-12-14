@@ -174,13 +174,12 @@ public class CarroDAO implements Map<String,Carro> {
        				  )
 				  """;
 			stm.executeUpdate(sql);
-			// Carro(marca,modelo,categoria,pac, cilindrada, motor,pneus)
 
 			sql = """
 				  CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Carro` (
        				  `marca` VARCHAR(50) NOT NULL,
        				  `modelo` VARCHAR(50) NOT NULL,
-       				  `pac` INT NOT NULL,
+       				  `pac` FLOAT NOT NULL,
        				  `cilindrada` INT NOT NULL,
        				  `motor` INT NOT NULL,
        				  `pneu` INT NOT NULL,
@@ -226,24 +225,6 @@ public class CarroDAO implements Map<String,Carro> {
 		return false;
 	}
 
-	public List<Motor> getMotor()
-	{
-		List<Motor> r = new ArrayList<>();
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
-			String sql = "SELECT * FROM Carro";
-			ResultSet rs = stm.executeQuery(sql);
-			while (rs.next())
-			{
-				r.add(new Motor(rs.getInt(1),rs.getInt(2)));
-			}
-		} catch (SQLException e) {
-			// Erro a criar tabela...
-			e.printStackTrace();
-			throw new NullPointerException(e.getMessage());
-		}
-		return r;
-	}
 	private String makeQuery(String c, String filter, int id)
 	{
 		return "SELECT * FROM "+ c + "  WHERE " + filter +" = " + id;
@@ -271,13 +252,13 @@ public class CarroDAO implements Map<String,Carro> {
 				{
 					switch (i)
 					{
-						case 0 -> r = new C1(rs.getInt(1));
-						case 1 -> r = new C2(rs.getInt(1));
-						case 2 -> r = new GT(rs.getInt(1));
-						case 3 -> r = new SC(rs.getInt(1));
-						case 4 -> r = new C1Hibrido(rs.getInt(1), new MotorElétrico(getMotor(rs.getInt(2))));
-						case 5 -> r = new C2Hibrido(rs.getInt(1), new MotorElétrico(getMotor(rs.getInt(2))));
-						case 6 -> r = new GTHibrido_(rs.getInt(1), new MotorElétrico(getMotor(rs.getInt(2))));
+						case 0 -> r = new C1(rs.getInt("categoria"));
+						case 1 -> r = new C2(rs.getInt("categoria"));
+						case 2 -> r = new GT(rs.getInt("categoria"));
+						case 3 -> r = new SC(rs.getInt("categoria"));
+						case 4 -> r = new C1Hibrido(rs.getInt("categoria"), new MotorElétrico(getMotor(rs.getInt("motor"))));
+						case 5 -> r = new C2Hibrido(rs.getInt("categoria"), new MotorElétrico(getMotor(rs.getInt("motor"))));
+						case 6 -> r = new GTHibrido_(rs.getInt("categoria"), new MotorElétrico(getMotor(rs.getInt("motor"))));
 					}
 					break;
 				}
@@ -287,9 +268,9 @@ public class CarroDAO implements Map<String,Carro> {
 		return r;
 	}
 
-	private IConjuntoPneus getPneus(int id) throws SQLException
+	private Pneu getPneus(int id) throws SQLException
 	{
-		IConjuntoPneus r = null;
+		Pneu r = null;
 		String filter = "pneu";
 		List<String> list = new ArrayList<>();
 		list.add("Macio");
@@ -354,8 +335,11 @@ public class CarroDAO implements Map<String,Carro> {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 Statement stm = conn.createStatement()) {
 			 rs = stm.executeQuery(makeQuery("Motor", filter, id));
-			 ModoMotor modoMotor = this.getModo(rs.getInt(3));
-			 r = new Motor(rs.getInt(1),rs.getInt(2),modoMotor);
+			 int potencia = rs.getInt("potencia");
+			 int capacidade = rs.getInt("capacidadeCombustivel");
+			 int modo = rs.getInt("modo");
+			 ModoMotor modoMotor = this.getModo(modo);
+			 r = new Motor(potencia,capacidade,modoMotor);
 		}
 		return r;
 	}
@@ -365,22 +349,22 @@ public class CarroDAO implements Map<String,Carro> {
 		String marca = str[0];
 		String modelo = str[1];
 		Carro r = null;
-		int cat = 0, pac =0, cil =0 , pneu = 0, eng = 0;
+		int cat = 0, cil =0 , pneu = 0, eng = 0;
+		float pac = 0;
 		boolean aux = false;
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 Statement stm = conn.createStatement()) {
 			String sql = "SELECT * FROM Carro WHERE marca = '" + marca + "' AND modelo = '" + modelo + "'";
-			System.out.println(sql);
 			ResultSet rs = stm.executeQuery(sql);
 			if(rs.next())
 			{
-				marca = rs.getString(1);
-				modelo = rs.getString(2);
-				cat = rs.getInt(3);
-				pac = rs.getInt(4);
-				cil = rs.getInt(5);
-				pneu = rs.getInt(6);
-				eng = rs.getInt(7);
+				marca = rs.getString("marca");
+				modelo = rs.getString("modelo");
+				cat = rs.getInt("categoria");
+				pac = rs.getFloat("pac");
+				cil = rs.getInt("cilindrada");
+				pneu = rs.getInt("pneu");
+				eng = rs.getInt("motor");
 				aux = true;
 			}
 		} catch (SQLException e) {
@@ -391,7 +375,7 @@ public class CarroDAO implements Map<String,Carro> {
 		if (aux)
 		{
 			try {
-				IConjuntoPneus pneus = getPneus(pneu);
+				Pneu pneus = getPneus(pneu);
 				MotorCombustao motor = new MotorCombustao(eng,cil);
 				Categoria c = this.getCategoria(cat);
 				r = new Carro(marca,modelo,pac,pneus,motor,c);
@@ -538,7 +522,6 @@ public class CarroDAO implements Map<String,Carro> {
 			int categoria = this.insertCategoria(carro.get_unnamed_Categoria_());
 			String sql = "INSERT INTO Carro ()VALUES (" + carro.insertCommand() + "," + motor + "," + pneu + "," + categoria+ ")";
 			stm.executeUpdate(sql);
-			System.out.println("Carro: " + carro + " adicionado");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new NullPointerException(e.getMessage());
@@ -559,7 +542,7 @@ public class CarroDAO implements Map<String,Carro> {
 		motores.add(new MotorCombustao(300,60,modos.get(1),3000));
 		motores.add(new MotorElétrico(300,60,modos.get(2)));
 		motores.add(new MotorElétrico(300,60,modos.get(1)));
-		List<IConjuntoPneus> pneus = new ArrayList<>();
+		List<Pneu> pneus = new ArrayList<>();
 		pneus.add(new Chuva());
 		pneus.add(new Macio());
 		pneus.add(new Duro());
@@ -603,17 +586,48 @@ public class CarroDAO implements Map<String,Carro> {
 	}
 
 	@Override
-	public Set<String> keySet() {
-		return null;
+	public Set<String> keySet()
+	{
+		Set<String> result = new HashSet<>();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+			 Statement stm = conn.createStatement()) {
+			ResultSet rs = stm.executeQuery("SELECT * FROM Carro");
+			while(rs.next())
+			{
+				String marca = rs.getString("marca");
+				String modelo = rs.getString("modelo");
+				result.add(marca + "," + modelo);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return result;
 	}
 
 	@Override
 	public Collection<Carro> values() {
-		return null;
+		Collection<Carro> result = new ArrayList<>();
+		Set<String> keyset = this.keySet();
+		for (String key : keyset)
+		{
+			Carro carro = this.get(key);
+			result.add(carro);
+		}
+		return result;
 	}
 
 	@Override
 	public Set<Entry<String, Carro>> entrySet() {
-		return null;
+		Set<String> keyset = this.keySet();
+		Set<Entry<String,Carro>> result = new HashSet<>();
+		for(String key : keyset)
+		{
+			Carro carro = this.get(key);
+			result.add(Map.entry(key,carro));
+
+		}
+		return result;
 	}
 }

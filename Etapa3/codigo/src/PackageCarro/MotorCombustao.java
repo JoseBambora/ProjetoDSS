@@ -14,15 +14,16 @@ public class MotorCombustao extends Motor {
 		super(motor);
 		this._cilindrada = _cilindrada;
 	}
+
+	public MotorCombustao(int _potencia, int _capacidadeCombustivel) {
+		super(_potencia, _capacidadeCombustivel);
+	}
+
 	public MotorCombustao(int _potencia, int _capacidadeCombustivel, ModoMotor _modo) {
 		super(_potencia, _capacidadeCombustivel, _modo);
 	}
 
 	public int get_cilindrada() {
 		return _cilindrada;
-	}
-
-	public MotorCombustao(int _potencia, int _capacidadeCombustivel) {
-		super(_potencia, _capacidadeCombustivel);
 	}
 }

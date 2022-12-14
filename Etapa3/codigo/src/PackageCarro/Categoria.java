@@ -1,6 +1,6 @@
 package PackageCarro;
 
-public class Categoria implements ICategoria {
+public abstract class Categoria implements ICategoria {
 	private int _fiabilidade;
 
 	public Categoria(int _fiabilidade)
@@ -8,13 +8,8 @@ public class Categoria implements ICategoria {
 		this._fiabilidade = _fiabilidade;
 	}
 
-	public void calculaFiabilidade(int aCilindrada) {
-		throw new UnsupportedOperationException();
-	}
+	public abstract int calculaFiabilidade(int aCilindrada);
 
-	public void validaCat(Integer aCilindrada, Integer aPotenciac, Integer aPotenciae) {
-		throw new UnsupportedOperationException();
-	}
 
 	public String getValues()
 	{

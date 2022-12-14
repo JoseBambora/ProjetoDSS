@@ -1,16 +1,16 @@
 package PackageCarro;
 
-import javax.swing.plaf.PanelUI;
+import java.util.Objects;
 
 public class Carro implements ICarro {
 	private String _marca;
 	private String _modelo;
-	private int _pac;
-	public IConjuntoPneus _unnamed_IConjuntoPneus_;
+	private float _pac;
+	public Pneu _unnamed_IConjuntoPneus_;
 	private MotorCombustao _motor;
 	public Categoria _unnamed_Categoria_;
 
-	public Carro(String _marca, String _modelo, int _pac, IConjuntoPneus _unnamed_IConjuntoPneus_, MotorCombustao _motor, Categoria _unnamed_Categoria_) {
+	public Carro(String _marca, String _modelo, float _pac, Pneu _unnamed_IConjuntoPneus_, MotorCombustao _motor, Categoria _unnamed_Categoria_) {
 		this._marca = _marca;
 		this._modelo = _modelo;
 		this._pac = _pac;
@@ -29,41 +29,62 @@ public class Carro implements ICarro {
 	}
 
 	@Override
-	public Boolean validarRegistoCarro(String aMarca, String aModelo, Categoria aCategoria, Integer aCilintrada, Integer aPotenciac, Integer aPotencia, Float aPac) {
-		return null;
-	}
-
-	public Integer calculaFiabilidadeCarro() {
-		throw new UnsupportedOperationException();
+	public Boolean validarRegistoCarro(Integer aCilintrada, Integer potencia, Float aPac) {
+		return aCilintrada > 0 && potencia > 0 && this.validaAfinacao(aPac);
 	}
 
 	public void recalculaFiabilidade(Integer aDecisão, int aGdu) {
-		throw new UnsupportedOperationException();
+		this._unnamed_Categoria_.recalculaFiabilidade(aDecisão,aGdu);
 	}
 
 	@Override
-	public Boolean validaAfinacao(float aPAC, ModoMotor aModo, String aPneus) {
-		return null;
+	public Boolean validaAfinacao(float aPAC) {
+		return aPAC > 0 && aPAC < 1;
 	}
 
 	public void modoMotorNomal() {
-		throw new UnsupportedOperationException();
+		this._motor.modoMotorNormal();
 	}
 
-	public void calculaFiabilidade() {
-		throw new UnsupportedOperationException();
+	public void calculaFiabilidade(int cilindrada) {
+		this._unnamed_Categoria_.calculaFiabilidade(cilindrada);
 	}
 
 	public void capacidadeComb100() {
-		throw new UnsupportedOperationException();
+		this._motor.capacidadeComb100();
+		if(this._unnamed_Categoria_ instanceof C2Hibrido)
+		{
+			((C2Hibrido) this._unnamed_Categoria_).capacidadeComb100();
+		}
+		else if(this._unnamed_Categoria_ instanceof C1Hibrido)
+		{
+			((C1Hibrido) this._unnamed_Categoria_).capacidadeComb100();
+		}
+		else if(this._unnamed_Categoria_ instanceof GTHibrido_)
+		{
+			((GTHibrido_) this._unnamed_Categoria_).capacidadeComb100();
+		}
 	}
 
-	public void reduzCapacidadeCombustivel(String aDecisao) {
-		throw new UnsupportedOperationException();
+	public void reduzCapacidadeCombustivel(String aDecisao)
+	{
+		this._motor.reduzCapacidadeCombustivel(aDecisao);
+		if(this._unnamed_Categoria_ instanceof C2Hibrido)
+		{
+			((C2Hibrido) this._unnamed_Categoria_).reduzCapacidadeCombustivel(aDecisao);
+		}
+		else if(this._unnamed_Categoria_ instanceof C1Hibrido)
+		{
+			((C1Hibrido) this._unnamed_Categoria_).reduzCapacidadeCombustivel(aDecisao);
+		}
+		else if(this._unnamed_Categoria_ instanceof GTHibrido_)
+		{
+			((GTHibrido_) this._unnamed_Categoria_).reduzCapacidadeCombustivel(aDecisao);
+		}
 	}
 
 	public void reduzCapacidadePneu(String aDecisao, int aGdu) {
-		throw new UnsupportedOperationException();
+		this._unnamed_IConjuntoPneus_.reduzCapacidadePneu(aDecisao,aGdu);
 	}
 
 	public IConjuntoPneus get_unnamed_IConjuntoPneus_() {
@@ -82,6 +103,15 @@ public class Carro implements ICarro {
 	public Categoria get_unnamed_Categoria_() {
 		return _unnamed_Categoria_;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Carro carro = (Carro) o;
+		return Objects.equals(_marca, carro._marca) && Objects.equals(_modelo, carro._modelo);
+	}
+
 
 	@Override
 	public String toString() {

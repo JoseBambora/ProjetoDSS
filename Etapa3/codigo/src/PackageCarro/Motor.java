@@ -35,10 +35,19 @@ public class Motor implements IMotor {
 	}
 
 	public void modoMotorNormal() {
-		throw new UnsupportedOperationException();
+		this._modo = new Normal();
 	}
 
 	public void capacidadeComb100() {
-		throw new UnsupportedOperationException();
+		this._capacidadeCombustivel=100;
+	}
+	public void reduzCapacidadeCombustivel(String aDecisao)
+	{
+		switch (aDecisao)
+		{
+			case "Agressivo" -> this._capacidadeCombustivel -= 3;
+			case "Normal" -> this._capacidadeCombustivel-=2;
+			case "Conservador" -> this._capacidadeCombustivel-=1;
+		}
 	}
 }
