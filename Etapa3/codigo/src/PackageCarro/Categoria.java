@@ -18,4 +18,8 @@ public abstract class Categoria implements ICategoria {
 	public void recalculaFiabilidade(Integer aDecisão, int aGdu) {
 		throw new UnsupportedOperationException();
 	}
+
+	public int get_fiabilidade() {
+		return _fiabilidade;
+	}
 }

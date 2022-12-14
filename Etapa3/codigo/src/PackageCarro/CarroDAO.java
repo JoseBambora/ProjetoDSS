@@ -392,7 +392,7 @@ public class CarroDAO implements Map<String,Carro> {
 		}
 		return r;
 	}
-	private int getLastId(Statement statement) throws SQLException
+	private int getLastId(PreparedStatement statement) throws SQLException
 	{
 		int id = 0;
 		ResultSet rs = statement.getGeneratedKeys();
@@ -403,18 +403,19 @@ public class CarroDAO implements Map<String,Carro> {
 	private int insertModo(ModoMotor modoMotor)
 	{
 		int id = 0;
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD)){
 			String sql = "INSERT INTO ModoMotor VALUES()";
-			stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-			id = this.getLastId(stm);
+			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			ps.executeUpdate();
+			id = this.getLastId(ps);
 			if (modoMotor instanceof Agressivo)
 				sql = "INSERT INTO Agressivo VALUES (" + id + ")";
 			else if (modoMotor instanceof Conservador)
 				sql = "INSERT INTO Conservador VALUES (" + id + ")";
 			else
 				sql = "INSERT INTO Normal VALUES (" + id + ")";
-			stm.executeUpdate(sql);
+			ps = conn.prepareStatement(sql);
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			// Erro a criar tabela...
 			e.printStackTrace();
@@ -426,18 +427,19 @@ public class CarroDAO implements Map<String,Carro> {
 	private int insertPneu(IConjuntoPneus pneus)
 	{
 		int id = 0;
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			String sql = "INSERT INTO Pneu VALUES()";
-			stm.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
-			id = this.getLastId(stm);
+			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			ps.executeUpdate();
+			id = this.getLastId(ps);
 			if (pneus instanceof Macio)
 				sql = "INSERT INTO Macio VALUES (" + id + ")";
 			else if (pneus instanceof Duro)
 				sql = "INSERT INTO Duro VALUES (" + id + ")";
 			else
 				sql = "INSERT INTO Chuva VALUES (" + id + ")";
-			stm.executeUpdate(sql);
+			ps = conn.prepareStatement(sql);
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			// Erro a criar tabela...
 			e.printStackTrace();
@@ -449,12 +451,15 @@ public class CarroDAO implements Map<String,Carro> {
 	private int insertMotor(Motor motor)
 	{
 		int id = 0;
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD)) {
 			int modo = this.insertModo(motor.get_modo());
-			String sql = "INSERT INTO Motor (potencia, capacidadeCombustivel, modo) VALUES (" + motor.insertCommand() + ',' + modo + ")";
-			stm.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
-			id = this.getLastId(stm);
+			String sql = "INSERT INTO Motor (potencia, capacidadeCombustivel, modo) VALUES ( ?, ? , ?)";
+			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1,motor.get_potencia());
+			ps.setInt(2,motor.get_capacidadeCombustivel());
+			ps.setInt(3,modo);
+			ps.executeUpdate();
+			id = this.getLastId(ps);
 		} catch (SQLException e) {
 			// Erro a criar tabela...
 			e.printStackTrace();
@@ -466,48 +471,56 @@ public class CarroDAO implements Map<String,Carro> {
 	private int insertCategoria(Categoria categoria)
 	{
 		int id = 0;
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
-			String sql = "INSERT INTO Categoria (fiabilidade) VALUES(" + categoria.getValues()+ ")";
-			stm.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
-			id = this.getLastId(stm);
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			String sql = "INSERT INTO Categoria (fiabilidade) VALUES(?)";
+			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1,categoria.get_fiabilidade());
+			ps.executeUpdate();
+			id = this.getLastId(ps);
 			if (categoria instanceof C1)
 			{
 				sql = "INSERT INTO C1 VALUES (" + id + ")";
-				stm.executeUpdate(sql);
+				ps = conn.prepareStatement(sql);
+				ps.executeUpdate();
 				if (categoria instanceof C1Hibrido)
 				{
 					int car = this.insertMotor(((C1Hibrido) categoria).get_motorEletrico());
 					sql = "INSERT INTO C1H VALUES (" + id + ','+ car + ")";
-					stm.executeUpdate(sql);
+					ps = conn.prepareStatement(sql);
+					ps.executeUpdate();
 				}
 			}
 			else if (categoria instanceof C2)
 			{
 				sql = "INSERT INTO C2 VALUES (" + id + ")";
-				stm.executeUpdate(sql);
+				ps = conn.prepareStatement(sql);
+				ps.executeUpdate();
 				if (categoria instanceof C2Hibrido)
 				{
 					int car = this.insertMotor(((C2Hibrido) categoria).get_motorEletrico());
 					sql = "INSERT INTO C2H VALUES (" + id + ','+ car + ")";
-					stm.executeUpdate(sql);
+					ps = conn.prepareStatement(sql);
+					ps.executeUpdate();
 				}
 			}
 			else if (categoria instanceof GT)
 			{
 				sql = "INSERT INTO GT VALUES (" + id + ")";
-				stm.executeUpdate(sql);
+				ps = conn.prepareStatement(sql);
+				ps.executeUpdate();
 				if (categoria instanceof GTHibrido_)
 				{
 					int car = this.insertMotor(((GTHibrido_) categoria).get_motorEletrico());
 					sql = "INSERT INTO GTH VALUES (" + id + ','+ car + ")";
-					stm.executeUpdate(sql);
+					ps = conn.prepareStatement(sql);
+					ps.executeUpdate();
 				}
 			}
 			else if (categoria instanceof SC)
 			{
 				sql = "INSERT INTO SC VALUES (" + id + ")";
-				stm.executeUpdate(sql);
+				ps = conn.prepareStatement(sql);
+				ps.executeUpdate();
 			}
 		} catch (SQLException e) {
 			// Erro a criar tabela...
@@ -574,6 +587,7 @@ public class CarroDAO implements Map<String,Carro> {
 		//carros.add(new Carro("Toyota", "Supra",5,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(4)));
 		//carros.add(new Carro("Mercedes", "AMG",6,pneus.get(2),(MotorCombustao) motores.get(1),categorias.get(5)));
 		//this.insertCarro(new Carro("BMW","M4",0.5f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
+		this.insertCarro(new Carro("Ford","GT",0.5f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
 		//carros.forEach(this::insertCarro);
 	}
 

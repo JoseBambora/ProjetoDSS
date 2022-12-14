@@ -50,4 +50,12 @@ public class Motor implements IMotor {
 			case "Conservador" -> this._capacidadeCombustivel-=1;
 		}
 	}
+
+	public int get_potencia() {
+		return _potencia;
+	}
+
+	public int get_capacidadeCombustivel() {
+		return _capacidadeCombustivel;
+	}
 }
