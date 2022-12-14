@@ -12,7 +12,7 @@ public class PilotoDAO implements Map<String,Piloto> {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 Statement stm = conn.createStatement()) {
 
-			String sql = "CREATE TABLE IF NOT EXISTS `simuladorDSS`.`ModoMotor` (" +
+			String sql = "CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Piloto` (" +
 						"id INT NOT NULL AUTO_INCREMENT," +
 						"PRIMARY KEY (`id`))";
 			stm.executeUpdate(sql);
