@@ -207,28 +207,66 @@ public class CarroDAO implements Map<String,Carro> {
 	}
 	@Override
 	public int size() {
-		return 0;
+		int res = 0;
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+			 Statement stm = conn.createStatement())
+		{
+			String sql = "SELECT COUNT(*) FROM Carro";
+			ResultSet rs = stm.executeQuery(sql);
+			if(rs.next())
+			{
+				res = rs.getInt(1);
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+
+		}
+		return res;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return false;
+		return this.size() == 0;
 	}
 
 	@Override
-	public boolean containsKey(Object key) {
-		return false;
-	}
-
-	@Override
-	public boolean containsValue(Object value) {
-		return false;
-	}
-
-	private String makeQuery(String c, String filter, int id)
+	public boolean containsKey(Object key)
 	{
-		return "SELECT * FROM "+ c + "  WHERE " + filter +" = " + id;
+		boolean res = false;
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
+		{
+			String []keys = Carro.getMarcaModelo((String) key);
+			String marca = keys[0];
+			String modelo = keys[1];
+			String sql = "SELECT COUNT(*) FROM Carro WHERE marca = ? AND modelo = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1,marca);
+			ps.setString(2,modelo);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next())
+			{
+				res = rs.getInt(1) > 0;
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+
+		}
+		return res;
 	}
+
+	@Override
+	public boolean containsValue(Object value)
+	{
+		Carro carro = (Carro) value;
+		return this.containsKey(carro.generateKey());
+	}
+
 	private Categoria getCategoria(int id) throws SQLException
 	{
 		Categoria r = null;
@@ -555,50 +593,56 @@ public class CarroDAO implements Map<String,Carro> {
 	}
 	public void generateData()
 	{
-		List<ModoMotor> modos = new ArrayList<>();
-		modos.add(new Agressivo());
-		modos.add(new Normal());
-		modos.add(new Normal());
-		modos.add(new Conservador());
-		List<Motor> motores = new ArrayList<>();
-		motores.add(new MotorCombustao(525,60,modos.get(0),3000));
-		motores.add(new MotorCombustao(600,60,modos.get(2),3000));
-		motores.add(new MotorCombustao(400,60,modos.get(3),3000));
-		motores.add(new MotorCombustao(300,60,modos.get(1),3000));
-		motores.add(new MotorElétrico(300,60,modos.get(2)));
-		motores.add(new MotorElétrico(300,60,modos.get(1)));
-		List<Pneu> pneus = new ArrayList<>();
-		pneus.add(new Chuva());
-		pneus.add(new Macio());
-		pneus.add(new Duro());
-		List<Categoria> categorias = new ArrayList<>();
-		categorias.add(new C1(95));
-		categorias.add(new C2(99));
-		categorias.add(new GT(88));
-		categorias.add(new SC(79));
-		categorias.add(new C1Hibrido(80,(MotorElétrico) motores.get(4)));
-		categorias.add(new C2Hibrido(85,(MotorElétrico) motores.get(5)));
-		categorias.add(new GTHibrido_(90,(MotorElétrico) motores.get(4)));
-		//List<Carro> carros = new ArrayList<>();
-		//carros.add(new Carro("Porshe", "GT3RS",2,pneus.get(1),(MotorCombustao) motores.get(0),categorias.get(0)));
-		//carros.add(new Carro("Ferrari", "Enzo",2,pneus.get(0),(MotorCombustao) motores.get(1),categorias.get(1)));
-		//carros.add(new Carro("Audi", "R8",3,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(2)));
-		//carros.add(new Carro("Honda", "Type-R",4,pneus.get(2),(MotorCombustao) motores.get(3),categorias.get(3)));
-		//carros.add(new Carro("Toyota", "Supra",5,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(4)));
-		//carros.add(new Carro("Mercedes", "AMG",6,pneus.get(2),(MotorCombustao) motores.get(1),categorias.get(5)));
-		//this.insertCarro(new Carro("BMW","M4",0.5f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
-		this.insertCarro(new Carro("Ford","GT",0.5f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
-		//carros.forEach(this::insertCarro);
+		if(this.isEmpty())
+		{
+			System.out.println("entrou");
+			List<ModoMotor> modos = new ArrayList<>();
+			modos.add(new Agressivo());
+			modos.add(new Normal());
+			modos.add(new Normal());
+			modos.add(new Conservador());
+			List<Motor> motores = new ArrayList<>();
+			motores.add(new MotorCombustao(525,60,modos.get(0),3000));
+			motores.add(new MotorCombustao(600,60,modos.get(2),3000));
+			motores.add(new MotorCombustao(400,60,modos.get(3),3000));
+			motores.add(new MotorCombustao(300,60,modos.get(1),3000));
+			motores.add(new MotorElétrico(300,60,modos.get(2)));
+			motores.add(new MotorElétrico(300,60,modos.get(1)));
+			List<Pneu> pneus = new ArrayList<>();
+			pneus.add(new Chuva());
+			pneus.add(new Macio());
+			pneus.add(new Duro());
+			List<Categoria> categorias = new ArrayList<>();
+			categorias.add(new C1(95));
+			categorias.add(new C2(99));
+			categorias.add(new GT(88));
+			categorias.add(new SC(79));
+			categorias.add(new C1Hibrido(80,(MotorElétrico) motores.get(4)));
+			categorias.add(new C2Hibrido(85,(MotorElétrico) motores.get(5)));
+			categorias.add(new GTHibrido_(90,(MotorElétrico) motores.get(4)));
+			List<Carro> carros = new ArrayList<>();
+			carros.add(new Carro("Porshe", "GT3RS",2,pneus.get(1),(MotorCombustao) motores.get(0),categorias.get(0)));
+			carros.add(new Carro("Ferrari", "Enzo",2,pneus.get(0),(MotorCombustao) motores.get(1),categorias.get(1)));
+			carros.add(new Carro("Audi", "R8",3,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(2)));
+			carros.add(new Carro("Honda", "Type-R",4,pneus.get(2),(MotorCombustao) motores.get(3),categorias.get(3)));
+			carros.add(new Carro("Toyota", "Supra",5,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(4)));
+			carros.add(new Carro("Mercedes", "AMG",6,pneus.get(2),(MotorCombustao) motores.get(1),categorias.get(5)));
+			carros.add(new Carro("BMW","M4",0.5f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
+			carros.add(new Carro("Ford","GT",0.5f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
+			carros.forEach(this::insertCarro);
+		}
 	}
 
 	@Override
-	public Carro put(String key, Carro value) {
-		return null;
-
+	public Carro put(String key, Carro value)
+	{
+		this.insertCarro(value);
+		return value;
 	}
 
 	@Override
-	public Carro remove(Object key) {
+	public Carro remove(Object key)
+	{
 		return null;
 	}
 

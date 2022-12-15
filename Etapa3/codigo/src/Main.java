@@ -9,14 +9,17 @@ public class Main {
     public static void main(String[] args) {
         CarroDAO carroDAO = CarroDAO.getInstace();
         carroDAO.generateData();
-        Set<String> key = carroDAO.keySet();
-        Collection<Carro> carros = carroDAO.values();
-        Set<Map.Entry<String,Carro>> entrySet = carroDAO.entrySet();
-        System.out.println("Values: ");
-        carros.forEach(System.out::println);
-        System.out.println("\nEntrey Set");
-        entrySet.forEach(c -> System.out.println(c.getValue()));
-        System.out.println("\nKeySet: ");
-        key.forEach(System.out::println);
+        // Set<String> key = carroDAO.keySet();
+        // Collection<Carro> carros = carroDAO.values();
+        // Set<Map.Entry<String,Carro>> entrySet = carroDAO.entrySet();
+        // System.out.println("Values: ");
+        // carros.forEach(System.out::println);
+        // System.out.println("\nEntrey Set");
+        // entrySet.forEach(c -> System.out.println(c.getValue()));
+        // System.out.println("\nKeySet: ");
+        // key.forEach(System.out::println);
+        System.out.println(carroDAO.size());
+        //System.out.println(carroDAO.containsKey("Porshe,GT3RS"));
+        //System.out.println(carroDAO.containsKey("Porshe,GT2RS"));
     }
 }
