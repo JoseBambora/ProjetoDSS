@@ -214,8 +214,6 @@ public class UtilizadorDAO implements Map<String, Utilizador> {
         }
     }
 
-
-    //SELECT FROM Utilizador where key == ao id
     @Override
     public Utilizador put(String key, Utilizador value) {
         this.insertUser(value);
@@ -235,8 +233,6 @@ public class UtilizadorDAO implements Map<String, Utilizador> {
             this.put(key,user);
         }
     }
-
-    //ciclo para cada elemento do map fazer insert na base de dados
 
     @Override
     public void clear() {
@@ -276,7 +272,6 @@ public class UtilizadorDAO implements Map<String, Utilizador> {
         return result;
     }
 
-    //Fazer set com as PKs da tabela
     @Override
     public Collection<Utilizador> values() {
         Collection<Utilizador> users = new ArrayList<>();
@@ -289,7 +284,6 @@ public class UtilizadorDAO implements Map<String, Utilizador> {
         return users;
     }
 
-    //ir buscar todos os users
     @Override
     public Set<Entry<String, Utilizador>> entrySet() {
         Set<String> keyset = this.keySet();
