@@ -9,11 +9,11 @@ import java.security.Key;
 import java.sql.*;
 import java.util.*;
 
-public class UtilizadorDAO implements Map<String, Utilizador> {
+public class UtilizadoresDAO implements Map<String, Utilizador> {
 
-    private static UtilizadorDAO instance = null;
+    private static UtilizadoresDAO instance = null;
 
-    private UtilizadorDAO()
+    private UtilizadoresDAO()
     {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);
              Statement stm = conn.createStatement()){
@@ -48,9 +48,9 @@ public class UtilizadorDAO implements Map<String, Utilizador> {
         }
     }
 
-    public static UtilizadorDAO getInstance(){
+    public static UtilizadoresDAO getInstance(){
         if(instance == null)
-            instance = new UtilizadorDAO();
+            instance = new UtilizadoresDAO();
         return instance;
     }
 
