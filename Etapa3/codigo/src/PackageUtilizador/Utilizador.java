@@ -60,4 +60,10 @@ public class Utilizador {
 				", _password='" + _password + '\'' +
 				'}';
 	}
+
+    public int get_pontuacaoTotal() {
+		int pontuacao = 0;
+		if (this instanceof Jogador) pontuacao = ((Jogador) this).get_pontuacaoTotal();
+		return pontuacao;
+	}
 }
