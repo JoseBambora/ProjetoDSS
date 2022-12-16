@@ -57,7 +57,7 @@ public class CarroDAO implements Map<String,Carro> {
 			sql = """
 				  CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Categoria` (
        				  `id` INT NOT NULL AUTO_INCREMENT,
-       				  `fiabilidade` INT NOT NULL,
+       				  `fiabilidade` FLOAT NOT NULL,
              			  PRIMARY KEY (`id`)
        				  )
 				  """;
@@ -512,7 +512,7 @@ public class CarroDAO implements Map<String,Carro> {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			String sql = "INSERT INTO Categoria (fiabilidade) VALUES(?)";
 			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1,categoria.get_fiabilidade());
+			ps.setFloat(1,categoria.get_fiabilidade());
 			ps.executeUpdate();
 			id = this.getLastId(ps);
 			if (categoria instanceof C1)
@@ -595,7 +595,7 @@ public class CarroDAO implements Map<String,Carro> {
 	{
 		if(this.isEmpty())
 		{
-			System.out.println("entrou");
+			System.out.println("A gerar dados para os carros");
 			List<ModoMotor> modos = new ArrayList<>();
 			modos.add(new Agressivo());
 			modos.add(new Normal());
