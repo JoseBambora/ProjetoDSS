@@ -43,26 +43,77 @@ public class PilotoDAO implements Map<String,Piloto> {
 
 	@Override
 	public int size() {
-		return 0;
+		int res = 0;
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             Statement stm = conn.createStatement())
+        {
+            String sql = "SELECT COUNT(*) FROM Piloto";
+            ResultSet rs = stm.executeQuery(sql);
+            if(rs.next())
+            {
+                res = rs.getInt(1);
+            }
+        } catch (SQLException e) 
+		{
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+        }
+        return res;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return false;
+		return this.size() == 0;
 	}
+
 
 	@Override
 	public boolean containsKey(Object key) {
-		return false;
+		boolean res = false;
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
+		{
+			String sql = "SELECT COUNT(*) FROM Piloto WHERE nome = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1,(String)key);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next())
+			{
+				res = rs.getInt(1) > 0;
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+
+		}
+		return res;
 	}
 
 	@Override
 	public boolean containsValue(Object value) {
-		return false;
+		Piloto driver = (Piloto) value;
+        boolean res = false;
+        try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
+        {
+            String sql = "SELECT COUNT(*) FROM Utilizador WHERE sva = ? AND cts = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setFloat(1,(driver.get_SVA()));
+            ps.setFloat(2,(driver.get_CTS()));
+            ResultSet rs = ps.executeQuery();
+            if(rs.next())
+            {
+                res = rs.getInt(1) > 0;
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+
+        }
+        return res;
 	}
-
-	// Carro(marca,modelo,pac, cilindrada)
-
 
 
 	@Override
@@ -126,16 +177,17 @@ public class PilotoDAO implements Map<String,Piloto> {
 		List<Piloto> pilotos = new ArrayList<>();
 		pilotos.add(new Piloto("Alexander Hamilton", 0.5, 0.2));
 		pilotos.add(new Piloto("Scaramouche", 0.1, 0.6));
-		pilotos.add(new Piloto("Sergio Perez", 0.9, 0.1));
-		pilotos.add(new Piloto("George Russel", 0.2, 0.6));
-		pilotos.add(new Piloto("Charles Leclerc", 0.4, 0.7));
-		pilotos.add(new Piloto("Pierre Gasly", 0.7, 0.4));
+		pilotos.add(new Piloto("Murphy Jurtrudes", 0.9, 0.1));
+		pilotos.add(new Piloto("Raiden Russel", 0.2, 0.6));
+		pilotos.add(new Piloto("Gary Leclerc", 0.4, 0.7));
+		pilotos.add(new Piloto("Kiko Gasly", 0.7, 0.4));
 		pilotos.forEach(this::insertPiloto);
 	}
 
 	@Override
 	public Piloto put(String key, Piloto value) {
-		return null;
+		this.insertPiloto(value);
+        return null;
 	}
 
 	@Override
@@ -155,16 +207,49 @@ public class PilotoDAO implements Map<String,Piloto> {
 
 	@Override
 	public Set<String> keySet() {
-		return null;
+		Set<String> result = new HashSet<>();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			String sql = "SELECT * FROM Piloto";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				String nome = rs.getString("nome");
+				result.add(nome);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return result;
 	}
 
 	@Override
 	public Collection<Piloto> values() {
-		return null;
+		Collection<Piloto> drivers = new ArrayList<>();
+        Set<String> keyset = this.keySet();
+        for (String key : keyset)
+        {
+            Piloto driver = this.get(key);
+            drivers.add(driver);
+        }
+        return drivers;
 	}
 
 	@Override
 	public Set<Entry<String, Piloto>> entrySet() {
-		return null;
+		Set<String> keyset = this.keySet();
+		Set<Entry<String,Piloto>> result = new HashSet<>();
+		for(String key : keyset)
+		{
+			Piloto driver = this.get(key);
+			result.add(Map.entry(key,driver));
+
+		}
+		return result;
+	}
+}
+
 	}
 }
