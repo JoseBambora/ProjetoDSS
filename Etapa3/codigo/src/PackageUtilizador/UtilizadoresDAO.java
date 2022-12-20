@@ -1,11 +1,6 @@
 package PackageUtilizador;
 
 import DAOCONFIG.*;
-import PackageCarro.*;
-import PackageUtilizador.Utilizador;
-import jdk.jshell.execution.Util;
-import javax.swing.plaf.nimbus.State;
-import java.security.Key;
 import java.sql.*;
 import java.util.*;
 
