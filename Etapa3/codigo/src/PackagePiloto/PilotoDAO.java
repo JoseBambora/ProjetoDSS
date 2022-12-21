@@ -96,7 +96,7 @@ public class PilotoDAO implements Map<String,Piloto> {
         boolean res = false;
         try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
         {
-            String sql = "SELECT COUNT(*) FROM Utilizador WHERE sva = ? AND cts = ?";
+            String sql = "SELECT COUNT(*) FROM Piloto WHERE sva = ? AND cts = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setFloat(1,(driver.get_SVA()));
             ps.setFloat(2,(driver.get_CTS()));
@@ -152,7 +152,7 @@ public class PilotoDAO implements Map<String,Piloto> {
 	}
 
 
-		private void insertPiloto(Piloto piloto)
+	private void insertPiloto(Piloto piloto)
 	{
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 Statement stm = conn.createStatement())
