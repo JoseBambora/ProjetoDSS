@@ -1,3 +1,4 @@
+import PackageCampProva.CampeonatoProva;
 import PackageCarro.ModoMotor;
 import PackageUtilizador.UtilizadoresDAO;
 import PackageCircuito.CircuitoDAO;
@@ -13,6 +14,9 @@ import PackageCircuito.Circuito;
 import PackageCampeonato.Campeonato;
 import PackageUtilizador.Jogador;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +40,10 @@ public class Simulador implements ISimulador {
 		throw new UnsupportedOperationException();
 	}
 
-	public Boolean validarDadosUser(String aNome, String aPass) {
-		throw new UnsupportedOperationException();
+	public Boolean validarDadosUser(String aNome, String aPass)
+	{
+		UtilizadoresDAO utilizadoresDAO = UtilizadoresDAO.getInstance();
+		return utilizadoresDAO.containsKey(aNome) && utilizadoresDAO.get(aNome).get_password().equals(aPass);
 	}
 
 	public void adicionaPiloto(Piloto aPiloto) {
@@ -158,8 +164,21 @@ public class Simulador implements ISimulador {
 		throw new UnsupportedOperationException();
 	}
 
-	public void configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros) {
-		throw new UnsupportedOperationException();
+	public String configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros)
+	{
+		Campeonato campeonato;
+		CampeonatoProva campeonatoProva = new CampeonatoProva();
+		for(String player : aJogadores)
+		{
+			String pilotoID = aEscolhaPilotos.get(player);
+			String carroID = aEscolhaCarros.get(player);
+			Piloto piloto = PilotoDAO.getInstace().get(pilotoID);
+			Carro carro = CarroDAO.getInstace().get(carroID);
+			campeonatoProva.adicionajogador(player,carro,piloto);
+		}
+		String key =  campeonatoProva.get_id();
+		CampeonatoProvaDAO.getInstance().put(key,campeonatoProva);
+		return key;
 	}
 
 	public void guardaAfinacao(String aIdCampProva, Jogador aNome, float aPAC, ModoMotor aModo, String aPneus) {
@@ -176,5 +195,35 @@ public class Simulador implements ISimulador {
 
 	public void atualizaPontuacaoGlobal(String aIdCampeonatoProva, String aNome) {
 		throw new UnsupportedOperationException();
+	}
+
+	public void simulaCampeonato(String campProva)
+	{
+		UtilizadoresDAO utilizadoresDAO = UtilizadoresDAO.getInstance();
+		CampeonatoProva campeonatoProva = CampeonatoProvaDAO.getInstance().get(campProva);
+		Map<String,Integer> classificacoes = campeonatoProva.simulaCampeonato();
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		try
+		{
+			for(String nome : classificacoes.keySet())
+			{
+				Utilizador user = utilizadoresDAO.get(nome);
+				if(user.isJogador())
+				{
+					Jogador player = (Jogador) user;
+					System.out.println("Jogador: " + nome + ", qual a password?");
+					String password = input.readLine();
+					if(this.validarDadosUser(nome,password))
+					{
+						player.aumentaClassficacao(classificacoes.get(nome));
+						utilizadoresDAO.put(nome,player);
+					}
+				}
+			}
+		}
+		catch (Exception ignored)
+		{
+
+		}
 	}
 }

@@ -78,7 +78,7 @@ public interface ISimulador {
 
 	public void resgistaEscolhas(String aPiloto, String aCarro, String aPneus);
 
-	public void configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros);
+	public String configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros);
 
 	public void guardaAfinacao(String aIdCampProva, Jogador aNome, float aPAC, ModoMotor aModo, String aPneus);
 
@@ -87,4 +87,6 @@ public interface ISimulador {
 	public Map<String, Integer> getClassificacoesCorrida(String aIdCampeonato, String aIdProva);
 
 	public void atualizaPontuacaoGlobal(String aIdCampeonatoProva, String aNome);
+
+	public void simulaCampeonato(String campProva);
 }
