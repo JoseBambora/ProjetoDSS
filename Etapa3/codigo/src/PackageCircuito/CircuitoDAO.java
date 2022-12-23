@@ -161,8 +161,8 @@ public class CircuitoDAO implements Map<String,Circuito> {
 		Circuito r = null;
 		String campeonato = "";
 		boolean aux = false;
-        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
-            Statement stm = conn.createStatement(); {
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            Statement stm = conn.createStatement()); {
 
 			String sql = "SELECT * FROM Circuito WHERE nome = '" + nome +  "'";
 			System.out.println(sql);
