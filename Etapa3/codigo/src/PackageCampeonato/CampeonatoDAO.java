@@ -17,6 +17,7 @@ import DAOCONFIG.DAOconfig;
 
 public class CampeonatoDAO implements Map<String,Campeonato> {
 	private static CampeonatoDAO instance = null;
+	private String String;
 
 	
 	private CampeonatoDAO() throws NullPointerException{
@@ -98,8 +99,7 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 
 	@Override
 	public Campeonato get(Object key) {
-		String []str = Campeonato.getCampeonato((String) key);
-		String nome = str[0];
+		String nome = (String) key;
 		boolean disp = false;
 		Campeonato r = null;
 		boolean aux = false;
@@ -124,7 +124,7 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 		return r;
 	}
 
-	@Override
+	@Override //não faço a minima pq é q isto está assim, quando tiver tempo vejo
 	public void insertCampeonato(Campeonato value) {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 Statement stm = conn.createStatement())
