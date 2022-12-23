@@ -5,6 +5,26 @@ import java.util.Map;
 import java.util.Set;
 
 public class CampeonatoDAO implements Map<String,Campeonato> {
+	
+	
+	private CampeonatoDAO(){
+		try(Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+			Statement stm = conn.createStatement()){
+				String sql = "CREATE TABLE IF NOT EXISTTS `simuladorDSS`.`Campeonato` (" +
+				"nome VARCHAR(75)," + 
+				"PRIMARY KEY (`nome`))";
+			stm.executeUpdate(sql);
+
+			sql = """
+					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Campeonato` (
+					`nome` VARCHAR(75)
+					`disponivel` TINYINT
+						PRIMARY KEY (`nome`),
+					)
+					""";
+		}
+	}
+
 	@Override
 	public int size() {
 		return 0;

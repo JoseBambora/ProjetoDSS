@@ -46,7 +46,10 @@ public class CircuitoDAO implements Map<String,Circuito> {
 					`nome` VARCHAR(50) NOT NULL,
 					`distancia` INT NOT NULL,
 					`voltas` INT NOT NULL,
-					`campeonato` VARCHAR(50)
+					`campeonato` VARCHAR(75),
+						PRIMARY KEY (`nome`),
+						FOREIGN KEY (`nome`)
+						REFERENCES `simuladorDSS.`Campeonato` (nome)
        				)
 				 	""";
 			stm.executeUpdate(sql);
