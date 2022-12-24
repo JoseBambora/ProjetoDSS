@@ -208,14 +208,10 @@ public class CircuitoDAO implements Map<String,Circuito> {
 	}
 
 
-	public void generateData()
+	public void generateDataCircuito()
 	{
 		if(this.isEmpty())
 		{
-			List<Caracteristica> caracteristicas = new ArrayList<>();
-			caracteristicas.add(new Chicane());
-			caracteristicas.add(new Reta());
-			caracteristicas.add(new Curva());
 			List<Circuito> circuitos = new ArrayList<>();
 			circuitos.add(new Circuito("Braga", 500 , 2, "campeonato1")); // isto tá mal
 			circuitos.add(new Circuito("Lisboa", 730 , 5, "campeonato3")); // isto tá mal
