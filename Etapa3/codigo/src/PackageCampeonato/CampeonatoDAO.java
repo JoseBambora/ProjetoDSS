@@ -17,8 +17,7 @@ import DAOCONFIG.DAOconfig;
 
 public class CampeonatoDAO implements Map<String,Campeonato> {
 	private static CampeonatoDAO instance = null;
-	private String String;
-
+	
 	
 	private CampeonatoDAO() throws NullPointerException{
 		try(Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -51,7 +50,7 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 	@Override
 	public int size() {
 		int r = 0;
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD)
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 		Statement stm = conn.createStatement()){
 			String sql = "SELECT COUNT(*) FROM Campeonato";
 			ResultSet answerMessage = stm.executeQuery(sql);
@@ -124,7 +123,7 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 		return r;
 	}
 
-	@Override //não faço a minima pq é q isto está assim, quando tiver tempo vejo
+	//@Override //não faço a minima pq é q isto está assim, quando tiver tempo vejo
 	public void insertCampeonato(Campeonato value) {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 Statement stm = conn.createStatement())
