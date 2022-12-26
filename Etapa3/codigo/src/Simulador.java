@@ -17,6 +17,7 @@ import PackageUtilizador.Jogador;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -166,7 +167,7 @@ public class Simulador implements ISimulador {
 
 	public String configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros)
 	{
-		Campeonato campeonato;
+		Campeonato campeonato = CampeonatoDAO.getInstance().get(aCampnome);
 		CampeonatoProva campeonatoProva = new CampeonatoProva();
 		for(String player : aJogadores)
 		{
@@ -202,6 +203,16 @@ public class Simulador implements ISimulador {
 		UtilizadoresDAO utilizadoresDAO = UtilizadoresDAO.getInstance();
 		CampeonatoProva campeonatoProva = CampeonatoProvaDAO.getInstance().get(campProva);
 		Map<String,Integer> classificacoes = campeonatoProva.simulaCampeonato();
+		List<String> classiSort = new ArrayList<>(classificacoes.keySet());
+		classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
+		System.out.println("Classificações finais");
+		System.out.println("     Nome      | Pontuação");
+		for(int i = 0; i < classiSort.size(); )
+		{
+			i++;
+			String name = classiSort.get(i);
+			System.out.println(i + "º " + name.substring(0,15) + " | " + classificacoes.get(name));
+		}
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		try
 		{
