@@ -17,7 +17,7 @@ public class Circuito implements ICircuito {
 		this._campeonato = camp;
     }
 
-	public static String[] getCondutor(String key)
+	public static String[] getCircuito(String key)
 	{
 		return key.split(",");
 	}
