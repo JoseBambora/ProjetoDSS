@@ -55,9 +55,9 @@ public class Utilizador {
 
 	@Override
 	public String toString() {
-		return "Utilizador{" +
-				"_username='" + _username + '\'' +
-				", _password='" + _password + '\'' +
+		return "Utilizador{\n" +
+				"_username='" + _username + '\n' +
+				"_password='" + _password + '\n' +
 				'}';
 	}
 

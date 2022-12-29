@@ -42,7 +42,7 @@ public class Jogador extends Utilizador {
 
 	@Override
 	public String toString() {
-		return "Jogador{" +
+		return "Jogador{\n" +
 				"_username= " + this.get_username() + "\n" +
 				"_password= " + this.get_password() + "\n" +
 				"_pontuacaoTotal= " + _pontuacaoTotal +

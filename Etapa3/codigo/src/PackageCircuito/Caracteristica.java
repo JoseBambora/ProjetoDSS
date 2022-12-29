@@ -1,5 +1,7 @@
 package PackageCircuito;
 
+//import static javax.swing.text.rtf.RTFAttributes.BooleanAttribute.False;
+
 public class Caracteristica implements ICaracteristica {
 	private int _gdu;
 	public Circuito _unnamed_Circuito_;
@@ -15,11 +17,11 @@ public class Caracteristica implements ICaracteristica {
 	// 3 - impossivel
 
 	public Boolean validaGDU(Integer aGdu) {
-		if{aGdu != 1 || aGdu != 2 || aGdu != 3}
-			return False;
+		if(aGdu != 1 || aGdu != 2 || aGdu != 3)
+			return false;
 		else
 		{
-			return True;
+			return true;
 		}
 	}
 }

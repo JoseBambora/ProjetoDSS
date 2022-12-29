@@ -21,7 +21,7 @@ public class Admin extends Utilizador {
 
     @Override
     public String toString() {
-        return "Admin{" +
+        return "Admin{\n" +
                 "_username= " + this.get_username() + "\n" +
                 "_password= " + this.get_password() + "\n" +
                 "}";

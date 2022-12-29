@@ -1,5 +1,6 @@
 package PackageCircuito;
 
+import DAOCONFIG.DAOconfig;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class MelhoresVoltasDAO {
 	private MelhoresVoltasDAO()
 		{
 			try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 	 Statement stm = conn.createStatement()) {
+				 Statement stm = conn.createStatement()) {
 				String sql = "CREATE TABLE IF NOT EXISTS `simuladorDSS`.`MelhoresVoltas` (" +
 								"id INT NOT NULL AUTO_INCREMENT," +
 								"PRIMARY KEY (`id`))";

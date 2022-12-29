@@ -1,6 +1,8 @@
 package PackageUtilizador;
 
 import DAOCONFIG.*;
+import PackageCampProva.CampeonatoProva;
+
 import java.sql.*;
 import java.util.*;
 
@@ -13,27 +15,26 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);
              Statement stm = conn.createStatement()){
             String sql = "CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Utilizador`("+
-                    "id INT NOT NULL AUTO_INCREMENT," +
                     "username VARCHAR(75)," +
                     "password VARCHAR(75)," +
-                    "PRIMARY KEY (`id`))";
+                    "PRIMARY KEY (`username`))";
             stm.executeUpdate(sql);
             sql = """
                   CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Admin`(
-                     `idUser` INT NOT NULL,
-                      FOREIGN KEY (`idUser`)
-                      REFERENCES `simuladorDSS`.`Utilizador` (`id`),
-                      PRIMARY KEY (`idUser`)
+                     `username` VARCHAR(75),
+                      FOREIGN KEY (`username`)
+                      REFERENCES `simuladorDSS`.`Utilizador` (`username`),
+                      PRIMARY KEY (`username`)
                      )
                   """;
             stm.executeUpdate(sql);
             sql = """
                   CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Jogador`(
-                    `idUser` INT NOT NULL,
+                    `username` VARCHAR(75),
                     `pontuacao` INT,
-                        FOREIGN KEY (`idUser`)
-                        REFERENCES `simuladorDSS`.`Utilizador` (`id`),
-                        PRIMARY KEY (`idUser`)
+                        FOREIGN KEY (`username`)
+                        REFERENCES `simuladorDSS`.`Utilizador` (`username`),
+                        PRIMARY KEY (`username`)
                   )
                   """;
             stm.executeUpdate(sql);
@@ -74,12 +75,13 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
 
     @Override
     public boolean containsKey(Object key) {
+        Utilizador user = (Utilizador) key;
         boolean res = false;
         try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
         {
-            String sql = "SELECT COUNT(*) FROM Utilizador WHERE id = ?";
+            String sql = "SELECT COUNT(*) FROM Utilizador WHERE username = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1,(Integer) key);
+            ps.setString(1, user.get_username());
             ResultSet rs = ps.executeQuery();
             if(rs.next())
             {
@@ -97,64 +99,31 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
 
     @Override
     public boolean containsValue(Object value) {
-        Utilizador user = (Utilizador) value;
-        boolean res = false;
-        try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
-        {
-            String sql = "SELECT COUNT(*) FROM Utilizador WHERE username = ? AND password = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1,(user.get_username()));
-            ps.setString(2,(user.get_password()));
-            ResultSet rs = ps.executeQuery();
-            if(rs.next())
-            {
-                res = rs.getInt(1) > 0;
-            }
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            throw new NullPointerException(e.getMessage());
-
-        }
-        return res;
+        return containsKey(value);
     }
 
-    private int getLastId(PreparedStatement statement) throws SQLException
-    {
-        int id = 0;
-        ResultSet rs = statement.getGeneratedKeys();
-        if (rs.next()) {
-            id = rs.getInt(1);
-        }
-        return id;
-    }
-
-    //TESTADO
     @Override
     public Utilizador get(Object key) {
-        String username = "";
+        String username = (String) key;
         String password = "";
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
-            String sql = "SELECT * FROM Utilizador WHERE id = ?";
+            String sql = "SELECT * FROM Utilizador WHERE username = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            int id = (Integer) key;
-            ps.setInt(1,id);
+            ps.setString(1,username);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                username = rs.getString("username");
                 password = rs.getString("password");
             }
-            sql = "SELECT * FROM Admin WHERE idUser = ?";
+            sql = "SELECT * FROM Admin WHERE username = ?";
             ps = conn.prepareStatement(sql);
-            ps.setInt(1,id);
+            ps.setString(1,username);
             rs = ps.executeQuery();
             if(rs.next()){
                 return new Admin(username,password);
             }
-            sql = "SELECT * FROM Jogador WHERE idUser = ?";
+            sql = "SELECT * FROM Jogador WHERE username = ?";
             ps = conn.prepareStatement(sql);
-            ps.setInt(1,id);
+            ps.setString(1,username);
             rs = ps.executeQuery();
             if(rs.next()){
                 int pontuacao = rs.getInt("pontuacao");
@@ -177,17 +146,18 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
             ps.setString(1,username);
             ps.setString(2,password);
             ps.executeUpdate();
-            int id = this.getLastId(ps);
             if(value instanceof Jogador){
-                int pontuacao = ((Jogador) value).get_pontuacaoTotal();
-                sql = "INSERT INTO Jogador VALUES ("+id+",?)";
+                int pontuacao = value.get_pontuacaoTotal();
+                sql = "INSERT INTO Jogador (username,pontuacao) VALUES (?,?)";
                 ps = conn.prepareStatement(sql);
-                ps.setInt(1,pontuacao);
+                ps.setString(1,username);
+                ps.setInt(2,pontuacao);
                 ps.executeUpdate();
             }
             if(value instanceof Admin){
-                sql = "INSERT INTO Admin VALUES ("+id+")";
+                sql = "INSERT INTO Admin (username) VALUES (?)";
                 ps = conn.prepareStatement(sql);
+                ps.setString(1,username);
                 ps.executeUpdate();
             }
         }
@@ -243,8 +213,8 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                int id = rs.getInt("id");
-                result.add(String.valueOf(id));
+                String username = rs.getString("username");
+                result.add(username);
             }
         }
         catch (SQLException e) {
@@ -254,39 +224,37 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
         return result;
     }
 
-    //TESTADO
     @Override
     public Collection<Utilizador> values() {
         Collection<Utilizador> users = new ArrayList<>();
         Set<String> keyset = this.keySet();
         for (String key : keyset)
         {
-            Utilizador user = this.get(Integer.valueOf(key));
+            Utilizador user = this.get(key);
             users.add(user);
         }
         return users;
     }
 
-    //TESTADO
     @Override
     public Set<Entry<String, Utilizador>> entrySet() {
-        Set<String> keyset = this.keySet(); //[1,2,3]
+        Set<String> keyset = this.keySet();
         Set<Entry<String,Utilizador>> result = new HashSet<>();
         for(String key : keyset){
-            Utilizador user = this.get(Integer.valueOf(key));
+            Utilizador user = this.get(key);
             result.add(Map.entry(key,user));
         }
         return result;
     }
 
-    public void alteraPontuacao(int idJogador, int incremento){
+    public void addPontuacao(String nomeJogador, int incremento){
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
-            Utilizador aux = this.get(idJogador);
-            String sql= "UPDATE Jogador SET pontuacao = ? WHERE idUser = ?";
+            Utilizador aux = this.get(nomeJogador);
+            String sql= "UPDATE Jogador SET pontuacao = ? WHERE username = ?";
             PreparedStatement ps;
             ps = conn.prepareStatement(sql);
             ps.setInt(1,aux.get_pontuacaoTotal()+incremento);
-            ps.setInt(2,idJogador);
+            ps.setString(2,nomeJogador);
             ps.executeUpdate();
         }
         catch (SQLException e) {
@@ -295,8 +263,7 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
         }
     }
 
-
-
+    //Usar para testes
     public void generateData()
     {
         if(this.isEmpty())
