@@ -70,4 +70,9 @@ public class Circuito implements ICircuito {
 	public void atualizaMelhoresVoltas(Map<String, Integer> aTempos) {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public String toString() {
+		return this._nome + " " + this._voltas;
+	}
 }

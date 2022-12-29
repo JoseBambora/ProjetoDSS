@@ -20,39 +20,51 @@ public class CircuitoDAO implements Map<String,Circuito> {
 		{
 			try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			 	 Statement stm = conn.createStatement()) {
-				String sql = "CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Circuito` (" +
-								"nome VARCHAR," +
-								"PRIMARY KEY (`nome`))";
-
-							
-				stm.executeUpdate(sql);
 
 // Caracteristica(id,circuito,gdu)
-
-				sql = """
-					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Caracteristica` (
-      					`id` INT NOT NULL AUTO_INCREMENT,
-      					`circuito` VARCHAR(50),
-      					`gdu` INT NOT NULL,
-      						PRIMARY KEY (`id`),
-							FOREIGN KEY (`id`)
-      						REFERENCES `simuladorDSS`.`Circuito` (`id`))""";
-			stm.executeUpdate(sql);
-
-// Circuito(nome,distancia,voltas, campeonato)
-
-			sql = """
+				String sql = """
 				  	CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Circuito` (
 					`nome` VARCHAR(50) NOT NULL,
 					`distancia` INT NOT NULL,
 					`voltas` INT NOT NULL,
 					`campeonato` VARCHAR(75),
 						PRIMARY KEY (`nome`),
-						FOREIGN KEY (`nome`)
-						REFERENCES `simuladorDSS.`Campeonato` (nome)
-       				)
-				 	""";
-			stm.executeUpdate(sql);
+						FOREIGN KEY (`campeonato`)
+						REFERENCES `simuladorDSS`.`Campeonato` (nome))""";
+				stm.executeUpdate(sql);
+				sql = """
+					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Caracteristica` (
+      					`id` INT NOT NULL AUTO_INCREMENT,
+      					`nome` VARCHAR(50) NOT NULL,
+      					`circuito` VARCHAR(50) NOT NULL,
+      					`gdu` INT NOT NULL,
+      						PRIMARY KEY (`id`),
+							FOREIGN KEY (`nome`)
+      						REFERENCES `simuladorDSS`.`Circuito` (nome))""";
+				stm.executeUpdate(sql);
+				sql = """
+					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Chicane` (
+      					`id` INT NOT NULL ,
+      						PRIMARY KEY (`id`),
+							FOREIGN KEY (`id`)
+      						REFERENCES `simuladorDSS`.`Caracteristica` (id))""";
+				stm.executeUpdate(sql);
+				sql = """
+					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Reta` (
+      					`id` INT NOT NULL ,
+      						PRIMARY KEY (`id`),
+							FOREIGN KEY (`id`)
+      						REFERENCES `simuladorDSS`.`Caracteristica` (id))""";
+				stm.executeUpdate(sql);
+				sql = """
+					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Curva` (
+      					`id` INT NOT NULL ,
+      						PRIMARY KEY (`id`),
+							FOREIGN KEY (`id`)
+      						REFERENCES `simuladorDSS`.`Caracteristica` (id))""";
+				stm.executeUpdate(sql);
+// Circuito(nome,distancia,voltas, campeonato)
+
 
 // Chicane, Reta e Curva?
 	
@@ -132,11 +144,11 @@ public class CircuitoDAO implements Map<String,Circuito> {
         boolean res = false;
         try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
         {
-            String sql = "SELECT COUNT(*) FROM Piloto WHERE sva = ? AND cts = ?";
+            String sql = "SELECT COUNT(*) FROM Piloto WHERE nome = ? and sva = ? AND cts = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1,(circ.get_Dist()));
-            ps.setInt(2,(circ.get_Voltas()));
-			ps.setString(3,(circ.get_Campeonato()));
+            ps.setInt(1,circ.get_Dist());
+            ps.setInt(2,circ.get_Voltas());
+			ps.setString(3,circ.get_Campeonato());
             ResultSet rs = ps.executeQuery();
             if(rs.next())
             {
@@ -161,17 +173,16 @@ public class CircuitoDAO implements Map<String,Circuito> {
 		Circuito r = null;
 		String campeonato = "";
 		boolean aux = false;
-        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            Statement stm = conn.createStatement()) {
-
-			String sql = "SELECT * FROM Circuito WHERE nome = '" + nome +  "'";
-			System.out.println(sql);
-			ResultSet rs = stm.executeQuery(sql);
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD); ){
+			String sql = "SELECT * FROM Circuito WHERE nome = ?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1,nome);
+			ResultSet rs = preparedStatement.executeQuery();
 
             if(rs.next()){
-                distancia = rs.getInt(1);
-				voltas = rs.getInt(2);
-                campeonato = rs.getString(3);
+                distancia = rs.getInt("distancia");
+				voltas = rs.getInt("voltas");
+                campeonato = rs.getString("campeonato");
 				aux = true;
             }
 		} catch (SQLException e) {
@@ -190,15 +201,19 @@ public class CircuitoDAO implements Map<String,Circuito> {
 
 	private void insertCircuito(Circuito circ)
 	{
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement())
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
 		{
 			String nome = circ.get_nome();
 			int dist = circ.get_Dist();
 			int voltas = circ.get_Voltas();
 			String camp = circ.get_Campeonato();
-			String sql = "INSERT INTO Circuito ()VALUES (" + nome + ", " + dist + ", " + voltas + ", " + camp +")";
-			stm.executeUpdate(sql);
+			String sql = "INSERT INTO Circuito VALUES ( ? , ?, ?, ? )";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1,nome);
+			preparedStatement.setInt(2,dist);
+			preparedStatement.setInt(3,voltas);
+			preparedStatement.setString(4,camp);
+			preparedStatement.executeUpdate();
 			System.out.println("Circuito: " + circ + " adicionado");
 		} catch (SQLException e) {
 			e.printStackTrace();

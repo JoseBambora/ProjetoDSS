@@ -13,18 +13,11 @@ public class PilotoDAO implements Map<String,Piloto> {
 			 Statement stm = conn.createStatement()) {
 
 			String sql = "CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Piloto` (" +
-						"id INT NOT NULL AUTO_INCREMENT," +
+						"id INT NOT NULL AUTO_INCREMENT, " +
+						"nome VARCHAR(50) NOT NULL, " +
+						"sva INT NOT NULL, "+
+						"cts INT NOT NULL, " +
 						"PRIMARY KEY (`id`))";
-			stm.executeUpdate(sql);
-
-			// Piloto(nome,sva,cts)
-			sql = """
-				  CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Piloto` (
-       				  `nome` VARCHAR(50) NOT NULL,
-       				  `sva` INT NOT NULL,
-       				  `cts` INT NOT NULL,
-       				  )
-				  """;
 			stm.executeUpdate(sql);
 
 
@@ -124,18 +117,16 @@ public class PilotoDAO implements Map<String,Piloto> {
 		float sva = 0;
 		float cts =0;
 		boolean aux = false;
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement()) {
-
-			String sql = "SELECT * FROM Piloto WHERE nome = '" + nome +  "'";
-			System.out.println(sql);
-			ResultSet rs = stm.executeQuery(sql);
-
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			String sql = "SELECT * FROM Piloto WHERE nome = ?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1,nome);
+			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next())
 			{
-				nome = rs.getString(1);
-				sva = rs.getFloat(2);
-				cts = rs.getFloat(3);
+				nome = rs.getString("nome");
+				sva = rs.getFloat("sva");
+				cts = rs.getFloat("cts");
 				aux = true;
 			}
 
@@ -154,14 +145,17 @@ public class PilotoDAO implements Map<String,Piloto> {
 
 	private void insertPiloto(Piloto piloto)
 	{
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement())
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
 		{
 			String nome = piloto.get_nome();
 			Float sva = piloto.get_SVA();
 			Float cts = piloto.get_CTS();
-			String sql = "INSERT INTO Piloto ()VALUES (" + nome + ", " + sva + ", " + cts + ")";
-			stm.executeUpdate(sql);
+			String sql = "INSERT INTO Piloto (nome,sva,cts) VALUES ( ? , ?, ?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1,nome);
+			preparedStatement.setFloat(2,sva);
+			preparedStatement.setFloat(3,cts);
+			preparedStatement.executeUpdate();
 			System.out.println("Piloto: " + piloto + " adicionado");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -174,14 +168,17 @@ public class PilotoDAO implements Map<String,Piloto> {
 
 	public void generateDataPiloto()
 	{
-		List<Piloto> pilotos = new ArrayList<>();
-		pilotos.add(new Piloto("Alexander Hamilton", 0.5, 0.2));
-		pilotos.add(new Piloto("Scaramouche", 0.1, 0.6));
-		pilotos.add(new Piloto("Murphy Jurtrudes", 0.9, 0.1));
-		pilotos.add(new Piloto("Raiden Russel", 0.2, 0.6));
-		pilotos.add(new Piloto("Gary Leclerc", 0.4, 0.7));
-		pilotos.add(new Piloto("Kiko Gasly", 0.7, 0.4));
-		pilotos.forEach(this::insertPiloto);
+		if(this.isEmpty())
+		{
+			List<Piloto> pilotos = new ArrayList<>();
+			pilotos.add(new Piloto("Alexander Hamilton", 0.5, 0.2));
+			pilotos.add(new Piloto("Scaramouche", 0.1, 0.6));
+			pilotos.add(new Piloto("Murphy Jurtrudes", 0.9, 0.1));
+			pilotos.add(new Piloto("Raiden Russel", 0.2, 0.6));
+			pilotos.add(new Piloto("Gary Leclerc", 0.4, 0.7));
+			pilotos.add(new Piloto("Kiko Gasly", 0.7, 0.4));
+			pilotos.forEach(this::insertPiloto);
+		}
 	}
 
 	@Override
@@ -248,8 +245,5 @@ public class PilotoDAO implements Map<String,Piloto> {
 
 		}
 		return result;
-	}
-}
-
 	}
 }

@@ -48,4 +48,8 @@ public class Piloto implements IPiloto {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return this._nome;
+	}
 }
