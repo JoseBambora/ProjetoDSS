@@ -702,4 +702,45 @@ public class CarroDAO implements Map<String,Carro> {
 		}
 		return result;
 	}
+	public int getID(ModoMotor modoMotor) {
+		String sql;
+		if (modoMotor instanceof Agressivo)
+			sql = "SELECT * FROM Agressivo";
+		else if (modoMotor instanceof Conservador)
+			sql = "SELECT * FROM Conservador";
+		else
+			sql = "SELECT * FROM Normal";
+		int res = 0;
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			ResultSet r = preparedStatement.executeQuery();
+			if(r.next())
+				res = r.getInt("modo");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return res;
+	}
+	public int getID(Pneu pneu)
+	{
+		String sql;
+		if (pneu instanceof Duro)
+			sql = "SELECT * FROM Duro";
+		else if (pneu instanceof Chuva)
+			sql = "SELECT * FROM Chuva";
+		else
+			sql = "SELECT * FROM Macio";
+		int res = 0;
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			ResultSet r = preparedStatement.executeQuery();
+			if(r.next())
+				res = r.getInt("pneu");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return res;
+	}
 }

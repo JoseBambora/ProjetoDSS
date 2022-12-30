@@ -89,14 +89,15 @@ public class PilotoDAO implements Map<String,Piloto> {
         boolean res = false;
         try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
         {
-            String sql = "SELECT COUNT(*) FROM Piloto WHERE sva = ? AND cts = ?";
+            String sql = "SELECT COUNT(*) FROM Piloto WHERE name = ? sva = ? AND cts = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setFloat(1,(driver.get_SVA()));
-            ps.setFloat(2,(driver.get_CTS()));
+			ps.setString(1, driver.get_nome());
+            ps.setFloat(2,(driver.get_SVA()));
+            ps.setFloat(3,(driver.get_CTS()));
             ResultSet rs = ps.executeQuery();
             if(rs.next())
             {
-                res = rs.getInt(1) > 0;
+                res = true;
             }
         }
         catch (SQLException e)
@@ -185,6 +186,30 @@ public class PilotoDAO implements Map<String,Piloto> {
 	public Piloto put(String key, Piloto value) {
 		this.insertPiloto(value);
         return null;
+	}
+
+	public int getID(Piloto driver)
+	{
+		int res = 0;
+		try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
+		{
+			String sql = "SELECT COUNT(*) FROM Piloto WHERE name = ? sva = ? AND cts = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, driver.get_nome());
+			ps.setFloat(2,(driver.get_SVA()));
+			ps.setFloat(3,(driver.get_CTS()));
+			ResultSet rs = ps.executeQuery();
+			if(rs.next())
+			{
+				res = rs.getInt("id");
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return res;
 	}
 
 	@Override
