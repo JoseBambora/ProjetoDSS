@@ -192,7 +192,7 @@ public class CircuitoDAO implements Map<String,Circuito> {
 		}
 		if (aux)
 		{
-			r = new Circuito(nome,distancia,voltas,campeonato); // erro aqui
+			r = new Circuito(nome,distancia,voltas,campeonato);
 		}
 		return r;
 	}

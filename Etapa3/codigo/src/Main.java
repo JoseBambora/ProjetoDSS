@@ -21,6 +21,12 @@ public class Main {
         circuitoDAO.generateDataCircuito();
         UtilizadoresDAO utilizadores = UtilizadoresDAO.getInstance();
         utilizadores.generateData();
+        CampeonatoDAO campeonatoDAO = CampeonatoDAO.getInstance();
+        campeonatoDAO.generateData();
+        System.out.println(campeonatoDAO.values());
+        System.out.println(campeonatoDAO.keySet());
+        System.out.println(campeonatoDAO.entrySet());
+        System.out.println(campeonatoDAO.get("Formula 1"));
         // Set<String> key = carroDAO.keySet();
         // Collection<Carro> carros = carroDAO.values();
         // Set<Map.Entry<String,Carro>> entrySet = carroDAO.entrySet();
@@ -46,7 +52,6 @@ public class Main {
         //utilizadores.addPontuacao("Joao",10); //Testado
         //System.out.println(utilizadores.containsKey("Maria")); //Testado
         //System.out.println(utilizadores.containsValue(new Utilizador("Maria","Albertina")));//Testado
-        CampeonatoDAO campeonatoDAO = CampeonatoDAO.getInstance();
         //System.out.println(pilotoDAO.size());
         //System.out.println(pilotoDAO.values());
         //System.out.println(pilotoDAO.get("Alexander Hamilton"));

@@ -95,15 +95,13 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 		boolean disp = false;
 		Campeonato r = null;
 		boolean aux = false;
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            Statement stm = conn.createStatement();) {
-
-			String sql = "SELECT * FROM Campeonato WHERE nome = '" + nome +  "'";
-			System.out.println(sql);
-			ResultSet rs = stm.executeQuery(sql);
-
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD)) {
+			String sql = "SELECT * FROM Campeonato WHERE nome = ?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1,nome);
+			ResultSet rs = preparedStatement.executeQuery();
             if(rs.next()){
-                disp = rs.getBoolean(1);
+                disp = rs.getBoolean("disponivel");
 				aux = true;
             }
 		} catch (SQLException e) {
@@ -112,32 +110,39 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 			throw new NullPointerException(e.getMessage());
 		}
 		if (aux)
-			r = new Campeonato(nome, disp); // erro aqui
+			r = new Campeonato(nome, disp);
 		return r;
 	}
 
-	//@Override //não faço a minima pq é q isto está assim, quando tiver tempo vejo
 	public void insertCampeonato(Campeonato value) {
-		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-			 Statement stm = conn.createStatement())
+		String nome = value.get_nome();
+		boolean disp = value.get_disponivel();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
 		{
-			String nome = value.get_nome();
-			int disp = (value.get_disponivel() ? 1 : 0);
-			String sql = "INSERT INTO Campeonato ()VALUES (" + nome + ", " + disp +")";
-			stm.executeUpdate(sql);
-			System.out.println("Circuito: " + value + " adicionado");
+			String sql = "INSERT INTO Campeonato VALUES ( ? , ? )";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1,nome);
+			preparedStatement.setBoolean(2,disp);
+			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new NullPointerException(e.getMessage());
 		}
 	}
 
-	/*public void generateData(){
-		if(this.isEmpty()){
+	public void generateData(){
+		if(this.isEmpty())
+		{
 			List<Campeonato> campeonatos = new ArrayList<>();
-			campeonatos.add(new Campeonato())
+			campeonatos.add(new Campeonato("campeonato1",true));
+			campeonatos.add(new Campeonato("campeonato2",true));
+			campeonatos.add(new Campeonato("campeonato3",true));
+			campeonatos.add(new Campeonato("Campeonato nacional de rally",true));
+			campeonatos.add(new Campeonato("Rampa da falperra",true));
+			campeonatos.add(new Campeonato("Formula 1",false));
+			campeonatos.forEach(this::insertCampeonato);
 		}
-	}*/
+	}
 
 	public Campeonato put(String key, Campeonato value) {
 		this.insertCampeonato(value);
@@ -200,7 +205,6 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 		{
 			Campeonato circ = this.get(key);
 			result.add(Map.entry(key,circ));
-
 		}
 		return result;
 	}

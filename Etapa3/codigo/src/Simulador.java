@@ -168,14 +168,14 @@ public class Simulador implements ISimulador {
 	public String configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros)
 	{
 		Campeonato campeonato = CampeonatoDAO.getInstance().get(aCampnome);
-		CampeonatoProva campeonatoProva = new CampeonatoProva();
+		CampeonatoProva campeonatoProva = new CampeonatoProva(campeonato);
 		for(String player : aJogadores)
 		{
 			String pilotoID = aEscolhaPilotos.get(player);
 			String carroID = aEscolhaCarros.get(player);
 			Piloto piloto = PilotoDAO.getInstace().get(pilotoID);
 			Carro carro = CarroDAO.getInstace().get(carroID);
-			//campeonatoProva.adicionajogador(player,carro,piloto);
+			campeonatoProva.adicionajogador(player,carro,piloto);
 		}
 		String key =  campeonatoProva.get_id();
 		CampeonatoProvaDAO.getInstance().put(key,campeonatoProva);
