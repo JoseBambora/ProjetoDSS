@@ -11,9 +11,7 @@ import PackageUtilizador.Utilizador;
 import PackageUtilizador.UtilizadoresDAO;
 
 import java.sql.*;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class EscolhasDAO implements Map<String,Escolha> {
 
@@ -24,8 +22,6 @@ public class EscolhasDAO implements Map<String,Escolha> {
 			instance = new EscolhasDAO();
 		return instance;
 	}
-
-	//Escolhas(campeonatoProva, jogador, piloto, carro,pac,pneu,modo)
 
 	private EscolhasDAO(){
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);
@@ -130,7 +126,7 @@ public class EscolhasDAO implements Map<String,Escolha> {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			Escolha res = new Escolha();
 			String[] pk = ClassificacoesDAO.getCampProvaUsername((String) key);
-			String sql = "SELECT COUNT(*) FROM Escolhas WHERE campeonatoProva = ? AND nomeJogador = ?";
+			String sql = "SELECT * FROM Escolhas WHERE campeonatoProva = ? AND nomeJogador = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1,Integer.parseInt(pk[0]));
 			ps.setString(2,pk[1]);
@@ -161,19 +157,18 @@ public class EscolhasDAO implements Map<String,Escolha> {
 			PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, Integer.parseInt(pk[0]));
 			ps.setString(2, pk[1]);
-			//ps.setInt(3,PilotoDAO.getInstace().getIdPiloto(value.get_piloto())); preciso de metodo que dado piloto devolve id
+			ps.setInt(3,PilotoDAO.getInstace().getID(value.get_piloto()));
 			ps.setString(4,value.get_carro().get_marca());
 			ps.setString(5,value.get_carro().get_modelo());
 			ps.setFloat(6,value.get_pac());
-			//ps.setInt(7,CarroDAO.getInstace().getIdPneus); preciso de metodo que dado pneus devolve id
-			//ps.setInt(8,value.get_carro().get_motor().get_modo()); da erro pq n da o id do modo
+			ps.setInt(7,CarroDAO.getInstace().getID(value.get_pneu()));
+			ps.setInt(8,CarroDAO.getInstace().getID(value.get_modo()));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new NullPointerException(e.getMessage());
 		}
 	}
-
 
 	@Override
 	public Escolha put(String key, Escolha value) {
@@ -188,26 +183,64 @@ public class EscolhasDAO implements Map<String,Escolha> {
 
 	@Override
 	public void putAll(Map<? extends String, ? extends Escolha> m) {
-
+		Set<?extends String> keys = m.keySet();
+		for(String key: keys){
+			this.put(key,m.get(key));
+		}
 	}
 
 	@Override
 	public void clear() {
-
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
+			String sql = "DELETE * FROM Escolhas";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.executeQuery();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
 	}
 
 	@Override
 	public Set<String> keySet() {
-		return null;
+		Set<String> result = new HashSet<>();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
+			String sql = "SELECT * FROM Escolhas";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()){
+				int campeonatoProva = rs.getInt("campeonatoProva");
+				String idUser = rs.getString("nomeJogador");
+				String pk = generateKey(campeonatoProva,idUser);
+				result.add(pk);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return result;
 	}
 
 	@Override
 	public Collection<Escolha> values() {
-		return null;
+		Collection<Escolha> classificacoes = new ArrayList<>();
+		Set<String> keyset = this.keySet();
+		for (String key : keyset)
+		{
+			classificacoes.add(this.get(key));
+		}
+		return classificacoes;
 	}
 
 	@Override
 	public Set<Entry<String, Escolha>> entrySet() {
-		return null;
+		Set<String> keyset = this.keySet();
+		Set<Entry<String,Escolha>> result = new HashSet<>();
+		for(String key : keyset){
+			result.add(Map.entry(key,this.get(key)));
+		}
+		return result;
 	}
 }

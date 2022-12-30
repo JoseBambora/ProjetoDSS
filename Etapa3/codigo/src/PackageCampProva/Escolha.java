@@ -1,6 +1,7 @@
 package PackageCampProva;
 
 import PackageCarro.IConjuntoPneus;
+import PackageCarro.Pneu;
 import PackageUtilizador.Jogador;
 import PackagePiloto.Piloto;
 import PackageCarro.Carro;
@@ -10,8 +11,8 @@ public class Escolha {
 	private Jogador _jogador;
 	private Piloto _piloto;
 	private Carro _carro;
-	private Float _pac; //mudar diagrama de classes
-	private IConjuntoPneus _pneu;
+	private Float _pac;
+	private Pneu _pneu;
 	private ModoMotor _modo;
 	public Escolha() {
 		this._jogador = null;
@@ -22,7 +23,7 @@ public class Escolha {
 		this._modo = null;
 	}
 
-	public Escolha(Jogador _jogador, Piloto _piloto, Carro _carro, Float _pac, IConjuntoPneus _pneu, ModoMotor _modo) {
+	public Escolha(Jogador _jogador, Piloto _piloto, Carro _carro, Float _pac, Pneu _pneu, ModoMotor _modo) {
 		this._jogador = _jogador;
 		this._piloto = _piloto;
 		this._carro = _carro;
@@ -63,11 +64,11 @@ public class Escolha {
 		this._pac = _pac;
 	}
 
-	public IConjuntoPneus get_pneu() {
+	public Pneu get_pneu() {
 		return _pneu;
 	}
 
-	public void set_pneu(IConjuntoPneus _pneu) {
+	public void set_pneu(Pneu _pneu) {
 		this._pneu = _pneu;
 	}
 

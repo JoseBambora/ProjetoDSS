@@ -72,7 +72,7 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 
 	@Override
 	public boolean containsKey(Object key) {
-		String[] idcpUser = ClassificacoesDAO.getCampProvaUsername((String) key);
+		String[] idcpUser = getCampProvaUsername((String) key);
 		boolean res = false;
 		try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
 		{
@@ -104,7 +104,7 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			int res = 0;
 			String[] pk = ClassificacoesDAO.getCampProvaUsername((String) key);
-			String sql = "SELECT COUNT(*) FROM Classificacoes WHERE campeonatoProva = ? AND nomeJogador = ?";
+			String sql = "SELECT * FROM Classificacoes WHERE campeonatoProva = ? AND nomeJogador = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1,Integer.parseInt(pk[0]));
 			ps.setString(2,pk[1]);
