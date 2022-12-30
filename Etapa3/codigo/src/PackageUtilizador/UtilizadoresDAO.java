@@ -170,7 +170,7 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
     @Override
     public Utilizador put(String key, Utilizador value) {
         this.insertUser(value);
-        return null;
+        return value;
     }
 
     @Override

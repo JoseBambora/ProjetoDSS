@@ -1,6 +1,9 @@
 package PackageCampProva;
 
 import DAOCONFIG.*;
+import PackageCampeonato.Campeonato;
+import PackageCampeonato.CampeonatoDAO;
+import PackageUtilizador.Utilizador;
 import PackageUtilizador.UtilizadoresDAO;
 
 import java.sql.*;
@@ -85,10 +88,9 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 		boolean res = false;
 		try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
 		{
-			String sql = "SELECT COUNT(*) FROM Utilizador WHERE username = ? AND password = ?";
+			String sql = "SELECT COUNT(*) FROMCampeonatoProva WHERE campeonato = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1,(campeonatoProva.get_id()));
-			ps.setString(2,(campeonatoProva.get));
+			ps.setString(1,(campeonatoProva.getCampeonato().get_nome()));
 			ResultSet rs = ps.executeQuery();
 			if(rs.next())
 			{
@@ -105,13 +107,51 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 	}
 
 	@Override
-	public CampeonatoProva get(Object key) {
-		return null;
+	public CampeonatoProva get(Object key)
+	{
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			int idCP = 0;
+			String nome = "";
+			String sql = "SELECT * FROM CampeonatoProva WHERE id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			int id = (Integer) key;
+			ps.setInt(1,id);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				idCP = rs.getInt("id");
+				nome =  rs.getString("campeonato");
+			}
+			CampeonatoDAO cd = CampeonatoDAO.getInstance();
+			Campeonato c = new Campeonato(nome,cd.get(rs.getString("campeonato")).get_disponivel());
+			return new CampeonatoProva(String.valueOf(idCP),c);
+		} catch (SQLException e) {
+				// Erro a criar tabela...
+				e.printStackTrace();
+				throw new NullPointerException(e.getMessage());
+		}
+	}
+
+	public void insertCampeonatoProva(CampeonatoProva value){
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
+		{
+			String id = value.get_id();
+			String campeonato =value.getCampeonato().get_nome();
+			String sql = "INSERT INTO CampeonatoProva (id,campeonato) VALUES (?,?)";
+			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1,Integer.parseInt(id));
+			ps.setString(2,campeonato);
+			ps.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
 	}
 
 	@Override
 	public CampeonatoProva put(String key, CampeonatoProva value) {
-		return null;
+		this.insertCampeonatoProva(value);
+		return value;
 	}
 
 	@Override
@@ -121,26 +161,65 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 
 	@Override
 	public void putAll(Map<? extends String, ? extends CampeonatoProva> m) {
-
+		Set<?extends String> keys = m.keySet();
+		for(String key: keys){
+			CampeonatoProva campeonatoProva = m.get(key);
+			this.put(key,campeonatoProva);
+		}
 	}
 
 	@Override
 	public void clear() {
-
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
+			String sql = "DELETE * FROM CampeonatoProva";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.executeQuery();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
 	}
 
 	@Override
 	public Set<String> keySet() {
-		return null;
+		Set<String> result = new HashSet<>();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
+			String sql = "SELECT * FROM CampeonatoProva";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()){
+				int id = rs.getInt("id");
+				result.add(String.valueOf(id));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return result;
 	}
 
 	@Override
 	public Collection<CampeonatoProva> values() {
-		return null;
+		Collection<CampeonatoProva> campeonatoProvas = new ArrayList<>();
+		Set<String> keyset = this.keySet();
+		for (String key : keyset)
+		{
+			CampeonatoProva campeonatoProva = this.get(Integer.valueOf(key));
+			campeonatoProvas.add(campeonatoProva);
+		}
+		return campeonatoProvas;
 	}
 
 	@Override
 	public Set<Entry<String, CampeonatoProva>> entrySet() {
-		return null;
+		Set<String> keyset = this.keySet();
+		Set<Entry<String,CampeonatoProva>> result = new HashSet<>();
+		for(String key : keyset){
+			CampeonatoProva campeonatoProva = this.get(Integer.valueOf(key));
+			result.add(Map.entry(key,campeonatoProva));
+		}
+		return result;
 	}
 }

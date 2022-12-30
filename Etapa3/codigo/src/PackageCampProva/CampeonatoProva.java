@@ -1,6 +1,7 @@
 package PackageCampProva;
 
 import PackageCampeonato.Campeonato;
+import PackageCampeonato.CampeonatoDAO;
 import PackageCarro.ModoMotor;
 import PackageUtilizador.Jogador;
 import PackageCarro.Carro;
@@ -11,11 +12,17 @@ import java.util.Map;
 
 public class CampeonatoProva {
 	private String _id;
-	private ClassificacoesDAO _classificacao;
-	private ClassificacoesCorridasDAO _classificacoesCorridas;
-	private EscolhasDAO _escolhas;
+	private static ClassificacoesDAO _classificacao;
+	private static ClassificacoesCorridasDAO _classificacoesCorridas;
+	private static EscolhasDAO _escolhas;
+	private Campeonato _campeonato;
 
-	private Campeonato campeonato;
+	public CampeonatoProva(String _id, Campeonato _campeonato) {
+		this._id = _id;
+		this._campeonato = _campeonato;
+	}
+
+
 
 	public String get_id() {
 		return _id;
@@ -47,6 +54,14 @@ public class CampeonatoProva {
 
 	public void set_escolhas(EscolhasDAO _escolhas) {
 		this._escolhas = _escolhas;
+	}
+
+	public Campeonato getCampeonato() {
+		return _campeonato;
+	}
+
+	public void setCampeonato(Campeonato campeonato) {
+		this._campeonato = campeonato;
 	}
 
 	public void adicionajogador(Jogador aJogador, Carro aCarro, Piloto aPiloto) {
