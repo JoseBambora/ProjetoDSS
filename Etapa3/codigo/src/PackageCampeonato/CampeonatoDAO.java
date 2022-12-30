@@ -23,7 +23,7 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 		try(Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			Statement stm = conn.createStatement()){
 				String sql = "CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Campeonato` (" +
-				"nome VARCHAR(75)," +
+				"nome VARCHAR(75) NOT NULL," +
 				"disponivel TINYINT,"+
 				"PRIMARY KEY (`nome`))";
 			stm.executeUpdate(sql);

@@ -8,7 +8,6 @@ import java.sql.*;
 import java.util.*;
 
 public class ClassificacoesDAO implements Map<String,Integer> {
-	public CampeonatoProva _unnamed_CampeonatoProva_;
 
 	private static ClassificacoesDAO instance = null;
 
@@ -24,12 +23,10 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 			String sql = """
 					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Classificacoes`(
 						`campeonatoProva` INT NOT NULL,
-						`nomeJogador` VARCHAR(75),
-						`pontuacao` INT,
+						`nomeJogador` VARCHAR(75) NOT NULL,
+						`pontuacao` INT NOT NULL,
 						FOREIGN KEY (`campeonatoProva`)
 						REFERENCES `simuladorDSS`.`CampeonatoProva` (`id`),
-						FOREIGN KEY (`nomeJogador`)
-						REFERENCES `simuladorDSS`.`Jogador` (`username`),
 						PRIMARY KEY (`campeonatoProva`,`nomeJogador`))
 					""";
 			stm.executeUpdate(sql);
@@ -38,9 +35,6 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 			throw new NullPointerException(e.getMessage());
 		}
 	}
-
-
-//Classificacoes(campeonatoProva, nomeJogador, pontuacao)
 	public void atualizaClassificacoes(Map<String, Integer> aClassificacoes) {
 		throw new UnsupportedOperationException();
 	}
@@ -129,7 +123,7 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 	}
 
 	public void insertClassificacao(String key, Integer value) {
-		String[] pk = ClassificacoesDAO.getCampProvaUsername(key);
+		String[] pk = getCampProvaUsername(key);
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			String sql = "INSERT INTO Classificacoes (campeonatoProva,nomeJogador,pontuacao) VALUES (?,?,?)";
 			PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);

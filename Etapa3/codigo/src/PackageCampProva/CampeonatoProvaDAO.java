@@ -25,7 +25,7 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 			 String sql = """
 					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`CampeonatoProva`(
 						`id` INT NOT NULL AUTO_INCREMENT,
-						`campeonato` VARCHAR(75),
+						`campeonato` VARCHAR(75) NOT NULL,
 						FOREIGN KEY (`campeonato`)
 						REFERENCES `simuladorDSS`.`Campeonato` (`nome`),
 						PRIMARY KEY (`id`))

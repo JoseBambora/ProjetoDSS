@@ -306,7 +306,7 @@ public class CarroDAO implements Map<String,Carro> {
 		return r;
 	}
 
-	private Pneu getPneus(int id) throws SQLException
+	public Pneu getPneus(int id) throws SQLException
 	{
 		Pneu r = null;
 		List<String> list = new ArrayList<>();
@@ -336,7 +336,7 @@ public class CarroDAO implements Map<String,Carro> {
 		}
 		return r;
 	}
-	private ModoMotor getModo(int id) throws SQLException
+	public ModoMotor getModo(int id) throws SQLException
 	{
 		ModoMotor r = null;
 		List<String> list = new ArrayList<>();

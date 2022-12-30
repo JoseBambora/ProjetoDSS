@@ -15,13 +15,13 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);
              Statement stm = conn.createStatement()){
             String sql = "CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Utilizador`("+
-                    "username VARCHAR(75)," +
+                    "username VARCHAR(75) NOT NULL," +
                     "password VARCHAR(75)," +
                     "PRIMARY KEY (`username`))";
             stm.executeUpdate(sql);
             sql = """
                   CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Admin`(
-                     `username` VARCHAR(75),
+                     `username` VARCHAR(75) NOT NULL,
                       FOREIGN KEY (`username`)
                       REFERENCES `simuladorDSS`.`Utilizador` (`username`),
                       PRIMARY KEY (`username`)
@@ -30,7 +30,7 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
             stm.executeUpdate(sql);
             sql = """
                   CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Jogador`(
-                    `username` VARCHAR(75),
+                    `username` VARCHAR(75) NOT NULL,
                     `pontuacao` INT,
                         FOREIGN KEY (`username`)
                         REFERENCES `simuladorDSS`.`Utilizador` (`username`),
