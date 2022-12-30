@@ -11,25 +11,19 @@ import java.util.List;
 import java.util.Map;
 
 public class CampeonatoProva {
-	private String _id;
+	private int _id;
 	private static ClassificacoesDAO _classificacao;
 	private static ClassificacoesCorridasDAO _classificacoesCorridas;
 	private static EscolhasDAO _escolhas;
 	private Campeonato _campeonato;
 
-	public CampeonatoProva(String _id, Campeonato _campeonato) {
+	public CampeonatoProva(int _id ,Campeonato _campeonato) {
 		this._id = _id;
 		this._campeonato = _campeonato;
 	}
 
-
-
-	public String get_id() {
-		return _id;
-	}
-
-	public void set_id(String _id) {
-		this._id = _id;
+	public CampeonatoProva(Campeonato _campeonato) {
+		this._campeonato = _campeonato;
 	}
 
 	public ClassificacoesDAO get_classificacao() {
@@ -37,7 +31,7 @@ public class CampeonatoProva {
 	}
 
 	public void set_classificacao(ClassificacoesDAO _classificacao) {
-		this._classificacao = _classificacao;
+		CampeonatoProva._classificacao = _classificacao;
 	}
 
 	public ClassificacoesCorridasDAO get_classificacoesCorridas() {
@@ -45,7 +39,7 @@ public class CampeonatoProva {
 	}
 
 	public void set_classificacoesCorridas(ClassificacoesCorridasDAO _classificacoesCorridas) {
-		this._classificacoesCorridas = _classificacoesCorridas;
+		CampeonatoProva._classificacoesCorridas = _classificacoesCorridas;
 	}
 
 	public EscolhasDAO get_escolhas() {
@@ -53,7 +47,7 @@ public class CampeonatoProva {
 	}
 
 	public void set_escolhas(EscolhasDAO _escolhas) {
-		this._escolhas = _escolhas;
+		CampeonatoProva._escolhas = _escolhas;
 	}
 
 	public Campeonato getCampeonato() {

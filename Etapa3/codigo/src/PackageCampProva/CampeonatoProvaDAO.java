@@ -24,7 +24,7 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 			 Statement stm = conn.createStatement()){
 			 String sql = """
 					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`CampeonatoProva`(
-						`id` INT NOT NULL,
+						`id` INT NOT NULL AUTO_INCREMENT,
 						`campeonato` VARCHAR(75),
 						FOREIGN KEY (`campeonato`)
 						REFERENCES `simuladorDSS`.`Campeonato` (`nome`),
@@ -84,33 +84,13 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 
 	@Override
 	public boolean containsValue(Object value) {
-		CampeonatoProva campeonatoProva = (CampeonatoProva) value;
-		boolean res = false;
-		try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
-		{
-			String sql = "SELECT COUNT(*) FROMCampeonatoProva WHERE campeonato = ?";
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1,(campeonatoProva.getCampeonato().get_nome()));
-			ResultSet rs = ps.executeQuery();
-			if(rs.next())
-			{
-				res = rs.getInt(1) > 0;
-			}
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-			throw new NullPointerException(e.getMessage());
-
-		}
-		return res;
+		return this.containsKey(value);
 	}
 
 	@Override
 	public CampeonatoProva get(Object key)
 	{
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
-			int idCP = 0;
 			String nome = "";
 			String sql = "SELECT * FROM CampeonatoProva WHERE id = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -118,12 +98,11 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 			ps.setInt(1,id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()){
-				idCP = rs.getInt("id");
 				nome =  rs.getString("campeonato");
 			}
 			CampeonatoDAO cd = CampeonatoDAO.getInstance();
 			Campeonato c = new Campeonato(nome,cd.get(rs.getString("campeonato")).get_disponivel());
-			return new CampeonatoProva(String.valueOf(idCP),c);
+			return new CampeonatoProva(c);
 		} catch (SQLException e) {
 				// Erro a criar tabela...
 				e.printStackTrace();
@@ -134,12 +113,10 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 	public void insertCampeonatoProva(CampeonatoProva value){
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
 		{
-			String id = value.get_id();
 			String campeonato =value.getCampeonato().get_nome();
-			String sql = "INSERT INTO CampeonatoProva (id,campeonato) VALUES (?,?)";
+			String sql = "INSERT INTO CampeonatoProva (campeonato) VALUES (?)";
 			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1,Integer.parseInt(id));
-			ps.setString(2,campeonato);
+			ps.setString(1,campeonato);
 			ps.executeUpdate();
 		}
 		catch (SQLException e) {
