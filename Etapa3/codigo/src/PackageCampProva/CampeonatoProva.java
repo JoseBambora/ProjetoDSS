@@ -26,6 +26,22 @@ public class CampeonatoProva {
 		this._campeonato = _campeonato;
 	}
 
+	public int get_id() {
+		return _id;
+	}
+
+	public void set_id(int _id) {
+		this._id = _id;
+	}
+
+	public Campeonato get_campeonato() {
+		return _campeonato;
+	}
+
+	public void set_campeonato(Campeonato _campeonato) {
+		this._campeonato = _campeonato;
+	}
+
 	public ClassificacoesDAO get_classificacao() {
 		return _classificacao;
 	}
