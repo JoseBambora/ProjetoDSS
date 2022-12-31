@@ -3,7 +3,6 @@ package PackageCampProva;
 import PackageCampeonato.Campeonato;
 import PackageCampeonato.CampeonatoDAO;
 import PackageCarro.ModoMotor;
-import PackageUtilizador.Jogador;
 import PackageCarro.Carro;
 import PackagePiloto.Piloto;
 
@@ -74,7 +73,7 @@ public class CampeonatoProva {
 		this._campeonato = campeonato;
 	}
 
-	public void adicionajogador(Jogador aJogador, Carro aCarro, Piloto aPiloto) {
+	public void adicionajogador(String aJogador, Carro aCarro, Piloto aPiloto) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -91,10 +90,6 @@ public class CampeonatoProva {
 	}
 
 	public void atualizaPontuacao(String aNome, Integer aClassificacao) {
-		throw new UnsupportedOperationException();
-	}
-
-	public void adicionaJogadores(List<Piloto> aJogadores, Map<String, Piloto> aPilotosEsc, Map<String, Carro> aCarrosEsc) {
 		throw new UnsupportedOperationException();
 	}
 

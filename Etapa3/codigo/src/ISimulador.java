@@ -78,9 +78,9 @@ public interface ISimulador {
 
 	public void resgistaEscolhas(String aPiloto, String aCarro, String aPneus);
 
-	public String configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros);
+	public int configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros);
 
-	public void guardaAfinacao(String aIdCampProva, Jogador aNome, float aPAC, ModoMotor aModo, String aPneus);
+	public void guardaAfinacao(String aIdCampProva, String aNome, float aPAC, ModoMotor aModo, String aPneus);
 
 	public List<Jogador> getClassificacoesGlobais();
 

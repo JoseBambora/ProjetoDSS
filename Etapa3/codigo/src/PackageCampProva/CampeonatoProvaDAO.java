@@ -9,7 +9,7 @@ import PackageUtilizador.UtilizadoresDAO;
 import java.sql.*;
 import java.util.*;
 
-public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
+public class CampeonatoProvaDAO implements Map<Integer,CampeonatoProva> {
 
 	private static CampeonatoProvaDAO instance = null;
 
@@ -126,7 +126,7 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 	}
 
 	@Override
-	public CampeonatoProva put(String key, CampeonatoProva value) {
+	public CampeonatoProva put(Integer key, CampeonatoProva value) {
 		this.insertCampeonatoProva(value);
 		return value;
 	}
@@ -137,9 +137,9 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 	}
 
 	@Override
-	public void putAll(Map<? extends String, ? extends CampeonatoProva> m) {
-		Set<?extends String> keys = m.keySet();
-		for(String key: keys){
+	public void putAll(Map<? extends Integer, ? extends CampeonatoProva> m) {
+		Set<?extends Integer> keys = m.keySet();
+		for(Integer key: keys){
 			CampeonatoProva campeonatoProva = m.get(key);
 			this.put(key,campeonatoProva);
 		}
@@ -159,15 +159,15 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 	}
 
 	@Override
-	public Set<String> keySet() {
-		Set<String> result = new HashSet<>();
+	public Set<Integer> keySet() {
+		Set<Integer> result = new HashSet<>();
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
 			String sql = "SELECT * FROM CampeonatoProva";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()){
 				int id = rs.getInt("id");
-				result.add(String.valueOf(id));
+				result.add(id);
 			}
 		}
 		catch (SQLException e) {
@@ -180,8 +180,8 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 	@Override
 	public Collection<CampeonatoProva> values() {
 		Collection<CampeonatoProva> campeonatoProvas = new ArrayList<>();
-		Set<String> keyset = this.keySet();
-		for (String key : keyset)
+		Set<Integer> keyset = this.keySet();
+		for (Integer key : keyset)
 		{
 			CampeonatoProva campeonatoProva = this.get(Integer.valueOf(key));
 			campeonatoProvas.add(campeonatoProva);
@@ -190,10 +190,10 @@ public class CampeonatoProvaDAO implements Map<String,CampeonatoProva> {
 	}
 
 	@Override
-	public Set<Entry<String, CampeonatoProva>> entrySet() {
-		Set<String> keyset = this.keySet();
-		Set<Entry<String,CampeonatoProva>> result = new HashSet<>();
-		for(String key : keyset){
+	public Set<Entry<Integer, CampeonatoProva>> entrySet() {
+		Set<Integer> keyset = this.keySet();
+		Set<Entry<Integer,CampeonatoProva>> result = new HashSet<>();
+		for(Integer key : keyset){
 			CampeonatoProva campeonatoProva = this.get(Integer.valueOf(key));
 			result.add(Map.entry(key,campeonatoProva));
 		}

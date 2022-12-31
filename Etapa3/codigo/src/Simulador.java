@@ -165,7 +165,7 @@ public class Simulador implements ISimulador {
 		throw new UnsupportedOperationException();
 	}
 
-	public String configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros)
+	public int configuraCampeonato(String aCampnome, List<String> aJogadores, Map<String, String> aEscolhaPilotos, Map<String, String> aEscolhaCarros)
 	{
 		Campeonato campeonato = CampeonatoDAO.getInstance().get(aCampnome);
 		CampeonatoProva campeonatoProva = new CampeonatoProva(campeonato);
@@ -177,12 +177,12 @@ public class Simulador implements ISimulador {
 			Carro carro = CarroDAO.getInstace().get(carroID);
 			campeonatoProva.adicionajogador(player,carro,piloto);
 		}
-		String key =  campeonatoProva.get_id();
+		int key =  campeonatoProva.get_id();
 		CampeonatoProvaDAO.getInstance().put(key,campeonatoProva);
 		return key;
 	}
 
-	public void guardaAfinacao(String aIdCampProva, Jogador aNome, float aPAC, ModoMotor aModo, String aPneus) {
+	public void guardaAfinacao(String aIdCampProva, String aNome, float aPAC, ModoMotor aModo, String aPneus) {
 		throw new UnsupportedOperationException();
 	}
 
