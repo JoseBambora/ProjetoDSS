@@ -18,6 +18,11 @@ public abstract class Pneu implements IConjuntoPneus
         return capacidade;
     }
 
+    @Override
+    public String toString() {
+        return this.capacidade + "";
+    }
+
     private void agressivo(int aGdu)
     {
         if (aGdu == 0)

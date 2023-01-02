@@ -307,6 +307,22 @@ public class CarroDAO implements Map<String,Carro> {
 		return r;
 	}
 
+	private int getCat(int id) throws SQLException
+	{
+		int cap;
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
+		{
+			String sql = "SELECT * FROM Pneu where id = ?";
+			PreparedStatement ps2 = conn.prepareStatement(sql);
+			ps2 .setInt(1,id);
+			ResultSet rs2 = ps2 .executeQuery();
+			if(rs2.next())
+				cap = rs2.getInt("capacidade");
+			else
+				cap = -1;
+		}
+		return cap;
+	}
 	public Pneu getPneus(int id) throws SQLException
 	{
 		Pneu r = null;
@@ -324,12 +340,7 @@ public class CarroDAO implements Map<String,Carro> {
 				ResultSet rs = ps.executeQuery();
 				if(rs.next())
 				{
-					rs.close();
-					sql = "SELECT * FROM Pneu where id = ?";
-					PreparedStatement ps2 = conn.prepareStatement(sql);
-					ps2 .setInt(1,id);
-					ResultSet rs2 = ps2 .executeQuery();
-					int cap = rs2.getInt("capacidade");
+					int cap = getCat(id);
 					switch (i)
 					{
 						case 0 -> r = new Macio(id,cap);
