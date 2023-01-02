@@ -377,11 +377,14 @@ public class CarroDAO implements Map<String,Carro> {
 			 PreparedStatement ps = conn.prepareStatement(sql);
 			 ps.setInt(1,id);
 			 ResultSet rs = ps.executeQuery();
-			 int potencia = rs.getInt("potencia");
-			 int capacidade = rs.getInt("capacidadeCombustivel");
-			 int modo = rs.getInt("modo");
-			 ModoMotor modoMotor = this.getModo(modo);
-			 r = new Motor(id,potencia,capacidade,modoMotor);
+			 if(rs.next())
+			 {
+				 int potencia = rs.getInt("potencia");
+				 int capacidade = rs.getInt("capacidadeCombustivel");
+				 int modo = rs.getInt("modo");
+				 ModoMotor modoMotor = this.getModo(modo);
+				 r = new Motor(id,potencia,capacidade,modoMotor);
+			 }
 		}
 		return r;
 	}
@@ -578,7 +581,7 @@ public class CarroDAO implements Map<String,Carro> {
 			int motor = this.insertMotor(carro.get_motor());
 			int pneu = this.insertPneu(carro.get_unnamed_IConjuntoPneus_());
 			int categoria = this.insertCategoria(carro.get_unnamed_Categoria_());
-			String sql = "INSERT INTO Carro ()VALUES (?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO Carro VALUES (?,?,?,?,?,?,?)";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1,carro.get_marca());
 			ps.setString(2,carro.get_modelo());
