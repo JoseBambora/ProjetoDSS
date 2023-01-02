@@ -4,9 +4,9 @@ public class MotorCombustao extends Motor {
 	private int _cilindrada;
 	public Carro _unnamed_Carro_;
 
-	public MotorCombustao(int _potencia, int _capacidadeCombustivel, ModoMotor _modo,int _cilindrada)
+	public MotorCombustao(int id,int _potencia, int _capacidadeCombustivel, ModoMotor _modo,int _cilindrada)
 	{
-		super(_potencia,_capacidadeCombustivel,_modo);
+		super(id,_potencia,_capacidadeCombustivel,_modo);
 		this._cilindrada = _cilindrada;
 	}
 	public MotorCombustao(Motor motor ,int _cilindrada)
@@ -15,12 +15,8 @@ public class MotorCombustao extends Motor {
 		this._cilindrada = _cilindrada;
 	}
 
-	public MotorCombustao(int _potencia, int _capacidadeCombustivel) {
-		super(_potencia, _capacidadeCombustivel);
-	}
-
-	public MotorCombustao(int _potencia, int _capacidadeCombustivel, ModoMotor _modo) {
-		super(_potencia, _capacidadeCombustivel, _modo);
+	public MotorCombustao(int id,int _potencia, int _capacidadeCombustivel) {
+		super(id,_potencia, _capacidadeCombustivel,null);
 	}
 
 	public int get_cilindrada() {

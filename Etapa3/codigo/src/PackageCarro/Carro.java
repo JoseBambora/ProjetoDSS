@@ -42,8 +42,8 @@ public class Carro implements ICarro {
 		return aPAC > 0 && aPAC < 1;
 	}
 
-	public void modoMotorNomal() {
-		this._motor.modoMotorNormal();
+	public void modoMotorNomal(Normal normal) {
+		this._motor.modoMotorNormal(normal);
 	}
 
 	public void calculaFiabilidade(int cilindrada) {
@@ -87,7 +87,7 @@ public class Carro implements ICarro {
 		this._unnamed_IConjuntoPneus_.reduzCapacidadePneu(aDecisao,aGdu);
 	}
 
-	public IConjuntoPneus get_unnamed_IConjuntoPneus_() {
+	public Pneu get_unnamed_IConjuntoPneus_() {
 		return _unnamed_IConjuntoPneus_;
 	}
 

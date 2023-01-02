@@ -8,7 +8,7 @@ public interface ICarro {
 
 	public Boolean validaAfinacao(float aPAC);
 
-	public void modoMotorNomal();
+	public void modoMotorNomal(Normal normal);
 
 	public void calculaFiabilidade(int cilindrada);
 

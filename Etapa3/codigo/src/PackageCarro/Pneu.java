@@ -2,7 +2,22 @@ package PackageCarro;
 
 public abstract class Pneu implements IConjuntoPneus
 {
+    private int id;
     private int capacidade;
+    public Pneu(int id, int capacidade)
+    {
+        this.id = id;
+        this.capacidade = capacidade;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getCapacidade() {
+        return capacidade;
+    }
+
     private void agressivo(int aGdu)
     {
         if (aGdu == 0)

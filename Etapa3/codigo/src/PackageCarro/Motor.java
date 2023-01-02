@@ -1,12 +1,14 @@
 package PackageCarro;
 
 public class Motor implements IMotor {
+	private int id;
 	private int _potencia;
 	private int _capacidadeCombustivel;
 	private ModoMotor _modo;
 
-	public Motor(int _potencia, int _capacidadeCombustivel, ModoMotor _modo)
+	public Motor(int id, int _potencia, int _capacidadeCombustivel, ModoMotor _modo)
 	{
+		this.id = id;
 		this._potencia = _potencia;
 		this._capacidadeCombustivel = _capacidadeCombustivel;
 		this._modo = _modo;
@@ -14,17 +16,16 @@ public class Motor implements IMotor {
 
 	public Motor(Motor motor)
 	{
+		this.id = motor.id;
 		this._potencia = motor._potencia;
 		this._capacidadeCombustivel = motor._capacidadeCombustivel;
 		this._modo = motor._modo;
 	}
 
-	public Motor(int _potencia, int _capacidadeCombustivel)
-	{
-		this._potencia = _potencia;
-		this._capacidadeCombustivel = _capacidadeCombustivel;
-		this._modo = new ModoMotor();
+	public int getId() {
+		return id;
 	}
+
 	public ModoMotor get_modo()
 	{
 		return this._modo;
@@ -34,8 +35,8 @@ public class Motor implements IMotor {
 		return "" + this._potencia + ',' + this._capacidadeCombustivel;
 	}
 
-	public void modoMotorNormal() {
-		this._modo = new Normal();
+	public void modoMotorNormal(Normal modo) {
+		this._modo = modo;
 	}
 
 	public void capacidadeComb100() {

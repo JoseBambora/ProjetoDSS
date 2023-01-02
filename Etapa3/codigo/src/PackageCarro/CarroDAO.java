@@ -141,6 +141,7 @@ public class CarroDAO implements Map<String,Carro> {
 			sql = """
 				  CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Pneu` (
        				  `id` INT NOT NULL AUTO_INCREMENT,
+       				  `capacidade` INT NOT NULL,
              			  PRIMARY KEY (`id`)
        				  )
 				  """;
@@ -323,11 +324,12 @@ public class CarroDAO implements Map<String,Carro> {
 				ResultSet rs = ps.executeQuery();
 				if(rs.next())
 				{
+					int cap = rs.getInt("capacidade");
 					switch (i)
 					{
-						case 0 -> r = new Macio();
-						case 1 -> r = new Duro();
-						case 2 -> r = new Chuva();
+						case 0 -> r = new Macio(id,cap);
+						case 1 -> r = new Duro(id,cap);
+						case 2 -> r = new Chuva(id,cap);
 					}
 					break;
 				}
@@ -355,9 +357,9 @@ public class CarroDAO implements Map<String,Carro> {
 				{
 					switch (i)
 					{
-						case 0 -> r = new Agressivo();
-						case 1 -> r = new Conservador();
-						case 2 -> r = new Normal();
+						case 0 -> r = new Agressivo(id);
+						case 1 -> r = new Conservador(id);
+						case 2 -> r = new Normal(id);
 					}
 					break;
 				}
@@ -379,7 +381,7 @@ public class CarroDAO implements Map<String,Carro> {
 			 int capacidade = rs.getInt("capacidadeCombustivel");
 			 int modo = rs.getInt("modo");
 			 ModoMotor modoMotor = this.getModo(modo);
-			 r = new Motor(potencia,capacidade,modoMotor);
+			 r = new Motor(id,potencia,capacidade,modoMotor);
 		}
 		return r;
 	}
@@ -419,7 +421,7 @@ public class CarroDAO implements Map<String,Carro> {
 		{
 			try {
 				Pneu pneus = getPneus(pneu);
-				MotorCombustao motor = new MotorCombustao(eng,cil);
+				MotorCombustao motor = new MotorCombustao(getMotor(eng),cil);
 				Categoria c = this.getCategoria(cat);
 				r = new Carro(marca,modelo,pac,pneus,motor,c);
 			}catch (SQLException e) {
@@ -462,12 +464,13 @@ public class CarroDAO implements Map<String,Carro> {
 		return id;
 	}
 
-	private int insertPneu(IConjuntoPneus pneus)
+	private int insertPneu(Pneu pneus)
 	{
 		int id = 0;
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
-			String sql = "INSERT INTO Pneu VALUES()";
+			String sql = "INSERT INTO Pneu (capacidade) VALUES(?)";
 			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1,pneus.getCapacidade());
 			ps.executeUpdate();
 			id = this.getLastId(ps);
 			if (pneus instanceof Macio)
@@ -597,21 +600,21 @@ public class CarroDAO implements Map<String,Carro> {
 		{
 			System.out.println("A gerar dados para os carros");
 			List<ModoMotor> modos = new ArrayList<>();
-			modos.add(new Agressivo());
-			modos.add(new Normal());
-			modos.add(new Normal());
-			modos.add(new Conservador());
+			modos.add(new Agressivo(0));
+			modos.add(new Normal(0));
+			modos.add(new Normal(0));
+			modos.add(new Conservador(0));
 			List<Motor> motores = new ArrayList<>();
-			motores.add(new MotorCombustao(525,60,modos.get(0),3000));
-			motores.add(new MotorCombustao(600,60,modos.get(2),3000));
-			motores.add(new MotorCombustao(400,60,modos.get(3),3000));
-			motores.add(new MotorCombustao(300,60,modos.get(1),3000));
-			motores.add(new MotorElétrico(300,60,modos.get(2)));
-			motores.add(new MotorElétrico(300,60,modos.get(1)));
+			motores.add(new MotorCombustao(0,525,60,modos.get(0),3000));
+			motores.add(new MotorCombustao(0,600,60,modos.get(2),3000));
+			motores.add(new MotorCombustao(0,400,60,modos.get(3),3000));
+			motores.add(new MotorCombustao(0,300,60,modos.get(1),3000));
+			motores.add(new MotorElétrico(0,300,60,modos.get(2)));
+			motores.add(new MotorElétrico(0,300,60,modos.get(1)));
 			List<Pneu> pneus = new ArrayList<>();
-			pneus.add(new Chuva());
-			pneus.add(new Macio());
-			pneus.add(new Duro());
+			pneus.add(new Chuva(0,4));
+			pneus.add(new Macio(0,3));
+			pneus.add(new Duro(0,2));
 			List<Categoria> categorias = new ArrayList<>();
 			categorias.add(new C1(95));
 			categorias.add(new C2(99));
