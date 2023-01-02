@@ -189,15 +189,15 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
     @Override
     public void clear() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
-            String sql = "DELETE * FROM Utilizador";
+            String sql = "DELETE FROM Utilizador";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.executeQuery();
-            sql = "DELETE * FROM Jogador";
+            ps.executeUpdate();
+            sql = "DELETE FROM Jogador";
             ps = conn.prepareStatement(sql);
-            ps.executeQuery();
-            sql = "DELETE * FROM Admin";
+            ps.executeUpdate();
+            sql = "DELETE FROM Admin";
             ps = conn.prepareStatement(sql);
-            ps.executeQuery();
+            ps.executeUpdate();
         }
         catch (SQLException e) {
             e.printStackTrace();

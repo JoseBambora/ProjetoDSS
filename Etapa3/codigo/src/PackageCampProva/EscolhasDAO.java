@@ -32,7 +32,7 @@ public class EscolhasDAO implements Map<String,Escolha> {
 						`nomeJogador` VARCHAR(75) NOT NULL,
 						`piloto` INT NOT NULL,
 						`marca` VARCHAR(50) NOT NULL,
-						`modelo VARCHAR(50) NOT NULL,
+						`modelo` VARCHAR(50) NOT NULL,
 						`pac` FLOAT NOT NULL,
 						`pneus` INT NOT NULL,
 						`modo` INT NOT NULL,
@@ -40,12 +40,10 @@ public class EscolhasDAO implements Map<String,Escolha> {
 						REFERENCES `simuladorDSS`.`CampeonatoProva` (`id`),
 						FOREIGN KEY (`piloto`)
 						REFERENCES `simuladorDSS`.`Piloto` (`id`),
-						FOREIGN KEY (`marca`)
-						REFERENCES `simuladorDSS`.`Carro` (`marca`),
-						FOREIGN KEY (`modelo`)
-						REFERENCES `simuladorDSS`.`Carro` (`modelo`),
-						FOREIGN KEY (`pneu`)
-						REFERENCES `simuladorDSS`.`Pneus` (`id`),
+						FOREIGN KEY (marca,modelo)
+					    REFERENCES simuladorDSS.Carro (marca,modelo),
+						FOREIGN KEY (`pneus`)
+						REFERENCES `simuladorDSS`.`Pneu` (`id`),
 						FOREIGN KEY (`modo`)
 						REFERENCES `simuladorDSS`.`ModoMotor` (`id`),
 						PRIMARY KEY (`campeonatoProva`,`nomeJogador`))
@@ -85,7 +83,9 @@ public class EscolhasDAO implements Map<String,Escolha> {
 	}
 
 	public String generateKey(int idCampProva, String usernameJogador){
-		return idCampProva +','+ usernameJogador;
+		StringBuilder sb = new StringBuilder();
+		sb.append(idCampProva).append(",").append(usernameJogador);
+		return sb.toString();
 	}
 
 	public static String[] getCampProvaUsername(String key){

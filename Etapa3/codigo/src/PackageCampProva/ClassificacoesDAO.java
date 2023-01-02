@@ -63,7 +63,9 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 	}
 
 	public String generateKey(int idCampProva, String usernameJogador){
-		return idCampProva +','+ usernameJogador;
+		StringBuilder sb = new StringBuilder();
+		sb.append(idCampProva).append(',').append(usernameJogador);
+		return sb.toString();
 	}
 
 	public static String[] getCampProvaUsername(String key){
@@ -158,7 +160,7 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 	@Override
 	public void clear() {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
-			String sql = "DELETE * FROM Classificacoes";
+			String sql = "DELETE FROM Classificacoes";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.executeQuery();
 		}

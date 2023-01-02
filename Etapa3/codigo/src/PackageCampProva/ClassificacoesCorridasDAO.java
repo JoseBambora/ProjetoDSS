@@ -64,7 +64,9 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 	}
 
 	public String generateKey(int idCampProva,String circuito, String usernameJogador){
-		return idCampProva+','+circuito+","+usernameJogador;
+		StringBuilder sb = new StringBuilder();
+		sb.append(idCampProva).append(',').append(circuito).append(',').append(usernameJogador);
+		return sb.toString();
 	}
 
 	public static String[] getCampProvaUsername(String key){
@@ -106,7 +108,7 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			int res = 0;
 			String[] pk = ClassificacoesDAO.getCampProvaUsername((String) key);
-			String sql = "SELECT * FROM ClassificacoesCorrida WHERE campeonatoProva = ? AND circuito = ? AND nomeJogador = ?";
+			String sql = "SELECT * FROM ClassificacoesCorridas WHERE campeonatoProva = ? AND circuito = ? AND nomeJogador = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1,Integer.parseInt(pk[0]));
 			ps.setString(2,pk[1]);
@@ -163,7 +165,7 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 	@Override
 	public void clear() {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
-			String sql = "DELETE * FROM ClassificacoesCorridas";
+			String sql = "DELETE FROM ClassificacoesCorridas";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.executeQuery();
 		}

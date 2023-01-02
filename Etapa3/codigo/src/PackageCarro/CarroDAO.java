@@ -320,11 +320,16 @@ public class CarroDAO implements Map<String,Carro> {
 			{
 				String sql = "SELECT * FROM " + cat + " WHERE pneu = ?";
 				PreparedStatement ps = conn.prepareStatement(sql);
-				ps.setString(1,cat);
+				ps.setInt(1,id);
 				ResultSet rs = ps.executeQuery();
 				if(rs.next())
 				{
-					int cap = rs.getInt("capacidade");
+					rs.close();
+					sql = "SELECT * FROM Pneu where id = ?";
+					PreparedStatement ps2 = conn.prepareStatement(sql);
+					ps2 .setInt(1,id);
+					ResultSet rs2 = ps2 .executeQuery();
+					int cap = rs2.getInt("capacidade");
 					switch (i)
 					{
 						case 0 -> r = new Macio(id,cap);

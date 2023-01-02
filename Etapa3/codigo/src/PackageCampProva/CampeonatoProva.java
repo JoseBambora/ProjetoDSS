@@ -100,4 +100,12 @@ public class CampeonatoProva {
 	public Map<String, Integer> simulaCampeonato() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public String toString() {
+		return "CampeonatoProva{" +
+				"_id=" + _id +
+				", _campeonato=" + _campeonato +
+				'}';
+	}
 }

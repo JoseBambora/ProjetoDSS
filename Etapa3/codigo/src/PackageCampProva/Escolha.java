@@ -79,4 +79,16 @@ public class Escolha {
 	public void set_modo(ModoMotor _modo) {
 		this._modo = _modo;
 	}
+
+	@Override
+	public String toString() {
+		return "Escolha{" +
+				"_jogador=" + _jogador +
+				", _piloto=" + _piloto +
+				", _carro=" + _carro +
+				", _pac=" + _pac +
+				", _pneu=" + _pneu +
+				", _modo=" + _modo +
+				'}';
+	}
 }

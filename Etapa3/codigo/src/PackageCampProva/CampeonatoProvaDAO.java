@@ -148,9 +148,9 @@ public class CampeonatoProvaDAO implements Map<Integer,CampeonatoProva> {
 	@Override
 	public void clear() {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
-			String sql = "DELETE * FROM CampeonatoProva";
+			String sql = "DELETE FROM CampeonatoProva";
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.executeQuery();
+			ps.executeUpdate();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
