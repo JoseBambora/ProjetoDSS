@@ -3,14 +3,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-
-import PackageCampeonato.CampeonatoDAO;
-import PackageCarro.CarroDAO;
-import PackagePiloto.PilotoDAO;
-import PackageUtilizador.*;
-import PackageUtilizador.Utilizador;
-import PackageUtilizador.UtilizadoresDAO;
 
 /**
  * Exemplo de interface em modo texto.
@@ -20,11 +12,7 @@ import PackageUtilizador.UtilizadoresDAO;
  */
 public class TextUI {
 
-    private ISimulador model;
-    CampeonatoDAO campeonatoDAO;
-    UtilizadoresDAO utilizadorDAO;
-    CarroDAO carroDAO;
-    PilotoDAO pilotoDAO;
+    private ISimulador model = new Simulador();
 
     // Menus da aplicação
     private Menu menu;
@@ -108,10 +96,10 @@ public class TextUI {
             
             System.out.println("Nome de Utilizador: ");
             String username = scin.nextLine();
-            if (!utilizadorDAO.containsKey(username)) {
+            if (!model.validarRegistoUser(username)) {
                 System.out.println("Palavra-Passe: ");
                 String password = scin.nextLine();
-                
+                model.validarDadosUser(username,password);
                 // check if the password is correct with the username given
                 
                 
@@ -139,9 +127,9 @@ public class TextUI {
             Map<String, String> aEscolhaCarros = new HashMap<>(num);
 
             System.out.println("Selecione um campeonato: ");
-            System.out.println(campeonatoDAO.toString());
+            System.out.println(model.getCampeonatos());
             camp = scin.nextLine();
-            if(!campeonatoDAO.containsKey(camp))
+            if(model.existeCampeonato(camp))
             {
                 System.out.println(" Campeonato inválido! ");
             }
@@ -156,9 +144,9 @@ public class TextUI {
                 while(flag == false)
                 {
                     System.out.println("Selecione um piloto: ");
-                    System.out.println(pilotoDAO.toString());
+                    System.out.println(model.getPilotos());
                     driver = scin.nextLine();
-                    if(!pilotoDAO.containsKey(driver))
+                    if(model.verificaExistenciaPiloto(driver))
                     {
                         System.out.println(" Piloto inválido! ");
                     }
@@ -172,9 +160,9 @@ public class TextUI {
                 while(flag == false)
                 {
                     System.out.println("Selecione um carro: ");
-                    System.out.println(carroDAO.toString());
+                    System.out.println(model.getCarros());
                     car = scin.nextLine();
-                    if(!carroDAO.containsKey(car))
+                    if(model.verificaExistenciaCarro(car))
                     {
                         System.out.println(" Carro inválido! ");
                     }
@@ -188,10 +176,10 @@ public class TextUI {
             }
             
 
-            sim.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
+            int id = sim.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
             //adicionaJogador(jogador, driver, car)
 
-            sim.simulaCampeonato(camp);
+            sim.simulaCampeonato(id);
             
             
         }

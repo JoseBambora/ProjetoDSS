@@ -68,7 +68,7 @@ public interface ISimulador {
 
 	public Boolean validaGDUCarateristicas(Map<Integer, Integer> aRetas, Map<Integer, Integer> aCurvas, Map<Integer, Integer> aChicanes);
 
-	public Boolean verificaExistenciaCarro(String aMarca, String aModelo);
+	public Boolean verificaExistenciaCarro(String carro);
 
 	public void adicionaCampeonato(Campeonato aCampeonato);
 
@@ -88,5 +88,11 @@ public interface ISimulador {
 
 	public void atualizaPontuacaoGlobal(String aIdCampeonatoProva, String aNome);
 
-	public void simulaCampeonato(String campProva);
+	public void simulaCampeonato(int campProva);
+
+	public boolean existeCampeonato(String name);
+
+	public List<Campeonato> getCampeonatos();
+	public List<Piloto> getPilotos();
+	public List<Carro> getCarros();
 }

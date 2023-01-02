@@ -34,7 +34,7 @@ public class Simulador implements ISimulador {
 	}
 
 	public Boolean validarRegistoUser(String aNome) {
-		throw new UnsupportedOperationException();
+		return ! UtilizadoresDAO.getInstance().containsKey(aNome);
 	}
 
 	public Map<String, Boolean> verificaExistênciaJogadores(List<String> aNomes) {
@@ -52,7 +52,7 @@ public class Simulador implements ISimulador {
 	}
 
 	public Boolean verificaExistenciaPiloto(String aPiloto) {
-		throw new UnsupportedOperationException();
+		return PilotoDAO.getInstace().containsKey(aPiloto);
 	}
 
 	public Boolean validaRegistoPiloto(String aNome, Float aCts, Float aSva) {
@@ -145,8 +145,21 @@ public class Simulador implements ISimulador {
 		return null;
 	}
 
-	public Boolean verificaExistenciaCarro(String aMarca, String aModelo) {
-		throw new UnsupportedOperationException();
+	public Boolean verificaExistenciaCarro(String carro) {
+		return CarroDAO.getInstace().containsKey(carro);
+	}
+	public List<Campeonato> getCampeonatos()
+	{
+		return new ArrayList<>(CampeonatoDAO.getInstance().values());
+	}
+
+	public List<Piloto> getPilotos()
+	{
+		return new ArrayList<>(PilotoDAO.getInstace().values());
+	}
+	public List<Carro> getCarros()
+	{
+		return new ArrayList<>(CarroDAO.getInstace().values());
 	}
 
 	public void adicionaCampeonato(Campeonato aCampeonato) {
@@ -197,8 +210,12 @@ public class Simulador implements ISimulador {
 	public void atualizaPontuacaoGlobal(String aIdCampeonatoProva, String aNome) {
 		throw new UnsupportedOperationException();
 	}
+	public boolean existeCampeonato(String name)
+	{
+		return CampeonatoDAO.getInstance().containsKey(name);
+	}
 
-	public void simulaCampeonato(String campProva)
+	public void simulaCampeonato(int campProva)
 	{
 		UtilizadoresDAO utilizadoresDAO = UtilizadoresDAO.getInstance();
 		CampeonatoProva campeonatoProva = CampeonatoProvaDAO.getInstance().get(campProva);
