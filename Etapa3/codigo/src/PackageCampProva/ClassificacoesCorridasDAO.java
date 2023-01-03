@@ -48,7 +48,7 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 		String pk = this.generateKey(campeonatoProva,circuito,nomeJogador,null);
 		this.insertClassificacao(pk,incremento);
 	}
-	
+
 	public void addClassificacao(Map<String, Integer> aClassificacoes) {
 		throw new UnsupportedOperationException();
 	}
