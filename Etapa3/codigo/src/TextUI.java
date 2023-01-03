@@ -1,3 +1,5 @@
+import PackageCarro.ModoMotor;
+import PackageCarro.Pneu;
 import PackageUtilizador.Jogador;
 import PackageUtilizador.Utilizador;
 
@@ -17,13 +19,13 @@ import java.util.Scanner;
  */
 public class TextUI {
 
-    private ISimulador model = new Simulador();
+    private static ISimulador model = new Simulador();
 
     // Menus da aplicação
     private Menu menu;
 
     // Scanner para leitura
-    private Scanner scin;
+    private static Scanner scin;
 
     /**
      * Executa o menu principal e invoca o método correspondente à opção seleccionada.
@@ -123,7 +125,6 @@ public class TextUI {
     {
         try
         {
-            Simulador sim = new Simulador();
             String camp, nickname, driver, car;
             System.out.println("Indique o número de jogadores: ");
             int num = scin.nextInt();
@@ -182,10 +183,10 @@ public class TextUI {
             }
             
 
-            int id = sim.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
+            int id = model.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
             //adicionaJogador(jogador, driver, car)
 
-            Map<String,Integer> classificacoes = sim.simulaCampeonato(id);
+            Map<String,Integer> classificacoes = model.simulaCampeonato(id);
             List<String> classiSort = new ArrayList<>(classificacoes.keySet());
             classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
             System.out.println("Classificações finais do campeonato " + camp);
@@ -205,17 +206,43 @@ public class TextUI {
             }
             for(String nome : classificacoes.keySet())
             {
-                if(sim.isJogador(nome))
+                if(model.isJogador(nome))
                 {
                     System.out.println("Jogador: " + nome + ", qual a password?");
                     String password = scin.nextLine();
-                    if(!sim.validarDadosUser(nome,password))
-                        sim.atualizaPontuacaoGlobal(id,nome);
+                    if(!model.validarDadosUser(nome,password))
+                        model.atualizaPontuacaoGlobal(id,nome);
                 }
             }
         }
         catch (NullPointerException e) {
             System.out.println(e.getMessage());
         }
+    }
+    public static float getPac()
+    {
+        System.out.println("Qual o pac? (0.0 - 1.0)");
+        return scin.nextFloat();
+    }
+    public static Pneu getPneus()
+    {
+        List<Pneu> pneus = model.getPneus();
+        pneus.forEach(System.out::println);
+        int id = scin.nextInt();
+        return model.getPneu(id);
+    }
+    public static ModoMotor getModo()
+    {
+        List<ModoMotor> modo = model.getModos();
+        modo.forEach(System.out::println);
+        int id = scin.nextInt();
+        return model.getModo(id);
+    }
+    public static boolean pretendeAfinar()
+    {
+        System.out.println("Pretende afinar?");
+        System.out.println("1 - Sim");
+        System.out.println("0 - Não");
+        return scin.nextInt() == 1;
     }
 }
