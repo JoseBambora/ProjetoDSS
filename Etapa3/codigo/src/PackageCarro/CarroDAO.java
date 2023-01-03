@@ -323,7 +323,7 @@ public class CarroDAO implements Map<String,Carro> {
 		}
 		return cap;
 	}
-	public Pneu getPneus(int id) throws SQLException
+	public Pneu getPneus(int id)
 	{
 		Pneu r = null;
 		List<String> list = new ArrayList<>();
@@ -352,9 +352,13 @@ public class CarroDAO implements Map<String,Carro> {
 				i++;
 			}
 		}
+		catch (SQLException e)
+		{
+
+		}
 		return r;
 	}
-	public ModoMotor getModo(int id) throws SQLException
+	public ModoMotor getModo(int id)
 	{
 		ModoMotor r = null;
 		List<String> list = new ArrayList<>();
@@ -381,6 +385,10 @@ public class CarroDAO implements Map<String,Carro> {
 				}
 				i++;
 			}
+		}
+		catch (SQLException e)
+		{
+
 		}
 		return r;
 
@@ -677,7 +685,38 @@ public class CarroDAO implements Map<String,Carro> {
 	public void clear() {
 
 	}
-
+	public List<Pneu> getPneus()
+	{
+		List<Pneu> l = new ArrayList<>();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			String sql = "SELECT * FROM Pneu";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+				l.add(getPneus(rs.getInt("id")));
+		}
+		catch (SQLException e)
+		{
+			throw new RuntimeException(e);
+		}
+		return l;
+	}
+	public List<ModoMotor> getModos()
+	{
+		List<ModoMotor> l = new ArrayList<>();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			String sql = "SELECT * FROM ModoMotor";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+				l.add(getModo(rs.getInt("id")));
+		}
+		catch (SQLException e)
+		{
+			throw new RuntimeException(e);
+		}
+		return l;
+	}
 	@Override
 	public Set<String> keySet()
 	{

@@ -1,15 +1,12 @@
 import PackageCampProva.CampeonatoProva;
-import PackageCarro.ModoMotor;
+import PackageCarro.*;
 import PackageUtilizador.UtilizadoresDAO;
 import PackageCircuito.CircuitoDAO;
 import PackagePiloto.PilotoDAO;
-import PackageCarro.CarroDAO;
 import PackageCampeonato.CampeonatoDAO;
 import PackageCampProva.CampeonatoProvaDAO;
 import PackageUtilizador.Utilizador;
 import PackagePiloto.Piloto;
-import PackageCarro.Carro;
-import PackageCarro.Categoria;
 import PackageCircuito.Circuito;
 import PackageCampeonato.Campeonato;
 import PackageUtilizador.Jogador;
@@ -162,6 +159,16 @@ public class Simulador implements ISimulador {
 		return new ArrayList<>(CarroDAO.getInstace().values());
 	}
 
+	@Override
+	public List<Pneu> getPneus() {
+		return CarroDAO.getInstace().getPneus();
+	}
+
+	@Override
+	public List<ModoMotor> getModos() {
+		return CarroDAO.getInstace().getModos();
+	}
+
 	public void adicionaCampeonato(Campeonato aCampeonato) {
 		throw new UnsupportedOperationException();
 	}
@@ -230,5 +237,15 @@ public class Simulador implements ISimulador {
 	public boolean isJogador(String name)
 	{
 		return UtilizadoresDAO.getInstance().containsKey(name) && UtilizadoresDAO.getInstance().get(name).isJogador();
+	}
+
+	@Override
+	public Pneu getPneu(int id) {
+		return CarroDAO.getInstace().getPneus(id);
+	}
+
+	@Override
+	public ModoMotor getModo(int id) {
+		return CarroDAO.getInstace().getModo(id);
 	}
 }

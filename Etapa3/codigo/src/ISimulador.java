@@ -1,4 +1,5 @@
 import PackageCarro.ModoMotor;
+import PackageCarro.Pneu;
 import PackageUtilizador.Utilizador;
 import PackagePiloto.Piloto;
 import PackageCarro.Carro;
@@ -89,10 +90,14 @@ public interface ISimulador {
 	public void atualizaPontuacaoGlobal(int aIdCampeonatoProva, String aNome);
 
 	public Map<String,Integer> simulaCampeonato(int campProva);
-
 	public boolean existeCampeonato(String name);
 
 	public List<Campeonato> getCampeonatos();
 	public List<Piloto> getPilotos();
 	public List<Carro> getCarros();
+	public List<Pneu> getPneus();
+	public List<ModoMotor> getModos();
+	public boolean isJogador(String name);
+	public Pneu getPneu(int id);
+	public ModoMotor getModo(int id);
 }
