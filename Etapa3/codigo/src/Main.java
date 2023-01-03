@@ -17,29 +17,28 @@ public class Main {
         carroDAO.generateData();
         PilotoDAO pilotoDAO = PilotoDAO.getInstace();
         pilotoDAO.generateDataPiloto();
+        CampeonatoDAO campeonatoDAO = CampeonatoDAO.getInstance();
+        campeonatoDAO.generateData();
         CircuitoDAO circuitoDAO = CircuitoDAO.getInstace();
         circuitoDAO.generateDataCircuito();
         UtilizadoresDAO utilizadores = UtilizadoresDAO.getInstance();
         utilizadores.generateData();
-        CampeonatoDAO campeonatoDAO = CampeonatoDAO.getInstance();
-        campeonatoDAO.generateData();
-        System.out.println(campeonatoDAO.values());
-        System.out.println(campeonatoDAO.keySet());
-        System.out.println(campeonatoDAO.entrySet());
-        System.out.println(campeonatoDAO.get("Formula 1"));
-        // Set<String> key = carroDAO.keySet();
-        // Collection<Carro> carros = carroDAO.values();
-        // Set<Map.Entry<String,Carro>> entrySet = carroDAO.entrySet();
-        // System.out.println("Values: ");
-        // carros.forEach(System.out::println);
-        // System.out.println("\nEntrey Set");
-        // entrySet.forEach(c -> System.out.println(c.getValue()));
-        // System.out.println("\nKeySet: ");
-        // key.forEach(System.out::println);
+        // System.out.println(campeonatoDAO.values());
+        // System.out.println(campeonatoDAO.keySet());
+        // System.out.println(campeonatoDAO.entrySet());
+        // System.out.println(campeonatoDAO.get("Formula 1"));
+        //Set<String> key = carroDAO.keySet();
+        //Collection<Carro> carros = carroDAO.values();
+        //Set<Map.Entry<String,Carro>> entrySet = carroDAO.entrySet();
+        //System.out.println("Values: ");
+        //carros.forEach(System.out::println);
+        //System.out.println("\nEntrey Set");
+        //entrySet.forEach(c -> System.out.println(c.getValue()));
+        //System.out.println("\nKeySet: ");
+        //key.forEach(System.out::println);
         //System.out.println(carroDAO.size());
         //System.out.println(carroDAO.containsKey("Porshe,GT3RS"));
         //System.out.println(carroDAO.containsKey("Porshe,GT2RS"));
-
          //Testado
         //System.out.println(utilizadores.get("Maria")); //Testado
         // Set<String> key = utilizadores.keySet(); //Testado

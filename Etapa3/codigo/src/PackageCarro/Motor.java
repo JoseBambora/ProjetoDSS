@@ -59,4 +59,9 @@ public class Motor implements IMotor {
 	public int get_capacidadeCombustivel() {
 		return _capacidadeCombustivel;
 	}
+
+	@Override
+	public String toString() {
+		return "Motor " + this._potencia + " " + this._modo;
+	}
 }

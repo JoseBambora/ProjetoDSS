@@ -2,9 +2,12 @@ package PackageCircuito;
 
 //import static javax.swing.text.rtf.RTFAttributes.BooleanAttribute.False;
 
-public class Caracteristica implements ICaracteristica {
+public abstract class Caracteristica implements ICaracteristica {
 	private int _gdu;
-	
+	public Caracteristica(int gdu)
+	{
+		this._gdu = gdu;
+	}
 	// o circuito tem 10 rectas e apresenta a lista de curvas e rectas de modo a que 
 	// o José indique o grau de dificuldade de ultrapassagem (GDU) em cada uma 
 	// (as chicanes têm sempre um GDU de difícil). Para as rectas 1 e 6, e curvas 2 e 3,

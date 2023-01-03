@@ -2,6 +2,9 @@ package PackageCircuito;
 
 import PackageCampeonato.Campeonato;
 import DAOCONFIG.DAOconfig;
+import PackageCarro.Chuva;
+import PackageCarro.Duro;
+import PackageCarro.Macio;
 
 import java.util.Collection;
 import java.util.Map;
@@ -35,11 +38,10 @@ public class CircuitoDAO implements Map<String,Circuito> {
 				sql = """
 					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Caracteristica` (
       					`id` INT NOT NULL AUTO_INCREMENT,
-      					`nome` VARCHAR(50) NOT NULL,
       					`circuito` VARCHAR(50) NOT NULL,
       					`gdu` INT NOT NULL,
       						PRIMARY KEY (`id`),
-							FOREIGN KEY (`nome`)
+							FOREIGN KEY (`circuito`)
       						REFERENCES `simuladorDSS`.`Circuito` (nome))""";
 				stm.executeUpdate(sql);
 				sql = """
@@ -163,6 +165,59 @@ public class CircuitoDAO implements Map<String,Circuito> {
         }
         return res;
 	}
+	public Caracteristica getCaracteristica(int id, int gdu) {
+		Caracteristica r = null;
+		List<String> list = new ArrayList<>();
+		list.add("Reta");
+		list.add("Chicane");
+		list.add("Curva");
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			int i = 0;
+			for (String cat : list)
+			{
+				String sql = "SELECT * FROM " + cat + " WHERE id = ?";
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ps.setInt(1,id);
+				ResultSet rs = ps.executeQuery();
+				if(rs.next())
+				{
+					switch (i)
+					{
+						case 0 -> r = new Reta(gdu);
+						case 1 -> r = new Chicane(gdu);
+						case 2 -> r = new Curva(gdu);
+					}
+					break;
+				}
+				i++;
+			}
+		}
+		catch (SQLException e) {
+			// Erro a criar tabela...
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return r;
+	}
+	public List<Caracteristica> getCaracteristicas(String name)
+	{
+		List<Caracteristica> res = new ArrayList<>();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD); ){
+			String sql = "SELECT * FROM Caracteristica WHERE circuito = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1,name);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				res.add(getCaracteristica(rs.getInt("id"),rs.getInt("gdu")));
+			}
+		} catch (SQLException e) {
+			// Erro a criar tabela...
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return res;
+	}
 
 	@Override
 	public Circuito get(Object key) {
@@ -192,13 +247,38 @@ public class CircuitoDAO implements Map<String,Circuito> {
 		}
 		if (aux)
 		{
-			r = new Circuito(nome,distancia,voltas,campeonato);
+			r = new Circuito(nome,distancia,voltas,campeonato,getCaracteristicas(nome));
 		}
 		return r;
 	}
 
 
-
+	private void insertCaracteristica(Caracteristica caracteristica, String circuito)
+	{
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			String sql = "INSERT INTO Caracteristica (circuito,gdu) VALUES (?,?)";
+			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1,circuito);
+			ps.setInt(2,caracteristica.get_gdu());
+			ps.executeUpdate();
+			int id = 0;
+			ResultSet rs = ps.getGeneratedKeys();
+			if (rs.next())
+				id=rs.getInt(1);
+			if(caracteristica instanceof Reta)
+				sql = "INSERT INTO Reta VALUES (" + id + ")";
+			else if(caracteristica instanceof Curva)
+				sql = "INSERT INTO Curva VALUES (" + id + ")";
+			else if(caracteristica instanceof Chicane)
+				sql = "INSERT INTO Chicane VALUES (" + id + ")";
+			ps = conn.prepareStatement(sql);
+			ps.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+	}
 	private void insertCircuito(Circuito circ)
 	{
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
@@ -214,6 +294,7 @@ public class CircuitoDAO implements Map<String,Circuito> {
 			preparedStatement.setInt(3,voltas);
 			preparedStatement.setString(4,camp);
 			preparedStatement.executeUpdate();
+			circ.get_caracteristica().forEach(c -> insertCaracteristica(c,circ.get_nome()));
 			System.out.println("Circuito: " + circ + " adicionado");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -227,10 +308,17 @@ public class CircuitoDAO implements Map<String,Circuito> {
 	{
 		if(this.isEmpty())
 		{
+			List<Caracteristica> list = new ArrayList<>();
+			list.add(new Reta(3));
+			list.add(new Curva(1));
+			list.add(new Curva(2));
+			list.add(new Chicane(1));
+			list.add(new Reta(4));
+			list.add(new Reta(5));
 			List<Circuito> circuitos = new ArrayList<>();
-			circuitos.add(new Circuito("Braga", 500 , 2, "campeonato1")); // isto tá mal
-			circuitos.add(new Circuito("Lisboa", 730 , 5, "campeonato3")); // isto tá mal
-			circuitos.add(new Circuito("Porto", 670 , 3, "campeonato1")); // isto tá mal
+			circuitos.add(new Circuito("Braga", 500 , 2, "campeonato1",list)); // isto tá mal
+			circuitos.add(new Circuito("Lisboa", 730 , 5, "campeonato3",list)); // isto tá mal
+			circuitos.add(new Circuito("Porto", 670 , 3, "campeonato1",list)); // isto tá mal
 			circuitos.forEach(this::insertCircuito);
 		}
 	}

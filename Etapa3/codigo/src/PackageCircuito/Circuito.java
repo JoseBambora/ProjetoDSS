@@ -12,11 +12,12 @@ public class Circuito implements ICircuito {
 	private List<Caracteristica> _caracteristica;
 	public MelhoresVoltasDAO _unnamed_MelhoresVoltasDAO_;
 
-	public Circuito(String nome, int d, int e, String camp) {
+	public Circuito(String nome, int d, int e, String camp, List<Caracteristica> list) {
 		this._nome = nome;
 		this._distancia = d;
 		this._voltas =  e;
 		this._campeonato = camp;
+		this._caracteristica = new ArrayList<>(list);
     }
 
 	public static String[] getCircuito(String key)
@@ -79,6 +80,6 @@ public class Circuito implements ICircuito {
 
 	@Override
 	public String toString() {
-		return this._nome + " " + this._voltas;
+		return this._nome + " " + this._voltas + " " + this.get_caracteristica();
 	}
 }
