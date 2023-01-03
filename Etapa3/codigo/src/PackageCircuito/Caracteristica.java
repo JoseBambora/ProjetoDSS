@@ -4,7 +4,6 @@ package PackageCircuito;
 
 public class Caracteristica implements ICaracteristica {
 	private int _gdu;
-	public Circuito _unnamed_Circuito_;
 	
 	// o circuito tem 10 rectas e apresenta a lista de curvas e rectas de modo a que 
 	// o José indique o grau de dificuldade de ultrapassagem (GDU) em cada uma 
@@ -15,6 +14,10 @@ public class Caracteristica implements ICaracteristica {
 	// 1 - possivel
 	// 2 - dificil
 	// 3 - impossivel
+
+	public int get_gdu() {
+		return _gdu;
+	}
 
 	public Boolean validaGDU(Integer aGdu) {
 		if(aGdu != 1 || aGdu != 2 || aGdu != 3)

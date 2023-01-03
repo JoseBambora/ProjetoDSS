@@ -1,5 +1,7 @@
 package PackageCircuito;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Circuito implements ICircuito {
@@ -7,7 +9,7 @@ public class Circuito implements ICircuito {
 	private int _distancia;
 	private int _voltas;
 	private String _campeonato;
-	private Caracteristica _caracteristica;
+	private List<Caracteristica> _caracteristica;
 	public MelhoresVoltasDAO _unnamed_MelhoresVoltasDAO_;
 
 	public Circuito(String nome, int d, int e, String camp) {
@@ -48,6 +50,10 @@ public class Circuito implements ICircuito {
 	
 	public void set_Voltas(int voltas) {
 		this._voltas = voltas;
+	}
+
+	public List<Caracteristica> get_caracteristica() {
+		return new ArrayList<>(_caracteristica);
 	}
 
 	@Override
