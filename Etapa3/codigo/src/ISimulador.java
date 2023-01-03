@@ -86,9 +86,9 @@ public interface ISimulador {
 
 	public Map<String, Integer> getClassificacoesCorrida(String aIdCampeonato, String aIdProva);
 
-	public void atualizaPontuacaoGlobal(String aIdCampeonatoProva, String aNome);
+	public void atualizaPontuacaoGlobal(int aIdCampeonatoProva, String aNome);
 
-	public void simulaCampeonato(int campProva);
+	public Map<String,Integer> simulaCampeonato(int campProva);
 
 	public boolean existeCampeonato(String name);
 

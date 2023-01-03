@@ -207,51 +207,28 @@ public class Simulador implements ISimulador {
 		throw new UnsupportedOperationException();
 	}
 
-	public void atualizaPontuacaoGlobal(String aIdCampeonatoProva, String aNome) {
-		throw new UnsupportedOperationException();
+	public void atualizaPontuacaoGlobal(int aIdCampeonatoProva, String aNome)
+	{
+		CampeonatoProva camp = CampeonatoProvaDAO.getInstance().get(aIdCampeonatoProva);
+		if(CampeonatoProvaDAO.getInstance().containsKey(aIdCampeonatoProva))
+		{
+			Integer pontuacao = camp.get_classificacao().get(aNome);
+			if(pontuacao != null)
+				UtilizadoresDAO.getInstance().addPontuacao(aNome,pontuacao);
+		}
 	}
 	public boolean existeCampeonato(String name)
 	{
 		return CampeonatoDAO.getInstance().containsKey(name);
 	}
 
-	public void simulaCampeonato(int campProva)
+	public Map<String,Integer> simulaCampeonato(int campProva)
 	{
-		UtilizadoresDAO utilizadoresDAO = UtilizadoresDAO.getInstance();
 		CampeonatoProva campeonatoProva = CampeonatoProvaDAO.getInstance().get(campProva);
-		Map<String,Integer> classificacoes = campeonatoProva.simulaCampeonato();
-		List<String> classiSort = new ArrayList<>(classificacoes.keySet());
-		classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
-		System.out.println("Classificações finais");
-		System.out.println("     Nome      | Pontuação");
-		for(int i = 0; i < classiSort.size(); )
-		{
-			i++;
-			String name = classiSort.get(i);
-			System.out.println(i + "º " + name.substring(0,15) + " | " + classificacoes.get(name));
-		}
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		try
-		{
-			for(String nome : classificacoes.keySet())
-			{
-				Utilizador user = utilizadoresDAO.get(nome);
-				if(user.isJogador())
-				{
-					Jogador player = (Jogador) user;
-					System.out.println("Jogador: " + nome + ", qual a password?");
-					String password = input.readLine();
-					if(this.validarDadosUser(nome,password))
-					{
-						player.aumentaClassficacao(classificacoes.get(nome));
-						utilizadoresDAO.put(nome,player);
-					}
-				}
-			}
-		}
-		catch (Exception ignored)
-		{
-
-		}
+		return campeonatoProva.simulaCampeonato();
+	}
+	public boolean isJogador(String name)
+	{
+		return UtilizadoresDAO.getInstance().containsKey(name) && UtilizadoresDAO.getInstance().get(name).isJogador();
 	}
 }

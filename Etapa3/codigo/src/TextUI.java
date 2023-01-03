@@ -1,3 +1,8 @@
+import PackageUtilizador.Jogador;
+import PackageUtilizador.Utilizador;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,7 +121,8 @@ public class TextUI {
 
     private void menuSimulador()
     {
-        try {
+        try
+        {
             Simulador sim = new Simulador();
             String camp, nickname, driver, car;
             System.out.println("Indique o número de jogadores: ");
@@ -179,9 +185,34 @@ public class TextUI {
             int id = sim.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
             //adicionaJogador(jogador, driver, car)
 
-            sim.simulaCampeonato(id);
-            
-            
+            Map<String,Integer> classificacoes = sim.simulaCampeonato(id);
+            List<String> classiSort = new ArrayList<>(classificacoes.keySet());
+            classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
+            System.out.println("Classificações finais do campeonato " + camp);
+            System.out.println("     Nome      | Pontuação");
+            for(int i = 0; i < classiSort.size(); )
+            {
+                String name = i + "º" + classiSort.get(i);
+                if(name.length() < 15)
+                {
+                    String esp = " ".repeat(15 - name.length());
+                    name += esp;
+                }
+                else
+                    name = name.substring(0,15);
+                i++;
+                System.out.println(name + " | " + classificacoes.get(name));
+            }
+            for(String nome : classificacoes.keySet())
+            {
+                if(sim.isJogador(nome))
+                {
+                    System.out.println("Jogador: " + nome + ", qual a password?");
+                    String password = scin.nextLine();
+                    if(!sim.validarDadosUser(nome,password))
+                        sim.atualizaPontuacaoGlobal(id,nome);
+                }
+            }
         }
         catch (NullPointerException e) {
             System.out.println(e.getMessage());
