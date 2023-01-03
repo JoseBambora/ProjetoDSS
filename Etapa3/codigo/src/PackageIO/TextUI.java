@@ -1,10 +1,10 @@
+package PackageIO;
+
 import PackageCarro.ModoMotor;
 import PackageCarro.Pneu;
-import PackageUtilizador.Jogador;
-import PackageUtilizador.Utilizador;
+import PackageFacade.ISimulador;
+import PackageFacade.Simulador;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,7 +81,7 @@ public class TextUI {
                 String password = scin.nextLine();
 
                 user.put(new Utilizador(username,password));
-                Simulador.adicionaUtilizador(user);
+                PackageFacade.Simulador.adicionaUtilizador(user);
 
                 System.out.println("Utilizador adicionado");
                 

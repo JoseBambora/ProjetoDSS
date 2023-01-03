@@ -4,10 +4,15 @@ import PackageCampeonato.Campeonato;
 import PackageCampeonato.CampeonatoDAO;
 import PackageCarro.ModoMotor;
 import PackageCarro.Carro;
+import PackageCarro.Pneu;
 import PackagePiloto.Piloto;
+import PackageIO.TextUI;
+import PackageUtilizador.UtilizadoresDAO;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CampeonatoProva {
 	private int _id;
@@ -81,16 +86,24 @@ public class CampeonatoProva {
 		throw new UnsupportedOperationException();
 	}
 
-	public void guardaAfinacao(String aNome, float aPAC, ModoMotor aModo, String aPneus) {
-		throw new UnsupportedOperationException();
+	public void guardaAfinacao(String aNome, float aPAC, ModoMotor aModo, Pneu aPneus) {
+		EscolhasDAO.getInstance().guardaAfinacao(aNome,aPAC,aModo,aPneus);
 	}
 
 	public Map<String, Integer> getClassificacoesCorrida(String aProva) {
-		throw new UnsupportedOperationException();
+		Map<String,Integer> pontuacoesJogadores = new HashMap<>();
+		Set<Map.Entry<String, Integer>> aux = ClassificacoesCorridasDAO.getInstance().entrySet();
+		for(Map.Entry<String, Integer> entry : aux){
+			String pk = entry.getKey();
+			String nomeJogador = ClassificacoesCorridasDAO.getCampProvaUsername(pk)[2];
+			pontuacoesJogadores.put(nomeJogador,entry.getValue());
+		}
+		return pontuacoesJogadores;
 	}
 
-	public void atualizaPontuacao(String aNome, Integer aClassificacao) {
-		throw new UnsupportedOperationException();
+	public void atualizaPontuacao(String aNome, String circuito, Integer aClassificacao) {
+		ClassificacoesDAO.getInstance().addPontuacao(this._id,aNome,aClassificacao);
+		ClassificacoesCorridasDAO.getInstance().addPontuacao(this._id,circuito,aNome,aClassificacao);
 	}
 
 	public void simulaProva(String aPista) {

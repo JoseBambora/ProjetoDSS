@@ -1,3 +1,5 @@
+package PackageIO;
+
 import java.util.*;
 
 /**
@@ -30,19 +32,19 @@ public class Menu {
 
     // Construtor
     /**
-     * Constructor vazio para objectos da classe Menu.
+     * Constructor vazio para objectos da classe PackageIO.Menu.
      *
      * Cria um menu vazio, ao qual se podem adicionar opções.
      */
     public Menu() {
-        this.titulo = "Menu";
+        this.titulo = "PackageIO.Menu";
         this.opcoes = new ArrayList<>();
         this.disponivel = new ArrayList<>();
         this.handlers = new ArrayList<>();
     }
 
     /**
-     * Constructor para objectos da classe Menu.
+     * Constructor para objectos da classe PackageIO.Menu.
      *
      * Cria um menu de opções sem event handlers.
      * Utilização de listas é útil para definir menus dinâmicos.
@@ -62,7 +64,7 @@ public class Menu {
     }
 
     /**
-     * Constructor para objectos da classe Menu.
+     * Constructor para objectos da classe PackageIO.Menu.
      *
      * Cria um menu de opções sem event handlers.
      * Utilização de listas é útil para definir menus estáticos. P.e.:
@@ -70,15 +72,15 @@ public class Menu {
      *
      * @param opcoes Uma lista de Strings com as opções do menu.
      */
-    public Menu(List<String> opcoes) { this("Menu", opcoes); }
+    public Menu(List<String> opcoes) { this("PackageIO.Menu", opcoes); }
 
     /**
-     * Constructor para objectos da classe Menu.
+     * Constructor para objectos da classe PackageIO.Menu.
      *
      * Cria um menu de opções sem event handlers.
      * Utilização de arrays é útil para definir menus estáticos. P.e.:
      *
-     * new Menu(String[]{
+     * new PackageIO.Menu(String[]{
      *     "Opção 1",
      *     "Opção 2",
      *     "Opção 3"
@@ -92,12 +94,12 @@ public class Menu {
     }
 
     /**
-     * Constructor para objectos da classe Menu.
+     * Constructor para objectos da classe PackageIO.Menu.
      *
      * Cria um menu de opções sem event handlers.
      * Utilização de arrays é útil para definir menus estáticos. P.e.:
      *
-     * new Menu(String[]{
+     * new PackageIO.Menu(String[]{
      *     "Opção 1",
      *     "Opção 2",
      *     "Opção 3"
@@ -112,7 +114,7 @@ public class Menu {
     // Métodos de instância
 
     /**
-     * Adicionar opções a um Menu.
+     * Adicionar opções a um PackageIO.Menu.
      *
      * @param name A opção a apresentar.
      * @param p A pré-condição da opção.
@@ -223,9 +225,9 @@ public class Menu {
 
 /** 
 
-public class Menu {
+public class PackageIO.Menu {
 
-    public Menu() {
+    public PackageIO.Menu() {
     }
 
     private void printMenuInicial() {

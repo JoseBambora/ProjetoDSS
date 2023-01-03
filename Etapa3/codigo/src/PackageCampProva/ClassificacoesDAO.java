@@ -3,6 +3,7 @@ package PackageCampProva;
 import DAOCONFIG.DAOconfig;
 import PackageCampeonato.Campeonato;
 import PackageCampeonato.CampeonatoDAO;
+import PackageUtilizador.Utilizador;
 
 import java.sql.*;
 import java.util.*;
@@ -35,6 +36,25 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 			throw new NullPointerException(e.getMessage());
 		}
 	}
+
+	public void addPontuacao(int id, String nomeJogador, int incremento){
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
+			String sql= "UPDATE Classificacoes SET pontuacao = ? WHERE campeonatoProva = ? AND nomeJodor = ?";
+			PreparedStatement ps;
+			String pk = this.generateKey(id,nomeJogador);
+			int pontos = this.get(pk);
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1,incremento+pontos);
+			ps.setInt(2,id);
+			ps.setString(3,nomeJogador);
+			ps.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+	}
+
 	public void atualizaClassificacoes(Map<String, Integer> aClassificacoes) {
 		throw new UnsupportedOperationException();
 	}

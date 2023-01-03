@@ -1,9 +1,16 @@
 package PackageCampProva;
 
 import DAOCONFIG.DAOconfig;
+import PackageUtilizador.Utilizador;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Date;
 
 public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 
@@ -23,11 +30,12 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 						`circuito` VARCHAR(50) NOT NULL,
 						`nomeJogador` VARCHAR(75) NOT NULL,
 						`pontuacao` INT NOT NULL,
+						`data` DATETIME NOT NULL,
 						FOREIGN KEY (`campeonatoProva`)
 						REFERENCES `simuladorDSS`.`CampeonatoProva` (`id`),
 						FOREIGN KEY (`circuito`)
 						REFERENCES `simuladorDSS`.`Circuito` (`nome`),
-						PRIMARY KEY (`campeonatoProva`,`circuito`,`nomeJogador`))
+						PRIMARY KEY (`campeonatoProva`,`circuito`,`nomeJogador`,`data`))
 					""";
 			stm.executeUpdate(sql);
 		} catch (SQLException e) {
@@ -36,6 +44,11 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 		}
 	}
 
+	public void addPontuacao(int campeonatoProva, String circuito, String nomeJogador, int incremento){
+		String pk = this.generateKey(campeonatoProva,circuito,nomeJogador,null);
+		this.insertClassificacao(pk,incremento);
+	}
+	
 	public void addClassificacao(Map<String, Integer> aClassificacoes) {
 		throw new UnsupportedOperationException();
 	}
@@ -63,9 +76,9 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 		return this.size()==0;
 	}
 
-	public String generateKey(int idCampProva,String circuito, String usernameJogador){
+	public String generateKey(int idCampProva, String circuito, String usernameJogador, Date data){
 		StringBuilder sb = new StringBuilder();
-		sb.append(idCampProva).append(',').append(circuito).append(',').append(usernameJogador);
+		sb.append(idCampProva).append(',').append(circuito).append(',').append(usernameJogador).append(',').append(data);
 		return sb.toString();
 	}
 
@@ -108,11 +121,12 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			int res = 0;
 			String[] pk = ClassificacoesDAO.getCampProvaUsername((String) key);
-			String sql = "SELECT * FROM ClassificacoesCorridas WHERE campeonatoProva = ? AND circuito = ? AND nomeJogador = ?";
+			String sql = "SELECT * FROM ClassificacoesCorridas WHERE campeonatoProva = ? AND circuito = ? AND nomeJogador = ? AND data = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1,Integer.parseInt(pk[0]));
 			ps.setString(2,pk[1]);
 			ps.setString(3,pk[2]);
+			ps.setDate(4, (java.sql.Date) new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(pk[3]));
 			ResultSet rs = ps.executeQuery();
 			if(rs.next())
 			{
@@ -124,18 +138,21 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 			// Erro a criar tabela...
 			e.printStackTrace();
 			throw new NullPointerException(e.getMessage());
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
 	public void insertClassificacao(String key, Integer value) {
 		String[] pk = getCampProvaUsername(key);
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
-			String sql = "INSERT INTO ClassificacoesCorridas (campeonatoProva,circuito,nomeJogador,pontuacao) VALUES (?,?,?,?)";
+			String sql = "INSERT INTO ClassificacoesCorridas (campeonatoProva,circuito,nomeJogador,pontuacao,data) VALUES (?,?,?,?,?)";
 			PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, Integer.parseInt(pk[0]));
 			ps.setString(2, pk[1]);
 			ps.setString(3, pk[2]);
 			ps.setInt(4, value);
+			ps.setDate(5,new java.sql.Date(System.currentTimeMillis()));
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -186,7 +203,8 @@ public class ClassificacoesCorridasDAO implements Map<String,Integer> {
 				int campeonatoProva = rs.getInt("campeonatoProva");
 				String circuito = rs.getString("circuito");
 				String idUser = rs.getString("nomeJogador");
-				String pk = generateKey(campeonatoProva,circuito,idUser);
+				Date data = rs.getDate("data");
+				String pk = generateKey(campeonatoProva,circuito,idUser,data);
 				result.add(pk);
 			}
 		}
