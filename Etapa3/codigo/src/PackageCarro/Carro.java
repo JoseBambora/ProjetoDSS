@@ -33,7 +33,8 @@ public class Carro implements ICarro {
 		return aCilintrada > 0 && potencia > 0 && this.validaAfinacao(aPac);
 	}
 
-	public void recalculaFiabilidade(Integer aDecisão, int aGdu) {
+	public void recalculaFiabilidade(String aDecisão, int aGdu)
+	{
 		this._unnamed_Categoria_.recalculaFiabilidade(aDecisão,aGdu);
 	}
 
