@@ -311,9 +311,9 @@ public class CircuitoDAO implements Map<String,Circuito> {
 			list.add(new Reta(3));
 			list.add(new Curva(1));
 			list.add(new Curva(2));
-			list.add(new Chicane(1));
-			list.add(new Reta(4));
-			list.add(new Reta(5));
+			list.add(new Chicane(3));
+			list.add(new Reta(1));
+			list.add(new Reta(1));
 			List<Circuito> circuitos = new ArrayList<>();
 			circuitos.add(new Circuito("Braga", 500 , 2, "campeonato1",list)); // isto tá mal
 			circuitos.add(new Circuito("Lisboa", 730 , 5, "campeonato3",list)); // isto tá mal

@@ -42,10 +42,31 @@ public class Piloto implements IPiloto {
 	public void set_CTS(float cts) {
 		this._cts = cts;
 	}
+	private String simulaFacil(List<String> aClassificacao)
+	{
+		return  "";
 
+	}
+	private String simulaMedio(List<String> aClassificacao)
+	{
+		return  "";
+
+	}
+	private String simulaDificil(List<String> aClassificacao)
+	{
+		return  "";
+	}
     @Override
-	public Integer simulaDecisao(Caracteristica aSituacao, List<String> aClassificacao) {
-		return null;
+	public String simulaDecisao(Caracteristica aSituacao, List<String> aClassificacao)
+	{
+		String res = "";
+		switch (aSituacao.get_gdu())
+		{
+			case 1 -> res = simulaFacil(aClassificacao);
+			case 2 -> res = simulaMedio(aClassificacao);
+			case 3 -> res = simulaDificil(aClassificacao);
+		}
+		return res;
 	}
 
 	@Override
