@@ -4,7 +4,7 @@ public interface ICarro {
 
 	public Boolean validarRegistoCarro(Integer aCilintrada, Integer potencia, Float aPac);
 
-	public void recalculaFiabilidade(String aDecisão, int aGdu);
+	public float recalculaFiabilidade(String aDecisão, int aGdu);
 
 	public Boolean validaAfinacao(float aPAC);
 
