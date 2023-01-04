@@ -20,9 +20,4 @@ public class GTHibrido_ extends GT {
 	{
 		this._motorEletrico.capacidadeComb100();
 	}
-
-	public void calculaFiabilidade()
-	{
-
-	}
 }

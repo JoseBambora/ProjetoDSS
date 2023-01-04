@@ -13,10 +13,6 @@ public abstract class Categoria implements ICategoria {
 		return Float.toString(this._fiabilidade);
 	}
 
-	public void recalculaFiabilidade(Integer aDecisão, int aGdu) {
-		throw new UnsupportedOperationException();
-	}
-
 	public float get_fiabilidade() {
 		return _fiabilidade;
 	}
@@ -28,7 +24,7 @@ public abstract class Categoria implements ICategoria {
 	protected abstract void normal(int aGdu);
 	protected abstract void conservador(int aGdu);
 	@Override
-	public void recalculaFiabilidade(String aDecisão, int aGdu)
+	public float recalculaFiabilidade(String aDecisão, int aGdu)
 	{
 		switch (aDecisão)
 		{
@@ -36,5 +32,6 @@ public abstract class Categoria implements ICategoria {
 			case "Normal" -> this.normal(aGdu);
 			case "Conservador" -> this.conservador(aGdu);
 		};
+		return this.get_fiabilidade();
 	}
 }
