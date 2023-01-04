@@ -130,6 +130,17 @@ public class TextUI {
         }
     }
 
+    public static void printDesclassificados(List<String> desclassificados)
+    {
+        System.out.println("Desclassificados:");
+        for(int i = 0; i < desclassificados.size();)
+        {
+            String name = desclassificados.get(i);
+            System.out.println(name);
+        }
+    }
+
+
     private void menuSimulador()
     {
         try

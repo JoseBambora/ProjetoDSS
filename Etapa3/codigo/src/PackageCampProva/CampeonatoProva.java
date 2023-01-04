@@ -12,10 +12,7 @@ import PackagePiloto.Piloto;
 import PackageIO.TextUI;
 import PackageUtilizador.UtilizadoresDAO;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class CampeonatoProva {
 	private int _id;
@@ -115,13 +112,42 @@ public class CampeonatoProva {
 		int volta = circuito.get_Voltas();
 		List<Caracteristica> list = circuito.get_caracteristica();
 		List<String> classificacao = EscolhasDAO.getInstance().initSimulacao(this._id);
+		List<String> desclassificados = new ArrayList<>();
+		Random random = new Random();
+		int condMeteorologicas = random.nextInt(2);
 		for(int i = 0; i < volta; i++)
 		{
 			for(Caracteristica caracteristica : list)
 			{
-
+				for(String nomeJ : classificacao){
+					int size = classificacao.size();
+					Escolha e = EscolhasDAO.getInstance().get(nomeJ);
+					Piloto piloto = e.get_piloto();
+					Carro c = e.get_carro();
+					String decisao = piloto.simulaDecisao(caracteristica,classificacao.indexOf(nomeJ),size,condMeteorologicas);
+					c.reduzCapacidadeCombustivel(decisao);
+					float fiabilidadeAntiga = c.recalculaFiabilidade(decisao,caracteristica.get_gdu());
+					c.reduzCapacidadePneu(decisao,caracteristica.get_gdu());
+					float fiabilidade = random.nextFloat(101);
+					//bateu, é desclassificado
+					if(fiabilidade > fiabilidadeAntiga){
+						desclassificados.add(nomeJ);
+						classificacao.remove(nomeJ);
+					}
+				}
 			}
 			TextUI.printClassifacao(classificacao);// Imprimir classificação
+			TextUI.printDesclassificados(desclassificados); //Imprimir desclassificados
+		}
+		Map<String,Integer> jogadorPontos = new HashMap<>();
+		int pontosP = 30;
+		for(String nomejog : classificacao){
+			jogadorPontos.put(nomejog,pontosP);
+			if(pontosP>0) pontosP-=3;
+		}
+		for (String key : jogadorPontos.keySet()) {
+			ClassificacoesCorridasDAO.getInstance().addPontuacao(this._id,circuito.get_nome(),key,jogadorPontos.get(key));
+			ClassificacoesDAO.getInstance().addPontuacao(this._id,key,jogadorPontos.get(key));
 		}
 	}
 
