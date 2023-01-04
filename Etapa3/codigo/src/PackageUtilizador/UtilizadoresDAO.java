@@ -97,6 +97,28 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
         return res;
     }
 
+    public boolean containsKey(String key) {
+        boolean res = false;
+        try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
+        {
+            String sql = "SELECT COUNT(*) FROM Utilizador WHERE username = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, key);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next())
+            {
+                res = rs.getInt(1) > 0;
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+
+        }
+        return res;
+    }
+
     @Override
     public boolean containsValue(Object value) {
         return containsKey(value);
