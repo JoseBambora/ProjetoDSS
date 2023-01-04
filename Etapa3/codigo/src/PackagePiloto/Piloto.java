@@ -42,29 +42,58 @@ public class Piloto implements IPiloto {
 	public void set_CTS(float cts) {
 		this._cts = cts;
 	}
-	private String simulaFacil(List<String> aClassificacao)
+
+	/**
+	 * case "Agressivo" -> this.agressivo(aGdu);
+	 * 			case "Normal" -> this.normal(aGdu);
+	 * 			case "Conservador" -> this.conservador(aGdu);
+	 */
+	private String simulaFacil(int posicao, int size, int metereologia)
 	{
-		return  "";
+		if(posicao == 1)
+			return  "Conservador";
+		else
+		{
+			if(posicao > size/2 && _sva > 0.2f)
+				return "Agressivo";
+			else
+				return "Normal";
+		}
 
 	}
-	private String simulaMedio(List<String> aClassificacao)
+	private String simulaMedio(int posicao, int size, int metereologia)
 	{
-		return  "";
-
+		if(posicao == 1)
+			return  "Conservador";
+		else
+		{
+			if(posicao > size/2 && metereologia == 1 && _sva > 0.5f && _cts > 0.5f)
+				return "Agressivo";
+			else
+				return "Normal";
+		}
 	}
-	private String simulaDificil(List<String> aClassificacao)
+	private String simulaDificil(int posicao, int size, int metereologia)
 	{
-		return  "";
+		if(metereologia == 0 || posicao == 1)
+			return  "Conservador";
+		else
+		{
+			if(posicao > size/2 + size/3 && _cts > 0.8f && _sva > 0.7f)
+				return "Agressivo";
+			else
+				return "Normal";
+		}
 	}
     @Override
-	public String simulaDecisao(Caracteristica aSituacao, List<String> aClassificacao)
+	public String simulaDecisao(Caracteristica aSituacao, int posicao, int size, int metereologia)
 	{
 		String res = "";
 		switch (aSituacao.get_gdu())
 		{
-			case 1 -> res = simulaFacil(aClassificacao);
-			case 2 -> res = simulaMedio(aClassificacao);
-			case 3 -> res = simulaDificil(aClassificacao);
+			case 1 -> res = simulaFacil(posicao, size, metereologia);
+			case 2 -> res = simulaMedio(posicao, size, metereologia);
+			case 3 -> res = simulaDificil(posicao, size, metereologia);
 		}
 		return res;
 	}

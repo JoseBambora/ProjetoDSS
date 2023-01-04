@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface IPiloto {
 
-	public String simulaDecisao(Caracteristica aSituacao, List<String> aClassificacao);
+	public String simulaDecisao(Caracteristica aSituacao, int posicao, int size, int metereologia);
 }
