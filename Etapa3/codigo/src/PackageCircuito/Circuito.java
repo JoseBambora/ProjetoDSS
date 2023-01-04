@@ -19,11 +19,6 @@ public class Circuito implements ICircuito {
 		this._campeonato = camp;
 		this._caracteristica = new ArrayList<>(list);
     }
-
-	public static String[] getCircuito(String key)
-	{
-		return key.split(",");
-	}
 	
 	public String get_nome() {
 		return _nome;

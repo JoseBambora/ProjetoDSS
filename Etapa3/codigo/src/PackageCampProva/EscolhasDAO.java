@@ -115,7 +115,26 @@ public class EscolhasDAO implements Map<String,Escolha> {
 		}
 		return res;
 	}
-
+	public List<String> initSimulacao(int camp)
+	{
+		List<String>  init = new ArrayList<>();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			String sql = "SELECT * FROM Escolhas WHERE campeonatoProva = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1,camp);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+			{
+				String nome = rs.getString("nomeJogador");
+				init.add(nome);
+			}
+		} catch (SQLException e) {
+			// Erro a criar tabela...
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return init;
+	}
 	@Override
 	public boolean containsValue(Object value) {
 		return this.containsKey(value);

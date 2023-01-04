@@ -5,6 +5,9 @@ import PackageCampeonato.CampeonatoDAO;
 import PackageCarro.ModoMotor;
 import PackageCarro.Carro;
 import PackageCarro.Pneu;
+import PackageCircuito.Caracteristica;
+import PackageCircuito.Circuito;
+import PackageCircuito.CircuitoDAO;
 import PackagePiloto.Piloto;
 import PackageIO.TextUI;
 import PackageUtilizador.UtilizadoresDAO;
@@ -106,12 +109,30 @@ public class CampeonatoProva {
 		ClassificacoesCorridasDAO.getInstance().addPontuacao(this._id,circuito,aNome,aClassificacao);
 	}
 
-	public void simulaProva(String aPista) {
-		throw new UnsupportedOperationException();
+	public void simulaProva(String aPista)
+	{
+		Circuito circuito = CircuitoDAO.getInstace().get(aPista);
+		int volta = circuito.get_Voltas();
+		List<Caracteristica> list = circuito.get_caracteristica();
+		List<String> classificacao = EscolhasDAO.getInstance().initSimulacao(this._id);
+		for(int i = 0; i < volta; i++)
+		{
+			for(Caracteristica caracteristica : list)
+			{
+
+			}
+			TextUI.printClassifacao(classificacao);// Imprimir classificação
+		}
 	}
 
-	public Map<String, Integer> simulaCampeonato() {
-		throw new UnsupportedOperationException();
+	public Map<String, Integer> simulaCampeonato()
+	{
+		List<String> circuitos = CircuitoDAO.getInstace().getCircuitosCampeonato(_campeonato.get_nome());
+		for(String circuito : circuitos)
+		{
+			simulaProva(circuito);
+		}
+		return ClassificacoesDAO.getInstance().getClassificacoes(this._id);
 	}
 
 	@Override

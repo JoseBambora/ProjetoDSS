@@ -221,6 +221,27 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 		}
 		return classificacoes;
 	}
+	public Map<String,Integer> getClassificacoes(int campeonato)
+	{
+		Map<String,Integer> res = new HashMap<>();
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
+			String sql = "SELECT * FROM Classificacoes WHERE campeonatoProva = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1,campeonato);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				String jogador = rs.getString("nomeJogador");
+				int pontuacao = rs.getInt("pontuacao");
+				res.put(jogador,pontuacao);
+			}
+		} catch (SQLException e) {
+			// Erro a criar tabela...
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
+		return res;
+	}
 
 	@Override
 	public Set<Entry<String, Integer>> entrySet() {

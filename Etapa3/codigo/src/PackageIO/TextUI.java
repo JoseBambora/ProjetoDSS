@@ -120,6 +120,15 @@ public class TextUI {
         }
     }
 
+    public static void printClassifacao(List<String> classificacoes)
+    {
+        for(int i = 0; i < classificacoes.size();)
+        {
+            String name = classificacoes.get(i);
+            i++;
+            System.out.println(i + "º: " + name);
+        }
+    }
 
     private void menuSimulador()
     {
@@ -186,10 +195,9 @@ public class TextUI {
             int id = model.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
             //adicionaJogador(jogador, driver, car)
 
-            Map<String,Integer> classificacoes = model.simulaCampeonato(id);
-            List<String> classiSort = new ArrayList<>(classificacoes.keySet());
+            Map<String,Integer> classificacoes = model.simulaCampeonato(id);List<String> classiSort = new ArrayList<>(classificacoes.keySet());
             classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
-            System.out.println("Classificações finais do campeonato " + camp);
+            System.out.println("Classificação");
             System.out.println("     Nome      | Pontuação");
             for(int i = 0; i < classiSort.size(); )
             {

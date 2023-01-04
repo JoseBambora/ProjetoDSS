@@ -221,8 +221,7 @@ public class CircuitoDAO implements Map<String,Circuito> {
 
 	@Override
 	public Circuito get(Object key) {
-		String []str = Circuito.getCircuito((String) key); // completar get
-		String nome = str[0];
+		String nome = (String) key;
 		int distancia =  0;
         int voltas = 0;
 		Circuito r = null;
@@ -321,6 +320,12 @@ public class CircuitoDAO implements Map<String,Circuito> {
 			circuitos.add(new Circuito("Porto", 670 , 3, "campeonato1",list)); // isto tá mal
 			circuitos.forEach(this::insertCircuito);
 		}
+	}
+
+	public List<String> getCircuitosCampeonato(String campeonato)
+	{
+		Collection<Circuito> circuitos = this.values();
+		return circuitos.stream().filter(c -> c.get_Campeonato().equals(campeonato)).map(Circuito::get_nome).toList();
 	}
 
 	@Override
