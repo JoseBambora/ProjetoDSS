@@ -167,7 +167,7 @@ public class CampeonatoProva {
 					c.reduzCapacidadePneu(decisao,caracteristica.get_gdu());
 					float fiabilidade = random.nextFloat(101);
 					//bateu, é desclassificado
-					if(fiabilidade > fiabilidadeAntiga){
+					if(fiabilidade > fiabilidadeAntiga || c.surrender()){
 						desclassificados.add(nomeJ);
 						classificacao.remove(nomeJ);
 					}

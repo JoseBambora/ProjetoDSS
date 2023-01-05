@@ -27,7 +27,10 @@ public class Carro implements ICarro {
 	{
 		return key.split(",");
 	}
-
+	public boolean surrender()
+	{
+		return this._motor.get_capacidadeCombustivel() <= 0 || this._unnamed_IConjuntoPneus_.getCapacidade() <= 0;
+	}
 	@Override
 	public Boolean validarRegistoCarro(Integer aCilintrada, Integer potencia, Float aPac) {
 		return aCilintrada > 0 && potencia > 0 && this.validaAfinacao(aPac);
