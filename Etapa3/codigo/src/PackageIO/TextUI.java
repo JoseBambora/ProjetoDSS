@@ -284,9 +284,9 @@ public class TextUI {
         int id = scin.nextInt();
         return model.getModo(id);
     }
-    public static boolean pretendeAfinar()
+    public static boolean pretendeAfinar(String jogador)
     {
-        System.out.println("Pretende afinar?");
+        System.out.println("O jogador" + jogador+ " pretende afinar?");
         System.out.println("1 - Sim");
         System.out.println("0 - Não");
         return scin.nextInt() == 1;

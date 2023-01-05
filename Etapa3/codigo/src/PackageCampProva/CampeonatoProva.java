@@ -140,7 +140,7 @@ public class CampeonatoProva {
 			}
 		}
 	}
-	public void simulaProva(String aPista)
+	public void simulaProva(String aPista, Map<String,Integer> afinacoes, int nrProvas)
 	{
 		Circuito circuito = CircuitoDAO.getInstace().get(aPista);
 		int volta = circuito.get_Voltas();
@@ -150,12 +150,16 @@ public class CampeonatoProva {
 		Map<String, Escolha> escolhas = new HashMap<>();
 		for(String nomeJ : classificacao)
 		{
-			if(TextUI.pretendeAfinar())
+			if(!afinacoes.containsKey(nomeJ))
+				afinacoes.put(nomeJ,0);
+			if(afinacoes.get(nomeJ) < 2 * nrProvas / 3)
 			{
-				float pac = TextUI.getPac();
-				ModoMotor modo = TextUI.getModo();
-				Pneu pneu = TextUI.getPneus();
-				EscolhasDAO.getInstance().guardaAfinacao(nomeJ,pac,modo,pneu);
+				if (TextUI.pretendeAfinar(nomeJ)) {
+					float pac = TextUI.getPac();
+					ModoMotor modo = TextUI.getModo();
+					Pneu pneu = TextUI.getPneus();
+					EscolhasDAO.getInstance().guardaAfinacao(nomeJ, pac, modo, pneu);
+				}
 			}
 			String pk = this._id+","+nomeJ;
 			Escolha e = EscolhasDAO.getInstance().get(pk);
@@ -205,10 +209,11 @@ public class CampeonatoProva {
 
 	public Map<String, Integer> simulaCampeonato()
 	{
+		Map<String,Integer> afinacoesNum = new HashMap<>();
 		List<String> circuitos = CircuitoDAO.getInstace().getCircuitosCampeonato(_campeonato.get_nome());
 		for(String circuito : circuitos)
 		{
-			simulaProva(circuito);
+			simulaProva(circuito,afinacoesNum,circuitos.size());
 		}
 		return ClassificacoesDAO.getInstance().getClassificacoes(this._id);
 	}
