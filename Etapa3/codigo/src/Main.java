@@ -2,6 +2,7 @@ import PackageCampeonato.CampeonatoDAO;
 import PackageCarro.Carro;
 import PackageCarro.CarroDAO;
 import PackageCircuito.CircuitoDAO;
+import PackageIO.TextUI;
 import PackagePiloto.Piloto;
 import PackagePiloto.PilotoDAO;
 import PackageUtilizador.Jogador;
