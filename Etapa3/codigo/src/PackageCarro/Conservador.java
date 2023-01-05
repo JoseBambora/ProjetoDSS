@@ -7,6 +7,6 @@ public class Conservador extends ModoMotor {
 
     @Override
     public String toString() {
-        return  "Modo Conservador " + super.toString();
+       return "Motor "+this.getId()+" em modo Conservador: "+ super.toString();
     }
 }

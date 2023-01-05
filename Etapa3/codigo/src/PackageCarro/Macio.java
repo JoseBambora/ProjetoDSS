@@ -8,6 +8,6 @@ public class Macio extends Pneu {
 
     @Override
     public String toString() {
-        return "Pneu Macio " + super.toString();
+        return this.getId()+" - Pneus Macios com capacidade = " + this.getCapacidade();
     }
 }

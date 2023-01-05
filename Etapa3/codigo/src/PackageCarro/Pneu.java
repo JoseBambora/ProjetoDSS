@@ -20,7 +20,7 @@ public abstract class Pneu implements IConjuntoPneus
 
     @Override
     public String toString() {
-        return this.id + " " + this.capacidade;
+        return "Id -> "+ this.id + " Capacidade-> " + this.capacidade;
     }
 
     private void agressivo(int aGdu)

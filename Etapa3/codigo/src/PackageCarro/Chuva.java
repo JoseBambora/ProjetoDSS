@@ -7,6 +7,6 @@ public class Chuva extends Pneu{
 
     @Override
     public String toString() {
-        return "Pneu Chuva ";
+        return this.getId()+" - Pneus de Chuva com capacidade = " + this.getCapacidade();
     }
 }

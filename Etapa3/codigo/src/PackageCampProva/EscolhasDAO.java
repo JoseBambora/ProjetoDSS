@@ -1,10 +1,7 @@
 package PackageCampProva;
 
 import DAOCONFIG.DAOconfig;
-import PackageCarro.Carro;
-import PackageCarro.CarroDAO;
-import PackageCarro.IConjuntoPneus;
-import PackageCarro.ModoMotor;
+import PackageCarro.*;
 import PackagePiloto.PilotoDAO;
 import PackageUtilizador.Jogador;
 import PackageUtilizador.Utilizador;
@@ -55,8 +52,23 @@ public class EscolhasDAO implements Map<String,Escolha> {
 		}
 	}
 
-	public void guardaAfinacao(String aJogador, float aPac, ModoMotor aModo, IConjuntoPneus aPneus) {
-		throw new UnsupportedOperationException();
+	public void guardaAfinacao(String aJogador, float aPac, ModoMotor aModo, Pneu aPneus) {
+		String[] pk = getCampProvaUsername(aJogador);
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
+			String sql= "UPDATE Escolhas SET pac = ?, pneus = ?, modo = ? WHERE campeonatoProva = ? AND nomeJogador = ?";
+			PreparedStatement ps;
+			ps = conn.prepareStatement(sql);
+			ps.setFloat(1,aPac);
+			ps.setInt(2,CarroDAO.getInstace().getID(aPneus));
+			ps.setInt(3,CarroDAO.getInstace().getID(aModo));
+			ps.setInt(4,Integer.parseInt(pk[0]));
+			ps.setString(5,pk[1]);
+			ps.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
 	}
 
 	@Override

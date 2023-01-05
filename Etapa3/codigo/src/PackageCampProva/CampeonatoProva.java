@@ -158,7 +158,7 @@ public class CampeonatoProva {
 					float pac = TextUI.getPac();
 					ModoMotor modo = TextUI.getModo();
 					Pneu pneu = TextUI.getPneus();
-					EscolhasDAO.getInstance().guardaAfinacao(nomeJ, pac, modo, pneu);
+					EscolhasDAO.getInstance().guardaAfinacao(this._id+","+nomeJ, pac, modo, pneu);
 				}
 			}
 			String pk = this._id+","+nomeJ;

@@ -167,6 +167,7 @@ public class TextUI {
             Map<String, String> aEscolhaPilotos = new HashMap<>(num);
             Map<String, String> aEscolhaCarros = new HashMap<>(num);
             List<Piloto> pilotos = model.getPilotos();
+            List<String> pilotosEscolhidos = new ArrayList<>();
             List<Carro> carros = model.getCarros();
             System.out.println("Selecione um campeonato: ");
             System.out.println(model.getCampeonatos());
@@ -197,9 +198,13 @@ public class TextUI {
                             System.out.println(" Piloto inválido! ");
                         }
                         else{
-                            System.out.println("Piloto " + driver + " adicionado");
-                            aEscolhaPilotos.put(nickname, driver);
-                            flag = true;
+                            if(!pilotosEscolhidos.contains(driver)){
+                                System.out.println("Piloto " + driver + " adicionado");
+                                aEscolhaPilotos.put(nickname, driver);
+                                pilotosEscolhidos.add(driver);
+                                flag = true;
+                            }
+                            else System.out.println("Piloto já escolhido para este campeonato!");
                         }
                     }
 
@@ -233,10 +238,10 @@ public class TextUI {
                 List<String> classiSort = new ArrayList<>(classificacoes.keySet());
                 classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
                 System.out.println("Classificação");
-                System.out.println("     Nome      | Pontuação");
+                System.out.println("     Nome       | Pontuação");
                 for(int i = 0; i < classiSort.size(); )
                 {
-                    String name = i + "º" + classiSort.get(i);
+                    String name = i+1 + "º" + classiSort.get(i);
                     if(name.length() < 15)
                     {
                         String esp = " ".repeat(15 - name.length());
@@ -267,18 +272,23 @@ public class TextUI {
     }
     public static float getPac()
     {
-        System.out.println("Qual o pac? (0.0 - 1.0)");
+        System.out.println("Qual o pac? (Valor entre 0,0 e 1,0)");
         return scin.nextFloat();
     }
     public static Pneu getPneus()
     {
+        System.out.println("Que conjunto de pneus deseja utilizar?");
         List<Pneu> pneus = model.getPneus();
-        pneus.forEach(System.out::println);
+        //pneus.forEach(System.out::println);
+        for (Pneu p:pneus) {
+            System.out.println(p);
+        }
         int id = scin.nextInt();
         return model.getPneu(id);
     }
     public static ModoMotor getModo()
     {
+        System.out.println("Que modo e motor quer escolher?");
         List<ModoMotor> modo = model.getModos();
         modo.forEach(System.out::println);
         int id = scin.nextInt();
@@ -286,7 +296,7 @@ public class TextUI {
     }
     public static boolean pretendeAfinar(String jogador)
     {
-        System.out.println("O jogador" + jogador+ " pretende afinar?");
+        System.out.println("O jogador " + jogador+ " pretende afinar?");
         System.out.println("1 - Sim");
         System.out.println("0 - Não");
         return scin.nextInt() == 1;

@@ -8,6 +8,6 @@ public class Duro extends Pneu{
 
     @Override
     public String toString() {
-        return "Pneu Duro " + super.toString();
+        return this.getId()+" - Pneus Duros com capacidade = " + this.getCapacidade();
     }
 }
