@@ -156,7 +156,8 @@ public class CampeonatoProva {
 			{
 				for(String nomeJ : classificacao){
 					int size = classificacao.size();
-					Escolha e = EscolhasDAO.getInstance().get(nomeJ);
+					String pk = this._id+","+nomeJ;
+					Escolha e = EscolhasDAO.getInstance().get(pk);
 					Piloto piloto = e.get_piloto();
 					Carro c = e.get_carro();
 					String decisao = piloto.simulaDecisao(caracteristica,classificacao.indexOf(nomeJ),size,condMeteorologicas);
