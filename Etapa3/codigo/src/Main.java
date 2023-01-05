@@ -13,8 +13,6 @@ import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        TextUI menu = new TextUI();
-        menu.run();
         CarroDAO carroDAO = CarroDAO.getInstace();
         carroDAO.generateData();
         PilotoDAO pilotoDAO = PilotoDAO.getInstace();
@@ -60,6 +58,7 @@ public class Main {
         //System.out.println(circuitoDAO.values());
         //System.out.println(circuitoDAO.get("Lisboa"));
         //System.out.println(circuitoDAO.size());
-
+        TextUI menu = new TextUI();
+        menu.run();
     }
 }
