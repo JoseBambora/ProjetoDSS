@@ -7,6 +7,6 @@ public class Agressivo extends ModoMotor {
 
     @Override
     public String toString() {
-        return super.toString() + " - Modo Agressivo";
+        return super.toString() + " - Agressivo";
     }
 }

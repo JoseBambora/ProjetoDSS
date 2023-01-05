@@ -290,7 +290,9 @@ public class TextUI {
     {
         System.out.println("Que modo quer escolher?");
         List<ModoMotor> modo = model.getModos();
-        modo.forEach(System.out::println);
+        for(int contaM = 0; contaM<3;contaM++){
+            System.out.println(modo.get(contaM));
+        }
         int id = scin.nextInt();
         return model.getModo(id);
     }
