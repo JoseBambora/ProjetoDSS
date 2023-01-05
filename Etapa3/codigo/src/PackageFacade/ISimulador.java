@@ -21,7 +21,7 @@ public interface ISimulador {
 
 	public Map<String, Boolean> verificaExistênciaJogadores(List<String> aNomes);
 
-	public Boolean validarDadosUser(String aNome, String aPass);
+	public Boolean validarDadosUser(Utilizador utilizador, String aPass);
 
 	public void adicionaPiloto(Piloto aPiloto);
 
