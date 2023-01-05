@@ -117,7 +117,6 @@ public class EscolhasDAO implements Map<String,Escolha> {
 	}
 	public List<String> initSimulacao(int camp)
 	{
-		System.out.println("init: " + camp);
 		List<String>  init = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			String sql = "SELECT * FROM Escolhas WHERE campeonatoProva = ?";
