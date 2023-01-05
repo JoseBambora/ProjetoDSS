@@ -51,7 +51,14 @@ public class Piloto implements IPiloto {
 	private String simulaFacil(int posicao, int size, int metereologia)
 	{
 		if(posicao == 1)
-			return  "Conservador";
+		{
+			if(_sva < 0.3f)
+				return  "Conservador";
+			else if(_sva < 0.7f)
+				return "Normal";
+			else
+				return "Agressivo";
+		}
 		else
 		{
 			if(posicao > size/2 && _sva > 0.2f)
@@ -64,7 +71,14 @@ public class Piloto implements IPiloto {
 	private String simulaMedio(int posicao, int size, int metereologia)
 	{
 		if(posicao == 1)
-			return  "Conservador";
+		{
+			if(_sva < 0.4f)
+				return  "Conservador";
+			else if(_sva < 0.8f)
+				return "Normal";
+			else
+				return "Agressivo";
+		}
 		else
 		{
 			if(posicao > size/2 && metereologia == 1 && _sva > 0.5f && _cts > 0.5f)
@@ -76,7 +90,12 @@ public class Piloto implements IPiloto {
 	private String simulaDificil(int posicao, int size, int metereologia)
 	{
 		if(metereologia == 0 || posicao == 1)
-			return  "Conservador";
+		{
+			if(_sva < 0.7f)
+				return  "Conservador";
+			else
+				return "Normal";
+		}
 		else
 		{
 			if(posicao > size/2 + size/3 && _cts > 0.8f && _sva > 0.7f)

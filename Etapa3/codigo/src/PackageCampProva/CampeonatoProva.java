@@ -108,6 +108,38 @@ public class CampeonatoProva {
 		ClassificacoesCorridasDAO.getInstance().addPontuacao(this._id,circuito,aNome,aClassificacao);
 	}
 
+	private void ultrapassagens(List<String> classificacao, List<String> decisoes, Random random)
+	{
+		for(int i = classificacao.size()-1; i > 0; i--)
+		{
+			String jog1 = classificacao.get(i);
+			String jog2 = classificacao.get(i-1);
+			String da = decisoes.get(i);
+			String df = decisoes.get(i-1);
+			if(!da.equals(df))
+			{
+				float probabilidade = random.nextFloat(101);
+				if((da.equals("Agressivo") && df.equals("Normal")) || (da.equals("Normal") && df.equals("Conservador")))
+				{
+					if(probabilidade > 50)
+					{
+						classificacao.set(i,jog1);
+						classificacao.set(i-1,jog2);
+						i--;
+					}
+				}
+				else if(da.equals("Agressivo") && df.equals("Conservador"))
+				{
+					if(probabilidade > 30)
+					{
+						classificacao.set(i,jog1);
+						classificacao.set(i-1,jog2);
+						i--;
+					}
+				}
+			}
+		}
+	}
 	public void simulaProva(String aPista)
 	{
 		Circuito circuito = CircuitoDAO.getInstace().get(aPista);
@@ -116,6 +148,7 @@ public class CampeonatoProva {
 		List<String> classificacao = EscolhasDAO.getInstance().initSimulacao(this._id);
 		List<String> desclassificados = new ArrayList<>();
 		Random random = new Random();
+		List<String> decisoes = new ArrayList<>();
 		int condMeteorologicas = random.nextInt(2);
 		for(int i = 0; i < volta; i++)
 		{
@@ -127,6 +160,7 @@ public class CampeonatoProva {
 					Piloto piloto = e.get_piloto();
 					Carro c = e.get_carro();
 					String decisao = piloto.simulaDecisao(caracteristica,classificacao.indexOf(nomeJ),size,condMeteorologicas);
+					decisoes.add(decisao);
 					c.reduzCapacidadeCombustivel(decisao);
 					float fiabilidadeAntiga = c.recalculaFiabilidade(decisao,caracteristica.get_gdu());
 					c.reduzCapacidadePneu(decisao,caracteristica.get_gdu());
@@ -137,6 +171,8 @@ public class CampeonatoProva {
 						classificacao.remove(nomeJ);
 					}
 				}
+				ultrapassagens(classificacao,decisoes,random);
+				decisoes.clear();
 			}
 			TextUI.printClassifacao(classificacao);// Imprimir classificação
 			TextUI.printDesclassificados(desclassificados); //Imprimir desclassificados
