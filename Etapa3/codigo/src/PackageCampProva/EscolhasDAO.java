@@ -117,6 +117,7 @@ public class EscolhasDAO implements Map<String,Escolha> {
 	}
 	public List<String> initSimulacao(int camp)
 	{
+		System.out.println("init: " + camp);
 		List<String>  init = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			String sql = "SELECT * FROM Escolhas WHERE campeonatoProva = ?";
@@ -172,7 +173,7 @@ public class EscolhasDAO implements Map<String,Escolha> {
 	public void insertEscolha(String key, Escolha value) {
 		String[] pk = getCampProvaUsername(key);
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
-			String sql = "INSERT INTO Escolhas (campeonatoProva,nomeJogador,piloto,marca,modelo,pac,pneu,modo) VALUES (?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO Escolhas (campeonatoProva,nomeJogador,piloto,marca,modelo,pac,pneus,modo) VALUES (?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, Integer.parseInt(pk[0]));
 			ps.setString(2, pk[1]);
@@ -182,6 +183,7 @@ public class EscolhasDAO implements Map<String,Escolha> {
 			ps.setFloat(6,value.get_pac());
 			ps.setInt(7,CarroDAO.getInstace().getID(value.get_pneu()));
 			ps.setInt(8,CarroDAO.getInstace().getID(value.get_modo()));
+			ps.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

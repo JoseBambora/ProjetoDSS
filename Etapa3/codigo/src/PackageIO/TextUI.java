@@ -226,9 +226,11 @@ public class TextUI {
                 System.out.println("A configurar campeonato");
                 int id = model.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
                 //adicionaJogador(jogador, driver, car)
+                System.out.println("Id do campeonato " + id);
                 System.out.println("Campeonato Configurado, a começar simulação!!");
 
-                Map<String,Integer> classificacoes = model.simulaCampeonato(id);List<String> classiSort = new ArrayList<>(classificacoes.keySet());
+                Map<String,Integer> classificacoes = model.simulaCampeonato(id);
+                List<String> classiSort = new ArrayList<>(classificacoes.keySet());
                 classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
                 System.out.println("Classificação");
                 System.out.println("     Nome      | Pontuação");

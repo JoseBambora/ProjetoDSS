@@ -100,9 +100,8 @@ public class CampeonatoProvaDAO implements Map<Integer,CampeonatoProva> {
 			if(rs.next()){
 				nome =  rs.getString("campeonato");
 			}
-			CampeonatoDAO cd = CampeonatoDAO.getInstance();
-			Campeonato c = new Campeonato(nome,cd.get(rs.getString("campeonato")).get_disponivel());
-			return new CampeonatoProva(c);
+			Campeonato c = CampeonatoDAO.getInstance().get(nome);
+			return new CampeonatoProva(id,c);
 		} catch (SQLException e) {
 				// Erro a criar tabela...
 				e.printStackTrace();
