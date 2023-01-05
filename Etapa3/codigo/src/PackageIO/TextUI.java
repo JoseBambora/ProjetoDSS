@@ -235,6 +235,7 @@ public class TextUI {
                 System.out.println("Campeonato Configurado, a começar simulação!!");
 
                 Map<String,Integer> classificacoes = model.simulaCampeonato(id);
+                System.out.println(classificacoes);
                 List<String> classiSort = new ArrayList<>(classificacoes.keySet());
                 classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
                 System.out.println("Classificação");
@@ -249,17 +250,19 @@ public class TextUI {
                     }
                     else
                         name = name.substring(0,15);
+                    System.out.println(name + " | " + classificacoes.get(classiSort.get(i)));
                     i++;
-                    System.out.println(name + " | " + classificacoes.get(name));
                 }
                 for(String nome : classificacoes.keySet())
                 {
-                    Utilizador utilizador = new Utilizador();
-                    utilizador.set_username((nome));
                     if(model.isJogador(nome))
                     {
+                        Utilizador utilizador = new Utilizador();
+                        utilizador.set_username((nome));
                         System.out.println("Jogador: " + nome + ", qual a password?");
+                        scin.nextLine();
                         String password = scin.next();
+                        System.out.println(password);
                         if(!model.validarDadosUser(utilizador,password))
                             model.atualizaPontuacaoGlobal(id,nome);
                     }
