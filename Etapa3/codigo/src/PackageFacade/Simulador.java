@@ -29,18 +29,18 @@ public class Simulador implements ISimulador {
 		throw new UnsupportedOperationException();
 	}
 
-	public Boolean validarRegistoUser(String aNome) {
-		return ! UtilizadoresDAO.getInstance().containsKey(aNome);
+	public Boolean validarRegistoUser(String username) {
+		return UtilizadoresDAO.getInstance().containsKey(username);
 	}
 
 	public Map<String, Boolean> verificaExistênciaJogadores(List<String> aNomes) {
 		throw new UnsupportedOperationException();
 	}
 
-	public Boolean validarDadosUser(String aNome, String aPass)
+	public Boolean validarDadosUser(Utilizador utilizador, String aPass)
 	{
 		UtilizadoresDAO utilizadoresDAO = UtilizadoresDAO.getInstance();
-		return utilizadoresDAO.containsKey(aNome) && utilizadoresDAO.get(aNome).get_password().equals(aPass);
+		return utilizadoresDAO.containsKey(utilizador.get_username()) && utilizadoresDAO.get(utilizador.get_username()).get_password().equals(aPass);
 	}
 
 	public void adicionaPiloto(Piloto aPiloto) {
