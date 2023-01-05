@@ -7,6 +7,6 @@ public class Normal extends ModoMotor {
 
     @Override
     public String toString() {
-        return "Motor "+this.getId()+" em modo Normal: "+ super.toString();
+        return super.toString()+" - Normal";
     }
 }

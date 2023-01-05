@@ -279,16 +279,13 @@ public class TextUI {
     {
         System.out.println("Que conjunto de pneus deseja utilizar?");
         List<Pneu> pneus = model.getPneus();
-        //pneus.forEach(System.out::println);
-        for (Pneu p:pneus) {
-            System.out.println(p);
-        }
+        pneus.forEach(System.out::println);
         int id = scin.nextInt();
         return model.getPneu(id);
     }
     public static ModoMotor getModo()
     {
-        System.out.println("Que modo e motor quer escolher?");
+        System.out.println("Que modo quer escolher?");
         List<ModoMotor> modo = model.getModos();
         modo.forEach(System.out::println);
         int id = scin.nextInt();

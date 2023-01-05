@@ -27,7 +27,7 @@ public class EscolhasDAO implements Map<String,Escolha> {
 					CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Escolhas`(
 						`campeonatoProva` INT NOT NULL,
 						`nomeJogador` VARCHAR(75) NOT NULL,
-						`piloto` INT NOT NULL,
+						`piloto` VARCHAR(50) NOT NULL,
 						`marca` VARCHAR(50) NOT NULL,
 						`modelo` VARCHAR(50) NOT NULL,
 						`pac` FLOAT NOT NULL,
@@ -36,7 +36,7 @@ public class EscolhasDAO implements Map<String,Escolha> {
 						FOREIGN KEY (`campeonatoProva`)
 						REFERENCES `simuladorDSS`.`CampeonatoProva` (`id`),
 						FOREIGN KEY (`piloto`)
-						REFERENCES `simuladorDSS`.`Piloto` (`id`),
+						REFERENCES `simuladorDSS`.`Piloto` (`nome`),
 						FOREIGN KEY (marca,modelo)
 					    REFERENCES simuladorDSS.Carro (marca,modelo),
 						FOREIGN KEY (`pneus`)
@@ -165,10 +165,10 @@ public class EscolhasDAO implements Map<String,Escolha> {
 			if(rs.next())
 			{
 				res.set_jogador(pk[1]);
-				res.set_piloto(PilotoDAO.getInstace().get(rs.getInt("piloto")));
+				res.set_piloto(PilotoDAO.getInstace().get(rs.getString("piloto")));
 				String marca = rs.getString("marca");
 				String modelo = rs.getString("modelo");
-				res.set_carro(CarroDAO.getInstace().get(Carro.getMarcaModelo(marca+modelo)));
+				res.set_carro(CarroDAO.getInstace().get(marca+","+modelo));
 				res.set_pac(rs.getFloat("pac"));
 				res.set_pneu(CarroDAO.getInstace().getPneus(rs.getInt("pneus")));
 				res.set_modo(CarroDAO.getInstace().getModo(rs.getInt("modo")));
@@ -188,7 +188,7 @@ public class EscolhasDAO implements Map<String,Escolha> {
 			PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, Integer.parseInt(pk[0]));
 			ps.setString(2, pk[1]);
-			ps.setInt(3,PilotoDAO.getInstace().getID(value.get_piloto()));
+			ps.setString(3,value.get_piloto().get_nome());
 			ps.setString(4,value.get_carro().get_marca());
 			ps.setString(5,value.get_carro().get_modelo());
 			ps.setFloat(6,value.get_pac());

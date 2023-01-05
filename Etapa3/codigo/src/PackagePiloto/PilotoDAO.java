@@ -13,11 +13,10 @@ public class PilotoDAO implements Map<String,Piloto> {
 			 Statement stm = conn.createStatement()) {
 
 			String sql = "CREATE TABLE IF NOT EXISTS `simuladorDSS`.`Piloto` (" +
-						"id INT NOT NULL AUTO_INCREMENT, " +
 						"nome VARCHAR(50) NOT NULL, " +
 						"sva INT NOT NULL, "+
 						"cts INT NOT NULL, " +
-						"PRIMARY KEY (`id`))";
+						"PRIMARY KEY (`nome`))";
 			stm.executeUpdate(sql);
 
 
@@ -112,16 +111,15 @@ public class PilotoDAO implements Map<String,Piloto> {
 
 	@Override
 	public Piloto get(Object key) {
-		String []str = Piloto.getCondutor((String) key); // completar get
-		String nome = str[0];
 		Piloto r = null;
 		float sva = 0;
 		float cts =0;
+		String nome = "";
 		boolean aux = false;
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			String sql = "SELECT * FROM Piloto WHERE nome = ?";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1,nome);
+			preparedStatement.setString(1,(String) key);
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next())
 			{
@@ -186,30 +184,6 @@ public class PilotoDAO implements Map<String,Piloto> {
 	public Piloto put(String key, Piloto value) {
 		this.insertPiloto(value);
         return null;
-	}
-
-	public int getID(Piloto driver)
-	{
-		int res = 0;
-		try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
-		{
-			String sql = "SELECT * FROM Piloto WHERE nome = ? AND sva = ? AND cts = ?";
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, driver.get_nome());
-			ps.setFloat(2,driver.get_SVA());
-			ps.setFloat(3,driver.get_CTS());
-			ResultSet rs = ps.executeQuery();
-			if(rs.next())
-			{
-				res = rs.getInt("id");
-			}
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-			throw new NullPointerException(e.getMessage());
-		}
-		return res;
 	}
 
 	@Override

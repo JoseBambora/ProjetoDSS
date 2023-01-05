@@ -279,6 +279,18 @@ public class CarroDAO implements Map<String,Carro> {
 		list.add("C1H");
 		list.add("C2H");
 		list.add("GTH");
+		int fiabilidade = 0;
+		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
+		{
+			String sql = "SELECT * FROM Categoria WHERE id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1,id);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next())
+			{
+				fiabilidade = rs.getInt("fiabilidade");
+			}
+		}
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);) {
 			int i = 0;
 			for (String cat : list)
@@ -291,13 +303,13 @@ public class CarroDAO implements Map<String,Carro> {
 				{
 					switch (i)
 					{
-						case 0 -> r = new C1(rs.getInt("categoria"));
-						case 1 -> r = new C2(rs.getInt("categoria"));
-						case 2 -> r = new GT(rs.getInt("categoria"));
-						case 3 -> r = new SC(rs.getInt("categoria"));
-						case 4 -> r = new C1Hibrido(rs.getInt("categoria"), new MotorElétrico(getMotor(rs.getInt("motor"))));
-						case 5 -> r = new C2Hibrido(rs.getInt("categoria"), new MotorElétrico(getMotor(rs.getInt("motor"))));
-						case 6 -> r = new GTHibrido_(rs.getInt("categoria"), new MotorElétrico(getMotor(rs.getInt("motor"))));
+						case 0 -> r = new C1(fiabilidade);
+						case 1 -> r = new C2(fiabilidade);
+						case 2 -> r = new GT(fiabilidade);
+						case 3 -> r = new SC(fiabilidade);
+						case 4 -> r = new C1Hibrido(fiabilidade, new MotorElétrico(getMotor(rs.getInt("motor"))));
+						case 5 -> r = new C2Hibrido(fiabilidade, new MotorElétrico(getMotor(rs.getInt("motor"))));
+						case 6 -> r = new GTHibrido_(fiabilidade, new MotorElétrico(getMotor(rs.getInt("motor"))));
 					}
 					break;
 				}
@@ -632,16 +644,16 @@ public class CarroDAO implements Map<String,Carro> {
 			modos.add(new Normal(0));
 			modos.add(new Conservador(0));
 			List<Motor> motores = new ArrayList<>();
-			motores.add(new MotorCombustao(0,525,60,modos.get(0),3000));
-			motores.add(new MotorCombustao(0,600,60,modos.get(2),3000));
-			motores.add(new MotorCombustao(0,400,60,modos.get(3),3000));
-			motores.add(new MotorCombustao(0,300,60,modos.get(1),3000));
-			motores.add(new MotorElétrico(0,300,60,modos.get(2)));
-			motores.add(new MotorElétrico(0,300,60,modos.get(1)));
+			motores.add(new MotorCombustao(0,525,100,modos.get(0),3000));
+			motores.add(new MotorCombustao(0,600,100,modos.get(2),3000));
+			motores.add(new MotorCombustao(0,400,100,modos.get(3),3000));
+			motores.add(new MotorCombustao(0,300,100,modos.get(1),3000));
+			motores.add(new MotorElétrico(0,300,100,modos.get(2)));
+			motores.add(new MotorElétrico(0,300,100,modos.get(1)));
 			List<Pneu> pneus = new ArrayList<>();
-			pneus.add(new Chuva(0,4));
-			pneus.add(new Macio(0,3));
-			pneus.add(new Duro(0,2));
+			pneus.add(new Chuva(0,100));
+			pneus.add(new Macio(0,100));
+			pneus.add(new Duro(0,100));
 			List<Categoria> categorias = new ArrayList<>();
 			categorias.add(new C1(95));
 			categorias.add(new C2(99));

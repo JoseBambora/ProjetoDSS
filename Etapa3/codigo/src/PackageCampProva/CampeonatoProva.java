@@ -172,7 +172,9 @@ public class CampeonatoProva {
 		{
 			for(Caracteristica caracteristica : list)
 			{
-				for(String nomeJ : classificacao){
+				List<String> aux = new ArrayList<>();
+				for(String nomeJ : classificacao)
+				{
 					int size = classificacao.size();
 					Escolha e = escolhas.get(nomeJ);
 					Piloto piloto = e.get_piloto();
@@ -182,13 +184,11 @@ public class CampeonatoProva {
 					c.reduzCapacidadeCombustivel(decisao);
 					float fiabilidadeAntiga = c.recalculaFiabilidade(decisao,caracteristica.get_gdu());
 					c.reduzCapacidadePneu(decisao,caracteristica.get_gdu());
-					float fiabilidade = random.nextFloat(101);
-					//bateu, é desclassificado
-					if(fiabilidade > fiabilidadeAntiga || c.surrender()){
-						desclassificados.add(nomeJ);
-						classificacao.remove(nomeJ);
-					}
+					float fiabilidade = random.nextFloat(30);
+					if(fiabilidade > fiabilidadeAntiga || c.surrender())
+						aux.add(nomeJ);
 				}
+				aux.forEach(s -> {classificacao.remove(s); desclassificados.add(s);});
 				ultrapassagens(classificacao,decisoes,random);
 				decisoes.clear();
 			}

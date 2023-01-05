@@ -39,7 +39,7 @@ public class ClassificacoesDAO implements Map<String,Integer> {
 
 	public void addPontuacao(int id, String nomeJogador, int incremento){
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);){
-			String sql= "UPDATE Classificacoes SET pontuacao = ? WHERE campeonatoProva = ? AND nomeJodor = ?";
+			String sql= "UPDATE Classificacoes SET pontuacao = ? WHERE campeonatoProva = ? AND nomeJogador = ?";
 			PreparedStatement ps;
 			String pk = this.generateKey(id,nomeJogador);
 			int pontos = this.get(pk);

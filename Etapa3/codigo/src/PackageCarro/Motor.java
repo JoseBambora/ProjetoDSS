@@ -46,9 +46,9 @@ public class Motor implements IMotor {
 	{
 		switch (aDecisao)
 		{
-			case "Agressivo" -> this._capacidadeCombustivel -= 3;
-			case "Normal" -> this._capacidadeCombustivel-=2;
-			case "Conservador" -> this._capacidadeCombustivel-=1;
+			case "Agressivo" -> this._capacidadeCombustivel -= 0.3f;
+			case "Normal" -> this._capacidadeCombustivel-=0.2f;
+			case "Conservador" -> this._capacidadeCombustivel-=0.1f;
 		}
 	}
 

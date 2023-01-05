@@ -14,6 +14,6 @@ public class ModoMotor
 
     @Override
     public String toString() {
-        return "";
+        return "" + this.getId();
     }
 }
