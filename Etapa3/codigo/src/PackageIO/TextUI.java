@@ -299,6 +299,7 @@ public class TextUI {
         System.out.println("O jogador " + jogador+ " pretende afinar?");
         System.out.println("1 - Sim");
         System.out.println("0 - Não");
-        return scin.nextInt() == 1;
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt() == 1;
     }
 }

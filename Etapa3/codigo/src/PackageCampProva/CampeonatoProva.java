@@ -154,15 +154,12 @@ public class CampeonatoProva {
 				afinacoes.put(nomeJ,0);
 			if(afinacoes.get(nomeJ) < 2 * nrProvas / 3)
 			{
-				/*
 				if (TextUI.pretendeAfinar(nomeJ)) {
 					float pac = TextUI.getPac();
 					ModoMotor modo = TextUI.getModo();
 					Pneu pneu = TextUI.getPneus();
 					EscolhasDAO.getInstance().guardaAfinacao(this._id+","+nomeJ, pac, modo, pneu);
 				}
-
-				 */
 			}
 			String pk = this._id+","+nomeJ;
 			Escolha e = EscolhasDAO.getInstance().get(pk);
