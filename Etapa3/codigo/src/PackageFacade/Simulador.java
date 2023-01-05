@@ -1,6 +1,7 @@
 package PackageFacade;
 
 import PackageCampProva.CampeonatoProva;
+import PackageCampProva.ClassificacoesDAO;
 import PackageCarro.*;
 import PackageUtilizador.UtilizadoresDAO;
 import PackageCircuito.CircuitoDAO;
@@ -217,7 +218,7 @@ public class Simulador implements ISimulador {
 		CampeonatoProva camp = CampeonatoProvaDAO.getInstance().get(aIdCampeonatoProva);
 		if(CampeonatoProvaDAO.getInstance().containsKey(aIdCampeonatoProva))
 		{
-			Integer pontuacao = camp.get_classificacao().get(aNome);
+			Integer pontuacao = ClassificacoesDAO.getInstance().get(ClassificacoesDAO.getInstance().generateKey(aIdCampeonatoProva,aNome));
 			if(pontuacao != null)
 				UtilizadoresDAO.getInstance().addPontuacao(aNome,pontuacao);
 		}

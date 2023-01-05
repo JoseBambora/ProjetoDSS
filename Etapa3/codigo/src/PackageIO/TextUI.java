@@ -263,7 +263,7 @@ public class TextUI {
                         scin.nextLine();
                         String password = scin.next();
                         System.out.println(password);
-                        if(!model.validarDadosUser(utilizador,password))
+                        if(model.validarDadosUser(utilizador,password))
                             model.atualizaPontuacaoGlobal(id,nome);
                     }
                 }
