@@ -147,6 +147,20 @@ public class CampeonatoProva {
 		List<Caracteristica> list = circuito.get_caracteristica();
 		List<String> classificacao = EscolhasDAO.getInstance().initSimulacao(this._id);
 		List<String> desclassificados = new ArrayList<>();
+		Map<String, Escolha> escolhas = new HashMap<>();
+		for(String nomeJ : classificacao)
+		{
+			if(TextUI.pretendeAfinar())
+			{
+				float pac = TextUI.getPac();
+				ModoMotor modo = TextUI.getModo();
+				Pneu pneu = TextUI.getPneus();
+				EscolhasDAO.getInstance().guardaAfinacao(nomeJ,pac,modo,pneu);
+			}
+			String pk = this._id+","+nomeJ;
+			Escolha e = EscolhasDAO.getInstance().get(pk);
+			escolhas.put(nomeJ,e);
+		}
 		Random random = new Random();
 		List<String> decisoes = new ArrayList<>();
 		int condMeteorologicas = random.nextInt(2);
@@ -156,8 +170,7 @@ public class CampeonatoProva {
 			{
 				for(String nomeJ : classificacao){
 					int size = classificacao.size();
-					String pk = this._id+","+nomeJ;
-					Escolha e = EscolhasDAO.getInstance().get(pk);
+					Escolha e = escolhas.get(nomeJ);
 					Piloto piloto = e.get_piloto();
 					Carro c = e.get_carro();
 					String decisao = piloto.simulaDecisao(caracteristica,classificacao.indexOf(nomeJ),size,condMeteorologicas);
