@@ -110,7 +110,7 @@ public class CampeonatoProvaDAO implements Map<Integer,CampeonatoProva> {
 		}
 	}
 
-	public void insertCampeonatoProva(CampeonatoProva value){
+	public int insertCampeonatoProva(CampeonatoProva value){
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
 		{
 			String campeonato =value.getCampeonato().get_nome();
@@ -118,6 +118,12 @@ public class CampeonatoProvaDAO implements Map<Integer,CampeonatoProva> {
 			PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1,campeonato);
 			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			int id = 0;
+			if (rs.next())
+				id = rs.getInt(1);
+			value.set_id(id);
+			return id;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

@@ -188,6 +188,7 @@ public class Simulador implements ISimulador {
 	{
 		Campeonato campeonato = CampeonatoDAO.getInstance().get(aCampnome);
 		CampeonatoProva campeonatoProva = new CampeonatoProva(campeonato);
+		CampeonatoProvaDAO.getInstance().put(0,campeonatoProva);
 		for(String player : aJogadores)
 		{
 			String pilotoID = aEscolhaPilotos.get(player);
@@ -196,9 +197,7 @@ public class Simulador implements ISimulador {
 			Carro carro = CarroDAO.getInstace().get(carroID);
 			campeonatoProva.adicionajogador(player,carro,piloto);
 		}
-		int key =  campeonatoProva.get_id();
-		CampeonatoProvaDAO.getInstance().put(key,campeonatoProva);
-		return key;
+		return campeonatoProva.get_id();
 	}
 
 	public void guardaAfinacao(String aIdCampProva, String aNome, float aPAC, ModoMotor aModo, String aPneus) {

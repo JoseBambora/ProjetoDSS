@@ -139,6 +139,7 @@ public class TextUI {
 
     public static void printClassifacao(List<String> classificacoes)
     {
+        System.out.println("Classificação atual");
         for(int i = 0; i < classificacoes.size();)
         {
             String name = classificacoes.get(i);
@@ -150,11 +151,7 @@ public class TextUI {
     public static void printDesclassificados(List<String> desclassificados)
     {
         System.out.println("Desclassificados:");
-        for(int i = 0; i < desclassificados.size();)
-        {
-            String name = desclassificados.get(i);
-            System.out.println(name);
-        }
+        desclassificados.forEach(System.out::println);
     }
 
 
@@ -226,10 +223,10 @@ public class TextUI {
                     }
                 }
 
-                System.out.println(aEscolhaPilotos);
-                System.out.println(aEscolhaCarros);
+                System.out.println("A configurar campeonato");
                 int id = model.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
                 //adicionaJogador(jogador, driver, car)
+                System.out.println("Campeonato Configurado, a começar simulação!!");
 
                 Map<String,Integer> classificacoes = model.simulaCampeonato(id);List<String> classiSort = new ArrayList<>(classificacoes.keySet());
                 classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));

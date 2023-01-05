@@ -79,7 +79,9 @@ public class CampeonatoProva {
 	}
 
 	public void adicionajogador(String aJogador, Carro aCarro, Piloto aPiloto) {
-		throw new UnsupportedOperationException();
+		Escolha escolha = new Escolha(aJogador,aPiloto,aCarro, aCarro.get_pac(), aCarro.get_unnamed_IConjuntoPneus_(),aCarro.get_motor().get_modo());
+		ClassificacoesDAO.getInstance().put(ClassificacoesDAO.getInstance().generateKey(this._id,aJogador), 0);
+		EscolhasDAO.getInstance().put(EscolhasDAO.getInstance().generateKey(this._id,aJogador), escolha);
 	}
 
 	public Boolean verificaExistenciaAdesao(String aPiloto) {

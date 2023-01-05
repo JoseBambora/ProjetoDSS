@@ -152,7 +152,7 @@ public class EscolhasDAO implements Map<String,Escolha> {
 			ResultSet rs = ps.executeQuery();
 			if(rs.next())
 			{
-				res.set_jogador((Jogador) UtilizadoresDAO.getInstance().get(pk[1]));
+				res.set_jogador(pk[1]);
 				res.set_piloto(PilotoDAO.getInstace().get(rs.getInt("piloto")));
 				String marca = rs.getString("marca");
 				String modelo = rs.getString("modelo");

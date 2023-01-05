@@ -1,3 +1,4 @@
+import PackageCampProva.CampeonatoProvaDAO;
 import PackageCampeonato.CampeonatoDAO;
 import PackageCarro.Carro;
 import PackageCarro.CarroDAO;
@@ -24,6 +25,7 @@ public class Main {
         circuitoDAO.generateDataCircuito();
         UtilizadoresDAO utilizadores = UtilizadoresDAO.getInstance();
         utilizadores.generateData();
+        CampeonatoProvaDAO campeonatoProvaDAO = CampeonatoProvaDAO.getInstance();
         TextUI menu = new TextUI();
         menu.run();
     }

@@ -8,7 +8,7 @@ import PackageCarro.Carro;
 import PackageCarro.ModoMotor;
 
 public class Escolha {
-	private Jogador _jogador;
+	private String _jogador;
 	private Piloto _piloto;
 	private Carro _carro;
 	private Float _pac;
@@ -23,7 +23,7 @@ public class Escolha {
 		this._modo = null;
 	}
 
-	public Escolha(Jogador _jogador, Piloto _piloto, Carro _carro, Float _pac, Pneu _pneu, ModoMotor _modo) {
+	public Escolha(String _jogador, Piloto _piloto, Carro _carro, Float _pac, Pneu _pneu, ModoMotor _modo) {
 		this._jogador = _jogador;
 		this._piloto = _piloto;
 		this._carro = _carro;
@@ -32,11 +32,11 @@ public class Escolha {
 		this._modo = _modo;
 	}
 
-	public Jogador get_jogador() {
+	public String get_jogador() {
 		return _jogador;
 	}
 
-	public void set_jogador(Jogador _jogador) {
+	public void set_jogador(String _jogador) {
 		this._jogador = _jogador;
 	}
 

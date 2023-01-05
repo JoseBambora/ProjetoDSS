@@ -193,11 +193,11 @@ public class PilotoDAO implements Map<String,Piloto> {
 		int res = 0;
 		try(Connection conn = DriverManager.getConnection(DAOconfig.URL,DAOconfig.USERNAME,DAOconfig.PASSWORD);)
 		{
-			String sql = "SELECT COUNT(*) FROM Piloto WHERE name = ? sva = ? AND cts = ?";
+			String sql = "SELECT * FROM Piloto WHERE nome = ? AND sva = ? AND cts = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, driver.get_nome());
-			ps.setFloat(2,(driver.get_SVA()));
-			ps.setFloat(3,(driver.get_CTS()));
+			ps.setFloat(2,driver.get_SVA());
+			ps.setFloat(3,driver.get_CTS());
 			ResultSet rs = ps.executeQuery();
 			if(rs.next())
 			{
