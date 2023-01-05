@@ -310,14 +310,22 @@ public class CircuitoDAO implements Map<String,Circuito> {
 			List<Caracteristica> list = new ArrayList<>();
 			list.add(new Reta(3));
 			list.add(new Curva(1));
+			list.add(new Reta(1));
 			list.add(new Curva(2));
+			list.add(new Reta(1));
 			list.add(new Chicane(3));
 			list.add(new Reta(1));
+			list.add(new Curva(2));
 			list.add(new Reta(1));
 			List<Circuito> circuitos = new ArrayList<>();
 			circuitos.add(new Circuito("Braga", 500 , 2, "campeonato1",list)); // isto tá mal
 			circuitos.add(new Circuito("Lisboa", 730 , 5, "campeonato3",list)); // isto tá mal
 			circuitos.add(new Circuito("Porto", 670 , 3, "campeonato1",list)); // isto tá mal
+			circuitos.add(new Circuito("Portugal",2400,5,"Formula 1",list));
+			circuitos.add(new Circuito("Espanha",1800,8,"Formula 1",list));
+			circuitos.add(new Circuito("França",1900,6,"Formula 1",list));
+			circuitos.add(new Circuito("Inglaterra",2300,7,"Formula 1",list));
+			circuitos.add(new Circuito("China",2700,3,"Formula 1",list));
 			circuitos.forEach(this::insertCircuito);
 		}
 	}

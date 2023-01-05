@@ -66,7 +66,7 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 	public boolean containsKey(Object key) {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);)
 		{
-			String sql = "SELECT COUNT(*) FROM Campeonato WHERE nome = ?";
+			String sql = "SELECT * FROM Campeonato WHERE nome = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1,(String)key);
 			ResultSet rs = ps.executeQuery();
@@ -137,9 +137,9 @@ public class CampeonatoDAO implements Map<String,Campeonato> {
 			campeonatos.add(new Campeonato("campeonato1",true));
 			campeonatos.add(new Campeonato("campeonato2",true));
 			campeonatos.add(new Campeonato("campeonato3",true));
-			campeonatos.add(new Campeonato("Campeonato nacional de rally",true));
+			campeonatos.add(new Campeonato("Campeonato nacional de rally",false));
 			campeonatos.add(new Campeonato("Rampa da falperra",true));
-			campeonatos.add(new Campeonato("Formula 1",false));
+			campeonatos.add(new Campeonato("Formula 1",true));
 			campeonatos.forEach(this::insertCampeonato);
 		}
 	}

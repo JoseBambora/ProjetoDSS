@@ -1,12 +1,18 @@
 package PackageIO;
 
+import PackageCarro.Carro;
 import PackageCarro.CarroDAO;
 import PackageCarro.ModoMotor;
 import PackageCarro.Pneu;
 import PackageFacade.ISimulador;
 import PackageFacade.Simulador;
+import PackagePiloto.Piloto;
 import PackageUtilizador.Utilizador;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +69,7 @@ public class TextUI {
         // this.model = new Facade();
 
         scin = new Scanner(System.in);
+        scin.useDelimiter("\n");
     }
 
     /**
@@ -103,7 +110,7 @@ public class TextUI {
         try {
             Utilizador utilizador = new Utilizador();
             System.out.println("Nome de Utilizador: ");
-            utilizador.set_username(scin.nextLine());
+            utilizador.set_username(scin.next());
 
             if(!model.validarRegistoUser(utilizador.get_username()))
             {
@@ -112,7 +119,7 @@ public class TextUI {
             }
             else {
                 System.out.println("Palavra-Passe: ");
-                utilizador.set_password(scin.nextLine());
+                utilizador.set_password(scin.next());
                 if(!model.validarDadosUser(utilizador, utilizador.get_password()))
                 {
                     System.out.println("Password incorreta!");
@@ -162,11 +169,13 @@ public class TextUI {
             List<String> aJogadores = new ArrayList<>(num);
             Map<String, String> aEscolhaPilotos = new HashMap<>(num);
             Map<String, String> aEscolhaCarros = new HashMap<>(num);
-
+            List<Piloto> pilotos = model.getPilotos();
+            List<Carro> carros = model.getCarros();
             System.out.println("Selecione um campeonato: ");
             System.out.println(model.getCampeonatos());
-            camp = scin.nextLine();
-
+            scin.nextLine();
+            camp = scin.next();
+            System.out.println(camp);
             if(!model.existeCampeonato(camp))
             {
                 System.out.println(" Campeonato inválido! ");
@@ -176,45 +185,49 @@ public class TextUI {
                 for(int i = 0; i<num; i++)
                 {
                     System.out.println(" Nickname: ");
-                    nickname = scin.nextLine();
+                    scin.nextLine();
+                    nickname = scin.next();
                     aJogadores.add(nickname);
-
                     boolean flag = false;
-                    while(flag == false)
+                    while(!flag)
                     {
                         System.out.println("Selecione um piloto: ");
-                        System.out.println(model.getPilotos());
-                        driver = scin.nextLine();
+                        System.out.println(pilotos);
+                        scin.nextLine();
+                        driver = scin.next();
                         if(!model.verificaExistenciaPiloto(driver))
                         {
                             System.out.println(" Piloto inválido! ");
                         }
                         else{
+                            System.out.println("Piloto " + driver + " adicionado");
                             aEscolhaPilotos.put(nickname, driver);
                             flag = true;
                         }
                     }
 
                     flag = false;
-                    while(flag == false)
+                    while(!flag)
                     {
                         System.out.println("Selecione um carro: ");
-                        System.out.println(model.getCarros());
-                        car = scin.nextLine();
-                        if(!model.verificaExistenciaCarro(car))
+                        System.out.println(carros);
+                        scin.nextLine();
+                        car = scin.next();
+                        String car2 = car.replaceAll(" ",",");
+                        if(!model.verificaExistenciaCarro(car2))
                         {
                             System.out.println(" Carro inválido! ");
                         }
                         else{
-                            aEscolhaCarros.put(nickname, car);
+                            System.out.println("Carro " + car + " adicionado");
+                            aEscolhaCarros.put(nickname, car2);
                             flag = true;
                         }
                     }
-
-
                 }
 
-
+                System.out.println(aEscolhaPilotos);
+                System.out.println(aEscolhaCarros);
                 int id = model.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
                 //adicionaJogador(jogador, driver, car)
 
@@ -242,15 +255,12 @@ public class TextUI {
                     if(model.isJogador(nome))
                     {
                         System.out.println("Jogador: " + nome + ", qual a password?");
-                        String password = scin.nextLine();
+                        String password = scin.next();
                         if(!model.validarDadosUser(utilizador,password))
                             model.atualizaPontuacaoGlobal(id,nome);
                     }
                 }
-
             }
-
-
         }
         catch (NullPointerException e) {
             System.out.println(e.getMessage());

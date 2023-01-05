@@ -293,6 +293,9 @@ public class UtilizadoresDAO implements Map<String, Utilizador> {
             System.out.println("A gerar dados para os users");
             List<Utilizador> users = new ArrayList<>();
             users.add(new Jogador("Joao","underskill",0));
+            users.add(new Jogador("Jose","123",0));
+            users.add(new Jogador("Ines","123",0));
+            users.add(new Jogador("Miguel","123",0));
             users.add(new Utilizador("Maria","Albertina"));
             users.add(new Admin("Deus","TodoPoderoso"));
             users.forEach(this::insertUser);

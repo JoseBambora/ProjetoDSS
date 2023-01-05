@@ -120,7 +120,7 @@ public class Carro implements ICarro {
 
 	@Override
 	public String toString() {
-		return this._marca + " " + this._modelo + " " + this._unnamed_IConjuntoPneus_ + " " + this._motor;
+		return this._marca + " " + this._modelo;
 	}
 
 	public String get_marca() {

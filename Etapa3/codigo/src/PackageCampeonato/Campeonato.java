@@ -86,6 +86,6 @@ public class Campeonato {
 
 	@Override
 	public String toString() {
-		return "(" + _nome + "," + _disponivel + ")";
+		return _nome;
 	}
 }

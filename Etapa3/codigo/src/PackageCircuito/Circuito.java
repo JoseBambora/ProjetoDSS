@@ -12,10 +12,10 @@ public class Circuito implements ICircuito {
 	private List<Caracteristica> _caracteristica;
 	public MelhoresVoltasDAO _unnamed_MelhoresVoltasDAO_;
 
-	public Circuito(String nome, int d, int e, String camp, List<Caracteristica> list) {
+	public Circuito(String nome, int _distancia, int _voltas, String camp, List<Caracteristica> list) {
 		this._nome = nome;
-		this._distancia = d;
-		this._voltas =  e;
+		this._distancia = _distancia;
+		this._voltas =  _voltas;
 		this._campeonato = camp;
 		this._caracteristica = new ArrayList<>(list);
     }
