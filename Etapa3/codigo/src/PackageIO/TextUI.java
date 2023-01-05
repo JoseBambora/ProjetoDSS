@@ -1,9 +1,11 @@
 package PackageIO;
 
+import PackageCarro.CarroDAO;
 import PackageCarro.ModoMotor;
 import PackageCarro.Pneu;
 import PackageFacade.ISimulador;
 import PackageFacade.Simulador;
+import PackageUtilizador.Utilizador;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,10 +14,10 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- * Exemplo de interface em modo texto.
+ * Interface em modo texto.
  *
- * @author JFC
- * @version 20220919
+ * 
+ * @version 2023
  */
 public class TextUI {
 
@@ -45,8 +47,7 @@ public class TextUI {
         // Criar o menu
         this.menu = new Menu(new String[]{
                 "Criar Utilizador",
-                "Login",
-                "Sair"
+                "Login"
         });
 
 
@@ -100,24 +101,33 @@ public class TextUI {
      */
     private void trataLoginUtilizador() {
         try {
-            
+            Utilizador utilizador = new Utilizador();
             System.out.println("Nome de Utilizador: ");
-            String username = scin.nextLine();
-            if (!model.validarRegistoUser(username)) {
-                System.out.println("Palavra-Passe: ");
-                String password = scin.nextLine();
-                model.validarDadosUser(username,password);
-                // check if the password is correct with the username given
-                
-                
-            } else {
-                
-                System.out.println("Esse username não existe!");
+            utilizador.set_username(scin.nextLine());
+
+            if(!model.validarRegistoUser(utilizador.get_username()))
+            {
+                System.out.println(model.validarRegistoUser(utilizador.get_username()));
+                System.out.println("Username não existe na base de dados!");
             }
+            else {
+                System.out.println("Palavra-Passe: ");
+                utilizador.set_password(scin.nextLine());
+                if(!model.validarDadosUser(utilizador, utilizador.get_password()))
+                {
+                    System.out.println("Password incorreta!");
+                }
+                else {
+                    System.out.println(" Login feito com sucesso! ");
+                    menuSimulador();
+                }
+            }
+
         }
         catch (NullPointerException e) {
             System.out.println(e.getMessage());
         }
+
     }
 
     public static void printClassifacao(List<String> classificacoes)
@@ -156,83 +166,91 @@ public class TextUI {
             System.out.println("Selecione um campeonato: ");
             System.out.println(model.getCampeonatos());
             camp = scin.nextLine();
-            if(model.existeCampeonato(camp))
+
+            if(!model.existeCampeonato(camp))
             {
                 System.out.println(" Campeonato inválido! ");
             }
+            else{
 
-            for(int i = 0; i<num; i++)
-            {
-                System.out.println(" Nickname: ");
-                nickname = scin.nextLine();
-                aJogadores.add(nickname);
-
-                boolean flag = false;
-                while(flag == false)
+                for(int i = 0; i<num; i++)
                 {
-                    System.out.println("Selecione um piloto: ");
-                    System.out.println(model.getPilotos());
-                    driver = scin.nextLine();
-                    if(model.verificaExistenciaPiloto(driver))
+                    System.out.println(" Nickname: ");
+                    nickname = scin.nextLine();
+                    aJogadores.add(nickname);
+
+                    boolean flag = false;
+                    while(flag == false)
                     {
-                        System.out.println(" Piloto inválido! ");
+                        System.out.println("Selecione um piloto: ");
+                        System.out.println(model.getPilotos());
+                        driver = scin.nextLine();
+                        if(!model.verificaExistenciaPiloto(driver))
+                        {
+                            System.out.println(" Piloto inválido! ");
+                        }
+                        else{
+                            aEscolhaPilotos.put(nickname, driver);
+                            flag = true;
+                        }
                     }
-                    else{
-                        aEscolhaPilotos.put(nickname, driver);
-                        flag = true;
-                    }
-                }
-                
-                flag = false;
-                while(flag == false)
-                {
-                    System.out.println("Selecione um carro: ");
-                    System.out.println(model.getCarros());
-                    car = scin.nextLine();
-                    if(model.verificaExistenciaCarro(car))
+
+                    flag = false;
+                    while(flag == false)
                     {
-                        System.out.println(" Carro inválido! ");
+                        System.out.println("Selecione um carro: ");
+                        System.out.println(model.getCarros());
+                        car = scin.nextLine();
+                        if(!model.verificaExistenciaCarro(car))
+                        {
+                            System.out.println(" Carro inválido! ");
+                        }
+                        else{
+                            aEscolhaCarros.put(nickname, car);
+                            flag = true;
+                        }
                     }
-                    else{
-                        aEscolhaCarros.put(nickname, car);
-                        flag = true;
+
+
+                }
+
+
+                int id = model.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
+                //adicionaJogador(jogador, driver, car)
+
+                Map<String,Integer> classificacoes = model.simulaCampeonato(id);List<String> classiSort = new ArrayList<>(classificacoes.keySet());
+                classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
+                System.out.println("Classificação");
+                System.out.println("     Nome      | Pontuação");
+                for(int i = 0; i < classiSort.size(); )
+                {
+                    String name = i + "º" + classiSort.get(i);
+                    if(name.length() < 15)
+                    {
+                        String esp = " ".repeat(15 - name.length());
+                        name += esp;
+                    }
+                    else
+                        name = name.substring(0,15);
+                    i++;
+                    System.out.println(name + " | " + classificacoes.get(name));
+                }
+                for(String nome : classificacoes.keySet())
+                {
+                    Utilizador utilizador = new Utilizador();
+                    utilizador.set_username((nome));
+                    if(model.isJogador(nome))
+                    {
+                        System.out.println("Jogador: " + nome + ", qual a password?");
+                        String password = scin.nextLine();
+                        if(!model.validarDadosUser(utilizador,password))
+                            model.atualizaPontuacaoGlobal(id,nome);
                     }
                 }
 
-
             }
-            
 
-            int id = model.configuraCampeonato(camp, aJogadores, aEscolhaPilotos, aEscolhaCarros);
-            //adicionaJogador(jogador, driver, car)
 
-            Map<String,Integer> classificacoes = model.simulaCampeonato(id);List<String> classiSort = new ArrayList<>(classificacoes.keySet());
-            classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
-            System.out.println("Classificação");
-            System.out.println("     Nome      | Pontuação");
-            for(int i = 0; i < classiSort.size(); )
-            {
-                String name = i + "º" + classiSort.get(i);
-                if(name.length() < 15)
-                {
-                    String esp = " ".repeat(15 - name.length());
-                    name += esp;
-                }
-                else
-                    name = name.substring(0,15);
-                i++;
-                System.out.println(name + " | " + classificacoes.get(name));
-            }
-            for(String nome : classificacoes.keySet())
-            {
-                if(model.isJogador(nome))
-                {
-                    System.out.println("Jogador: " + nome + ", qual a password?");
-                    String password = scin.nextLine();
-                    if(!model.validarDadosUser(nome,password))
-                        model.atualizaPontuacaoGlobal(id,nome);
-                }
-            }
         }
         catch (NullPointerException e) {
             System.out.println(e.getMessage());
