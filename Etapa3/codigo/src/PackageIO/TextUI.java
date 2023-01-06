@@ -245,7 +245,6 @@ public class TextUI {
                 System.out.println("Campeonato Configurado, a começar simulação!!");
 
                 Map<String,Integer> classificacoes = model.simulaCampeonato(id);
-                System.out.println(classificacoes);
                 List<String> classiSort = new ArrayList<>(classificacoes.keySet());
                 classiSort.sort((s1,s2) -> classificacoes.get(s2) - classificacoes.get(s1));
                 System.out.println("Classificação");
