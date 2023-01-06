@@ -147,7 +147,7 @@ public class Simulador implements ISimulador {
 	}
 	public List<Campeonato> getCampeonatos()
 	{
-		return new ArrayList<>(CampeonatoDAO.getInstance().values());
+		return new ArrayList<>(CampeonatoDAO.getInstance().values().stream().filter(Campeonato::get_disponivel).toList());
 	}
 
 	public List<Piloto> getPilotos()
