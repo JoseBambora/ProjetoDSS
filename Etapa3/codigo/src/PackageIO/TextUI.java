@@ -161,13 +161,22 @@ public class TextUI {
         try
         {
             String camp, nickname, driver, car;
-            System.out.println("Indique o número de jogadores: ");
-            int num = scin.nextInt();
+            List<Piloto> pilotos = model.getPilotos();
+            boolean flagP = true;
+            int num = 0;
+            while(flagP) {
+                System.out.println("Indique o número de jogadores: ");
+                int n = scin.nextInt();
+                if (n <= pilotos.size()){
+                    num = n;
+                    flagP = false;
+                }
+                else System.out.println("Numero de Jogadores tem de ser menor ou igual a "+pilotos.size());
 
+            }
             List<String> aJogadores = new ArrayList<>(num);
             Map<String, String> aEscolhaPilotos = new HashMap<>(num);
             Map<String, String> aEscolhaCarros = new HashMap<>(num);
-            List<Piloto> pilotos = model.getPilotos();
             List<String> pilotosEscolhidos = new ArrayList<>();
             List<Carro> carros = model.getCarros();
             System.out.println("Selecione um campeonato: ");
