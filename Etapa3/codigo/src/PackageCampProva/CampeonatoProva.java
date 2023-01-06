@@ -140,8 +140,7 @@ public class CampeonatoProva {
 			}
 		}
 	}
-	public void simulaProva(String aPista, Map<String,Integer> afinacoes, int nrProvas)
-	{
+	public void simulaProva(String aPista, Map<String,Integer> afinacoes, int nrProvas) throws InterruptedException {
 		Circuito circuito = CircuitoDAO.getInstace().get(aPista);
 		int volta = circuito.get_Voltas();
 		List<Caracteristica> list = circuito.get_caracteristica();
@@ -207,8 +206,7 @@ public class CampeonatoProva {
 		}
 	}
 
-	public Map<String, Integer> simulaCampeonato()
-	{
+	public Map<String, Integer> simulaCampeonato() throws InterruptedException {
 		Map<String,Integer> afinacoesNum = new HashMap<>();
 		List<String> circuitos = CircuitoDAO.getInstace().getCircuitosCampeonato(_campeonato.get_nome());
 		for(String circuito : circuitos)

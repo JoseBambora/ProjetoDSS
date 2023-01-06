@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Interface em modo texto.
@@ -137,8 +138,7 @@ public class TextUI {
 
     }
 
-    public static void printClassifacao(List<String> classificacoes)
-    {
+    public static void printClassifacao(List<String> classificacoes) throws InterruptedException {
         System.out.println("Classificação atual");
         for(int i = 0; i < classificacoes.size();)
         {
@@ -146,6 +146,7 @@ public class TextUI {
             i++;
             System.out.println(i + "º: " + name);
         }
+        TimeUnit.SECONDS.sleep(2);
     }
 
     public static void printDesclassificados(List<String> desclassificados)
@@ -271,6 +272,8 @@ public class TextUI {
         }
         catch (NullPointerException e) {
             System.out.println(e.getMessage());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
     public static float getPac()

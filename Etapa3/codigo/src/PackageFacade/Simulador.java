@@ -228,8 +228,7 @@ public class Simulador implements ISimulador {
 		return CampeonatoDAO.getInstance().containsKey(name);
 	}
 
-	public Map<String,Integer> simulaCampeonato(int campProva)
-	{
+	public Map<String,Integer> simulaCampeonato(int campProva) throws InterruptedException {
 		CampeonatoProva campeonatoProva = CampeonatoProvaDAO.getInstance().get(campProva);
 		return campeonatoProva.simulaCampeonato();
 	}

@@ -664,12 +664,12 @@ public class CarroDAO implements Map<String,Carro> {
 			categorias.add(new GTHibrido_(90,(MotorElétrico) motores.get(4)));
 			List<Carro> carros = new ArrayList<>();
 			carros.add(new Carro("Porshe", "GT3RS",0.7f,pneus.get(1),(MotorCombustao) motores.get(0),categorias.get(0)));
-			carros.add(new Carro("Ferrari", "Enzo",0.7f,pneus.get(0),(MotorCombustao) motores.get(1),categorias.get(1)));
-			carros.add(new Carro("Audi", "R8",0.6f,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(2)));
-			carros.add(new Carro("Honda", "Type-R",0.5f,pneus.get(2),(MotorCombustao) motores.get(3),categorias.get(3)));
-			carros.add(new Carro("Toyota", "Supra",0.9f,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(4)));
-			carros.add(new Carro("Mercedes", "AMG",0.6f,pneus.get(2),(MotorCombustao) motores.get(1),categorias.get(5)));
-			carros.add(new Carro("BMW","M4",0.5f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
+			carros.add(new Carro("Ferrari", "Enzo",0.74f,pneus.get(0),(MotorCombustao) motores.get(1),categorias.get(1)));
+			carros.add(new Carro("Audi", "R8",0.5f,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(2)));
+			carros.add(new Carro("Honda", "Type-R",0.42f,pneus.get(2),(MotorCombustao) motores.get(3),categorias.get(3)));
+			carros.add(new Carro("Toyota", "Supra",0.8f,pneus.get(1),(MotorCombustao) motores.get(2),categorias.get(4)));
+			carros.add(new Carro("Mercedes", "AMG",0.35f,pneus.get(2),(MotorCombustao) motores.get(1),categorias.get(5)));
+			carros.add(new Carro("BMW","M4",0.6f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
 			carros.add(new Carro("Ford","GT",0.5f,pneus.get(0),(MotorCombustao) motores.get(3),categorias.get(3)));
 			carros.forEach(this::insertCarro);
 		}

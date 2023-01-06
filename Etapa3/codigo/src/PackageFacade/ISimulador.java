@@ -91,7 +91,7 @@ public interface ISimulador {
 
 	public void atualizaPontuacaoGlobal(int aIdCampeonatoProva, String aNome);
 
-	public Map<String,Integer> simulaCampeonato(int campProva);
+	public Map<String,Integer> simulaCampeonato(int campProva) throws InterruptedException;
 	public boolean existeCampeonato(String name);
 
 	public List<Campeonato> getCampeonatos();
